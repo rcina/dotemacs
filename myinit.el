@@ -70,6 +70,8 @@
 
 (setq echo-keystrokes 0.5)
 
+(setq-default indent-tabs-mode nil)
+
 (straight-use-package 'color-theme-modern)
 (load-theme 'midnight t t)
 (enable-theme 'midnight)

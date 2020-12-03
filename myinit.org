@@ -141,6 +141,14 @@
   #+begin_src emacs-lisp
     (setq-default indent-tabs-mode nil)
   #+end_src
+*** Display buffer name in frame titles.
+- Emacs defaults to displaying invocation name and host.
+  The code below displays the buffer name instead in the frame title.
+  #+begin_src emacs-lisp
+    (setq frame-title-format
+          '("" invocation-name ": " (:eval (replace-regexp-in-string
+                                            "^ +" "" (buffer-name)))))
+  #+end_src
 ** Theme/Mode Line
 *** Emacs Colour Theme
 - I prefer a dark colour theme.
