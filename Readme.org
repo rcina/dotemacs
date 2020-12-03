@@ -1,0 +1,4 @@
+* Dot-Files
+  This dot-files repository is for my Emacs configuration files that
+  are stored in my ~/.emacs.d directory. At the moment just a minimal init.el file that
+  processes myinit.org in Literate Programming style.
