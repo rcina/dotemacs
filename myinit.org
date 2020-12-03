@@ -1046,6 +1046,12 @@
     (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
   #+end_src
 *** JavaScript Programming
+- JavaScript indentation should be set to two spaces. And handling weird
+  javascript extensions.
+  #+begin_src emacs-lisp
+  (setq js-indent-level 2)
+  (add-to-list 'auto-mode-alist '("\\.es6\\'" . js2-mode))
+  #+end_src
 - js2-mode install and setup.
   #+begin_src emacs-lisp
     (use-package js2-mode
