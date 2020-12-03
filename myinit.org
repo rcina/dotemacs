@@ -131,6 +131,11 @@
         (define-key w3m-mode-map "f" 'wicked/w3m-open-current-page-in-firefox)
         (define-key w3m-mode-map "F" 'wicked/w3m-open-link-or-image-in-firefox)))
   #+end_src
+*** Adjust keystroke echo timeout
+- Adjusts keystroke echo timeout from 1s to 0.5s.
+  #+begin_src emacs-lisp
+      (setq echo-keystrokes 0.5)
+  #+end_src
 ** Theme/Mode Line
 *** Emacs Colour Theme
 - I prefer a dark colour theme.
