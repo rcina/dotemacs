@@ -57,3 +57,4 @@ projectile-bookmarks.eld
 .lsp-session-v1
 elpy/
 straight/
+myinit.el
