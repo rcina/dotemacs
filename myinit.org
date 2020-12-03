@@ -156,6 +156,10 @@
   #+begin_src emacs-lisp
     (setq visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
   #+end_src
+*** Enable disabled commands
+#+begin_src emacs-lisp
+  (setq disabled-command-function nil)
+#+end_src
 ** Theme/Mode Line
 *** Emacs Colour Theme
 - I prefer a dark colour theme.
