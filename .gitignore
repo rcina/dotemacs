@@ -59,3 +59,4 @@ elpy/
 straight/
 myinit.el
 savehist
+saveplace
