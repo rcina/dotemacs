@@ -1187,6 +1187,11 @@
 (setq eldoc-idle-delay 0.1
       eldoc-echo-area-use-multiline-p nil)
 #+end_src
+*** CSS
+- Indentation could be a bit more narrow.
+#+begin_src emacs-lisp
+(setq css-indent-offset 2)
+#+end_src
 ** Git
 *** Magit
 #+begin_src emacs-lisp
