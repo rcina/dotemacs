@@ -102,6 +102,8 @@
   recently opened files.
 #+begin_src emacs-lisp
   (recentf-mode t)
+  (setq recentf-save-file "~/.emacs.d/recentf"
+        recentf-max-saved-items 50)
 #+end_src
 *** Save-place Package
 - Save-place is a package to save the location of the point when you kill a buffer and later return
