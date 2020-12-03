@@ -902,6 +902,16 @@
     (add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
     (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
   #+end_src
+*** Windmove
+- It lets you move point from window to window using Shift and the arrow
+  keys.
+  #+begin_src emacs-lisp
+    (when (fboundp 'windmove-default-keybindings)
+      (windmove-default-keybindings))
+
+    ;; Set wraparound
+    (setq windmove-wrap-around t)
+  #+end_src
 ** Programming
 *** Company mode
 - Company is a text completion framework for Emacs. The name stands for
