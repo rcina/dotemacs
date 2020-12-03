@@ -136,6 +136,11 @@
   #+begin_src emacs-lisp
       (setq echo-keystrokes 0.5)
   #+end_src
+*** Indent with spaces by default
+- Since most programming languages prefer spaces over tabs.
+  #+begin_src emacs-lisp
+    (setq-default indent-tabs-mode nil)
+  #+end_src
 ** Theme/Mode Line
 *** Emacs Colour Theme
 - I prefer a dark colour theme.
