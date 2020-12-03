@@ -160,6 +160,12 @@
 #+begin_src emacs-lisp
   (setq disabled-command-function nil)
 #+end_src
+*** Don't use dialog boxes
+- Clicking on an install button for instance makes Emacs
+  spawn dialog boxes from that point on.
+   #+begin_src emacs-lisp
+     (setq use-dialog-box nil)
+   #+end_src
 ** Theme/Mode Line
 *** Emacs Colour Theme
 - I prefer a dark colour theme.
