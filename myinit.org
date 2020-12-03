@@ -1,5 +1,7 @@
 #+STARTUP: fold
 * Emacs Configuration
+- I have used this emacs configuration https://depp.brause.cc/dotemacs/
+  to base some of my configuration upon.
 ** Emacs General Configuration
 *** Interface Adjustments
 - Hide tool bar, hide menu bar, hide scrollbars, turn on show-paren-mode,
@@ -148,6 +150,11 @@
     (setq frame-title-format
           '("" invocation-name ": " (:eval (replace-regexp-in-string
                                             "^ +" "" (buffer-name)))))
+  #+end_src
+*** Display fringe indicators
+- Adds fringe indicators to word boundaries.
+  #+begin_src emacs-lisp
+    (setq visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
   #+end_src
 ** Theme/Mode Line
 *** Emacs Colour Theme
