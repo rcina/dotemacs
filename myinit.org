@@ -1176,6 +1176,17 @@
     :config
     (dumb-jump-mode))
 #+end_src
+*** Emacs lisp
+- eldoc is a nice helper to avoid looking up function signatures in
+  function documentation.
+#+begin_src emacs-lisp
+(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
+
+;; set eldoc default delay
+(setq eldoc-idle-delay 0.1
+      eldoc-echo-area-use-multiline-p nil)
+#+end_src
 ** Git
 *** Magit
 #+begin_src emacs-lisp
