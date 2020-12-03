@@ -175,6 +175,12 @@
     (setq savehist-file "~/.emacs.d/savehist"
           history-length 150)
   #+end_src
+*** save-place
+- Start from last the last place you were in the file when you revisit.
+  #+begin_src emacs-lisp
+    (save-place-mode 1)
+    (setq save-place-file "~/.emacs.d/saveplace")
+  #+end_src
 ** Theme/Mode Line
 *** Emacs Colour Theme
 - I prefer a dark colour theme.
