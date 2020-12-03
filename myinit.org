@@ -473,7 +473,7 @@
 *** Org General Configuration
 - This section configures org mode for my needs.
   #+begin_src emacs-lisp
-     (require 'org-id)
+    (require 'org-id)
     (setq org-id-link-to-org-use-id 'create-if-interactive)
     (set 'org-habit-show-all-today t)
     (setq org-log-done 'time)
@@ -505,6 +505,15 @@
     (setq org-src-window-setup 'current-window)
     (add-hook 'org-mode-hook 'org-indent-mode)
     (setq org-confirm-babel-evaluate nil)
+
+    (setq org-startup-indented t
+          org-cycle-include-plain-lists 'integrate
+          org-return-follows-link t
+          org-src-fontify-natively t
+          org-src-preserve-indentation t
+          org-enforce-todo-dependencies t
+          org-enforce-todo-checkbox-dependencies t
+          org-link-frame-setup '((file . find-file)))
   #+end_src
 *** Org TODO Keywords
 - Setup org TODO keywords.
