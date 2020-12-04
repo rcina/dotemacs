@@ -1203,7 +1203,7 @@
                  (yas-deactivate-extra-mode 'php-mode))
                (if (string= web-mode-cur-language "css")
                    (setq emmet-use-css-transform t)
-                 ((setq )etq emmet-use-css-transform nil)))))
+                 (setq emmet-use-css-transform nil)))))
   #+end_src
 - Emmet mode install and configuration.
   #+begin_src emacs-lisp
