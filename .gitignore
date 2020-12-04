@@ -60,3 +60,4 @@ straight/
 myinit.el
 savehist
 saveplace
+.dap-breakpoints
