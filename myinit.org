@@ -1025,18 +1025,30 @@
     (custom-set-variables '(jdee-server-dir "~/.emacs.d/straight/repos/jdee-server"))
   #+end_src
 *** Python Programming
+- LSP jedi. Using LSP mode with jedi server.
+  #+begin_src emacs-lisp
+(use-package lsp-jedi
+  :straight t
+  :config
+  (with-eval-after-load "lsp-mode"
+    (add-to-list 'lsp-disabled-clients 'pyls)
+    (add-to-list 'lsp-enabled-clients 'jedi)))
+(add-hook 'python-mode-hook 'lsp)
+(setq python-shell-interpreter "/usr/local/bin/python3.7")
+  #+end_src
 - Elpy package. Elpy is an Emacs package to bring powerful Python editing to
   Emacs. It combines and configures a number of other packages, both
-  written  in Emacs Lisp as well as Python.
+  written  in Emacs Lisp as well as Python. Temporarily stopped using
+  this config for python because I moved to lsp-mode.
   #+begin_src emacs-lisp
-    (use-package elpy
-      :straight t
-      :config
-      (when (require 'elpy nil t)
-        (elpy-enable))
-      (setq elpy-rpc-backend "jedi"))
-    (setq elpy-rpc-python-command "python3.7")
-    (setq python-shell-interpreter "/usr/local/bin/python3.7")
+    ;; (use-package elpy
+    ;;   :straight t
+    ;;   :config
+    ;;   (when (require 'elpy nil t)
+    ;;     (elpy-enable))
+    ;;   (setq elpy-rpc-backend "jedi"))
+    ;; (setq elpy-rpc-python-command "python3.7")
+    ;; (setq python-shell-interpreter "/usr/local/bin/python3.7")
   #+end_src
 - py-autopep8 package to format python code on save.
   #+begin_src emacs-lisp
