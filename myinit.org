@@ -1034,7 +1034,7 @@
     (add-to-list 'lsp-disabled-clients 'pyls)
     (add-to-list 'lsp-enabled-clients 'jedi)))
 (add-hook 'python-mode-hook 'lsp)
-(setq python-shell-interpreter "/usr/local/bin/python3.7")
+;;(setq python-shell-interpreter "/usr/local/bin/python3.7")
   #+end_src
 - Elpy package. Elpy is an Emacs package to bring powerful Python editing to
   Emacs. It combines and configures a number of other packages, both
@@ -1157,7 +1157,7 @@
   (require 'dap-cpptools)
   (yas-global-mode))
 
-(setq lsp-clients-clangd-executable "/usr/local/bin/clangd10")
+;;(setq lsp-clients-clangd-executable "/usr/local/bin/clangd10")
   #+end_src
 - ggtags package for code navigation.
   #+begin_src emacs-lisp
