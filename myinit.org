@@ -969,6 +969,14 @@
       (add-hook 'python-mode-hook 'my/python-mode-hook)
       )
   #+end_src
+*** Company-box
+- A Company frontend with icons.
+  #+begin_src emacs-lisp
+(use-package company-box
+  :straight t
+  :hook (company-mode . company-box-mode))
+
+  #+end_src
 *** Line numbers for programming
 - Display line numbers for programming modes.
   #+begin_src emacs-lisp
