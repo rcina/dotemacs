@@ -62,3 +62,4 @@ savehist
 saveplace
 .dap-breakpoints
 .python-environments
+workspace/
