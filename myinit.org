@@ -1025,12 +1025,21 @@
       :straight t)
   #+end_src
 *** Java Programming
+- lsp-java
+  #+begin_src emacs-lisp
+(use-package lsp-java
+  :straight t
+  :config
+  (require 'lsp-java)
+  (add-hook 'java-mode-hook #'lsp)
+  (add-to-list 'lsp-enabled-clients 'jdtls))
+  #+end_src
 - The Java Development Environment for Emacs.
   #+begin_src emacs-lisp
-    (use-package jdee
-      :straight t)
-    (load "jdee")
-    (custom-set-variables '(jdee-server-dir "~/.emacs.d/straight/repos/jdee-server"))
+;; (use-package jdee
+;;   :straight t)
+;; (load "jdee")
+;; (custom-set-variables '(jdee-server-dir "~/.emacs.d/straight/repos/jdee-server"))
   #+end_src
 *** Python Programming
 - LSP jedi. Using LSP mode with jedi server.
@@ -1154,7 +1163,7 @@
   (add-hook 'cpp-mode-hook 'lsp))
 (use-package dap-mode :straight t)
 
-
+3
 (setq gc-cons-threshold (* 100 1024 1024)
       read-process-output-max (* 1024 1024)
       treemacs-space-between-root-nodes nil
