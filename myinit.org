@@ -405,6 +405,7 @@
       :config
       (add-to-list 'erc-modules 'notifications)
       (add-to-list 'erc-modules 'spelling)
+      (require 'erc-desktop-notifications)
       (erc-update-modules))
 
     ;; Make ERC client hide chat JOINS/PARTS/QUITS
