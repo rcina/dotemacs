@@ -28,7 +28,6 @@
 (require 'use-package)
 
 (use-package org
-      :straight org-plus-contrib
       :config
       (require 'org) )
 
