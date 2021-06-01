@@ -27,9 +27,8 @@
 (straight-use-package 'use-package)
 (require 'use-package)
 
-(use-package org
-      :config
-      (require 'org) )
+(straight-use-package 'org)
+(require 'org)
 
 ;; Load org-mode file with rest of my emacs configuration
 
