@@ -950,7 +950,9 @@
 
        (define-key company-active-map (kbd "S-TAB") 'company-select-previous)
        (define-key company-active-map (kbd "<backtab>") 'company-select-previous))
-
+ (let ((map company-active-map))
+    (define-key map (kbd "<tab>") 'company-complete-selection)
+    (define-key map (kbd "RET") 'nil))
      (setq company-frontends
            '(company-pseudo-tooltip-unless-just-one-frontend
              company-echo-metadata-frontend
