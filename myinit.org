@@ -341,6 +341,10 @@
          ("\\.c\\'" (".h"))
          ("\\.h\\'" (".c"))
          ))
+
+(setq-default ff-other-file-alist 'my-cpp-other-file-alist)
+
+(define-key c-mode-base-map (kbd "M-o") 'ff-find-other-file)
   #+end_src
 *** Hydra Package
 - This is a package for GNU Emacs that can be used to tie related
