@@ -331,20 +331,23 @@
 *** Find other file with meta-o keybinding
 - Use this keybinding to go to header files in c/c++.
   #+begin_src emacs-lisp
-     (defvar my-cpp-other-file-alist
-       '(("\\.cpp\\'" (".hpp" ".ipp"))
-         ("\\.ipp\\'" (".hpp" ".cpp"))
-         ("\\.hpp\\'" (".ipp" ".cpp"))
-         ("\\.cxx\\'" (".hxx" ".ixx"))
-         ("\\.ixx\\'" (".cxx" ".hxx"))
-         ("\\.hxx\\'" (".ixx" ".cxx"))
-         ("\\.c\\'" (".h"))
-         ("\\.h\\'" (".c"))
-         ))
+         (defvar my-cpp-other-file-alist
+           '(("\\.cpp\\'" (".hpp" ".ipp"))
+             ("\\.ipp\\'" (".hpp" ".cpp"))
+             ("\\.hpp\\'" (".ipp" ".cpp"))
+             ("\\.cxx\\'" (".hxx" ".ixx"))
+             ("\\.ixx\\'" (".cxx" ".hxx"))
+             ("\\.hxx\\'" (".ixx" ".cxx"))
+             ("\\.c\\'" (".h"))
+             ("\\.h\\'" (".c"))
+             ))
 
-(setq-default ff-other-file-alist 'my-cpp-other-file-alist)
+    (setq-default ff-other-file-alist 'my-cpp-other-file-alist)
+    (add-hook
+         'c-mode-hook
+          (lambda ()
+          (local-set-key (kbd "M-o") #'ff-find-other-file)))
 
-(define-key c-mode-base-map (kbd "M-o") 'ff-find-other-file)
   #+end_src
 *** Hydra Package
 - This is a package for GNU Emacs that can be used to tie related
