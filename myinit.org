@@ -185,9 +185,11 @@
 *** Emacs Colour Theme
 - I prefer a dark colour theme.
   #+begin_src emacs-lisp
-    (straight-use-package 'color-theme-modern)
-    (load-theme 'midnight t t)
-    (enable-theme 'midnight)
+    ;; (straight-use-package 'color-theme-modern)
+    ;; (load-theme 'midnight t t)
+    ;; (enable-theme 'midnight)
+(straight-use-package 'dracula-theme)
+(load-theme 'dracula t)
   #+end_src
 *** Powerline package for mode line
 - Customize mode line with powerline theme.
