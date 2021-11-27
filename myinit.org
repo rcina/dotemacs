@@ -456,6 +456,10 @@
       :straight t)
   #+end_src
 ** Org mode
+*** Configure org contrib
+#+begin src emacs-lisp
+(straight-use-package 'org-contrib)
+#+end_src
 *** Open Org agenda on startup
 - Automatically open org agenda on startup.
   #+begin_src emacs-lisp
