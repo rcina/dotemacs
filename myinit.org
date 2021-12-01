@@ -206,6 +206,14 @@
       (powerline-center-theme))
   #+end_src
 ** Useful Packages and functions
+*** Ivy-rich package
+#+begin_src emacs-lisp
+(use-package ivy-rich :straight t
+  :init
+  (require 'ivy-rich)
+  :config
+  (ivy-rich-mode 1))
+#+end_src
 *** Amx mode
 - Amx is an alternative interface for M-x in Emacs.
   #+begin_src emacs-lisp
