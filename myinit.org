@@ -176,6 +176,10 @@
     (setq savehist-file "~/.emacs.d/savehist"
           history-length 150)
   #+end_src
+*** Fix oh-my-zsh eterm color issue
+#+begin_src emacs-lisp
+(setq system-uses-terminfo nil)
+#+end_src
 *** save-place
 - Start from last the last place you were in the file when you revisit.
   #+begin_src emacs-lisp
