@@ -413,6 +413,18 @@
     ;;(global-set-key (kbd "C-M-s") 'isearch-forward)
     ;;(global-set-key (kbd "C-M-r") 'isearch-backward)
   #+end_src
+*** Helpful package
+#+begin_src emacs-lisp
+(use-package helpful :straight t
+  :custom
+  (counsel-describe-function-function #'helpful-callable)
+  (counsel-describe-variable-function #'helpful-variable)
+  :bind
+  ([remap describe-function] . counsel-describe-function)
+  ([remap describe-command] . helpful-command)
+  ([remap describe-variable] . counsel-describe-variable)
+  ([remap describe-key] . helpful-key))
+#+end_src
 ** IRC
 *** ZNC Package
 - ZNC package that allows emacs to talk to znc irc server.
