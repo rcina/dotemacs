@@ -12,6 +12,7 @@
     (menu-bar-mode 0)
     (scroll-bar-mode 0)
     (show-paren-mode 1)
+    (set-fringe-mode 10)
     (setq ring-bell-function #'ignore)
   #+end_src
 - Simplify emacs prompting for yes or no.
