@@ -1355,7 +1355,14 @@ instead."
       (bind-key "C-x g" 'magit-status)
       ))
 #+end_src
+*** Forge
+#+begin_src emacs-lisp
+(use-package forge
+  :straight t
+  :after magit)
+#+end_src
 *** Git-gutter
+***
 #+begin_src emacs-lisp
   (use-package git-gutter
     :straight t
