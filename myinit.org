@@ -209,9 +209,9 @@
 *** Ivy-rich package
 #+begin_src emacs-lisp
 (use-package ivy-rich :straight t
-  :init
-  (require 'ivy-rich)
+  :after (ivy)
   :config
+  (require 'ivy-rich)
   (ivy-rich-mode 1))
 #+end_src
 *** Amx mode
