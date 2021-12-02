@@ -488,7 +488,8 @@
 *** Open Org agenda on startup
 - Automatically open org agenda on startup.
   #+begin_src emacs-lisp
-    (org-agenda nil "a")
+;;(org-agenda nil "a")
+(add-hook 'after-init-hook 'org-agenda-list)
   #+end_src
 *** Org mode Keybindings
 - The default keybindings for org-mode agenda, storing a link, and org capture.
@@ -649,17 +650,34 @@
     (global-set-key (kbd "C-x p i") 'org-cliplink)
   #+end_src
 ** Buffers/Editing
-*** Projectile Package
+*** Projectile
+Package
 - Projectile is a really nice package that makes navigating in and
   between projects much easier.
   #+begin_src emacs-lisp
-     ;; projectile
-    (use-package projectile
-      :straight t
-      :config
-      (projectile-global-mode)
-      (setq projectile-completion-system 'ivy))
-  #+end_src
+;; Use coreutils ls
+(when (string= system-type "freebsd")
+  (setq dired-use-ls-dired t
+        insert-directory-program "/usr/local/bin/gls"
+        dired-listing-switches "-aBhl --group-directories-first"))
+;; projectile
+(use-package projectile
+  :straight t
+  :config
+  (projectile-mode)
+  :custom ((projectile-completion-system 'ivy))
+  :bind-keymap
+  ("C-c p" . projectile-command-map)
+  :init
+  (when (file-directory-p "~/Projects/")
+    (setq projectile-project-search-path '("~/Projects/")))
+  (setq projectile-switch-project-action #'projectile-dired))
+
+(use-package counsel-projectile
+  :straight t
+  :config
+  (counsel-projectile-mode))
+#+end_src
 *** Dired+
 - Library of features to extend dired mode.
   #+begin_src emacs-lisp
