@@ -19,7 +19,6 @@
   #+begin_src emacs-lisp
     (fset 'yes-or-no-p 'y-or-n-p)
   #+end_src
-
 - Set the tab width and fill column length
   #+begin_src emacs-lisp
     (setq-default fill-column 72 tab-width 4)
@@ -31,9 +30,6 @@
     (load custom-file)
   #+end_src
 *** Auto-save and Backup Files
-- Prevent emacs from cluttering current directory with auto-save files of the form
-  #files# by sending them to ~/.emacs.d/autosaves/ directory.
-
 - Create new auto-save and backup directories if necessary.
   #+begin_src emacs-lisp
     (make-directory "~/.emacs.d/autosave/" t)
@@ -110,8 +106,9 @@
 - Save-place is a package to save the location of the point when you kill a buffer and later return
   to it.
   #+begin_src emacs-lisp
-    (use-package saveplace :straight t)
-    (setq-default save-place t)
+(use-package saveplace :straight t
+  :init (save-place-mode 1))
+(setq save-place-file "~/.emacs.d/saveplace")
   #+end_src
 *** w3m and External Browsing
 - I like to use w3m inside Emacs.
@@ -180,12 +177,6 @@
 #+begin_src emacs-lisp
 (setq system-uses-terminfo nil)
 #+end_src
-*** save-place
-- Start from last the last place you were in the file when you revisit.
-  #+begin_src emacs-lisp
-    (save-place-mode 1)
-    (setq save-place-file "~/.emacs.d/saveplace")
-  #+end_src
 ** Theme/Mode Line
 *** Emacs Colour Theme
 - I prefer a dark colour theme.
@@ -207,6 +198,7 @@
   #+end_src
 ** Useful Packages and functions
 *** Ivy-rich package
+- ivy-rich comes with rich transformers for commands from ivy and counsel.
 #+begin_src emacs-lisp
 (use-package ivy-rich :straight t
   :after (ivy)
@@ -227,43 +219,48 @@
 *** Swiper package
 - A generic completion method for emacs.
   #+begin_src emacs-lisp
-    (use-package swiper :straight t)
-    (ivy-mode 1)
-    (setq ivy-use-virtual-buffers t)
-    (global-set-key "\C-s" 'swiper)
-    (global-set-key (kbd "C-c C-r") 'ivy-resume)
-    (global-set-key (kbd "<f6>") 'ivy-resume)
-    (global-set-key (kbd "M-x") 'counsel-M-x)
-    (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-    (global-set-key (kbd "<f1> f") 'counsel-describe-function)
-    (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
-    (global-set-key (kbd "<f1> l") 'counsel-load-library)
-    (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
-    (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
-    (global-set-key (kbd "C-c g") 'counsel-git)
-    (global-set-key (kbd "C-c j") 'counsel-git-grep)
-    (global-set-key (kbd "C-c k") 'counsel-ag)
-    (global-set-key (kbd "C-x l") 'counsel-locate)
-    (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
-    (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
+(use-package swiper :straight t)
+(ivy-mode)
+(setq ivy-use-virtual-buffers t)
+(setq enable-recursive-minibuffers t)
+(global-set-key "\C-s" 'swiper)
+(global-set-key (kbd "C-c C-r") 'ivy-resume)
+(global-set-key (kbd "<f6>") 'ivy-resume)
+(global-set-key (kbd "M-x") 'counsel-M-x)
+;;(global-set-key (kbd "M-x") 'amx)
+(global-set-key (kbd "C-x C-f") 'counsel-find-file)
+(global-set-key (kbd "<f1> f") 'counsel-describe-function)
+(global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+(global-set-key (kbd "<f1> l") 'counsel-load-library)
+(global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+(global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+(global-set-key (kbd "C-c g") 'counsel-git)
+(global-set-key (kbd "C-c j") 'counsel-git-grep)
+(global-set-key (kbd "C-c k") 'counsel-ag)
+(global-set-key (kbd "C-x l") 'counsel-locate)
+(global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
+(define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
   #+end_src
 *** Calfw Package
 - Calendar framework for Emacs.
   #+begin_src emacs-lisp
-    (use-package calfw
-      :straight t)
-    (use-package calfw-org
-      :straight t)
-    (require 'calfw-org)
+(use-package calfw
+  :straight t
+  :config
+  (require 'calfw))
+(use-package calfw-org
+  :straight t
+  :config
+  (require 'calfw-org))
   #+end_src
 *** Lorem Ipsum
 - Add filler lorem ipsum text to Emacs.
   #+begin_src emacs-lisp
     (straight-use-package 'lorem-ipsum)
     (require 'lorem-ipsum)
-    (global-set-key (kbd "C-c C-l s") 'lorem-ipsum-insert-sentences)
-    (global-set-key (kbd "C-c C-l p") 'lorem-ipsum-insert-paragraphs)
-    (global-set-key (kbd "C-c C-l l") 'lorem-ipsum-insert-list)
+    (global-set-key (kbd "C-c C-i s") 'lorem-ipsum-insert-sentences)
+    (global-set-key (kbd "C-c C-i p") 'lorem-ipsum-insert-paragraphs)
+    (global-set-key (kbd "C-c C-i l") 'lorem-ipsum-insert-list)
   #+end_src
 *** Rainbow delimiters
 - Rainbow delimiters is a "rainbow parentheses"-like mode which highlights
@@ -287,9 +284,14 @@
 - Lets you find the definition of a word.
   #+begin_src emacs-lisp
     (use-package define-word
-           :straight t)
-    (global-set-key (kbd "C-c d") 'define-word-at-point)
-    (global-set-key (kbd "C-c D") 'define-word)
+           :straight t
+           :defer t
+           :bind (("C-c d" . define-word-at-point)
+                 ("C-c D" . define-word))
+           :config
+           (setq define-word-default-service 'webster))
+    ;;(global-set-key (kbd "C-c d") 'define-word-at-point)
+    ;;(global-set-key (kbd "C-c D") 'define-word)
   #+end_src
 *** Fuzzy Search
 - An Emacs frontend fof fzf.
