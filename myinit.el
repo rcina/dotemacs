@@ -450,7 +450,8 @@
 
     (setq org-alphabetical-lists t)
 
-    (org-babel-do-load-languages 'org-babel-load-languages '((emacs-lisp . t) (python . t) (js . t) (ruby . t)))
+(org-babel-do-load-languages 'org-babel-load-languages '((emacs-lisp . t) (python . t) (js . t) (ruby . t)))
+(setq org-config-babel-evaluate nil)
 
     (straight-use-package 'org-re-reveal)
     (setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
