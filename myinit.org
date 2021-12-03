@@ -664,6 +664,12 @@
   #+begin_src emacs-lisp
     (setq org-alphabetical-lists t)
   #+end_src
+*** Structure Templates
+#+begin_src emacs-lisp
+(add-to-list 'org-structure-template-alist '("sh" . "src shell"))
+(add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+(add-to-list 'org-structure-template-alist '("py" . "src python"))
+#+end_src
 *** Org babel evaluation setup
 - Configure orb babel for programming languages.
   #+begin_src emacs-lisp
