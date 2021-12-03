@@ -481,9 +481,66 @@
       :straight t)
   #+end_src
 ** Org mode
+*** Org General Configuration
+- This section configures org mode for my needs.
+  #+begin_src emacs-lisp
+(require 'org-id)
+(setq org-id-link-to-org-use-id 'create-if-interactive)
+(setq org-habit-show-all-today t)
+(setq org-agenda-start-with-log-mode t)
+(setq org-log-done 'time)
+(setq org-agenda-start-on-weekday 0)
+
+(setq org-agenda-files (list "~/gtd/inbox.org"
+                             "~/gtd/todo.org"
+                             "~/gtd/goals.org"
+                             "~/gtd/waiting.org"))
+
+(setq org-refile-targets '((nil :maxlevel . 2)
+                           (org-agenda-files :maxlevel . 2)
+                           ("~/gtd/nextactions.org" :maxlevel . 2)
+                           ("~/gtd/notes.org" :maxlevel . 2)
+                           ("~/gtd/waiting.org" :maxlevel . 2)
+                           ("~/gtd/reference.org" :maxlevel . 2)
+                           ("~/gtd/todo.org" :maxlevel . 2)
+                           ("~/gtd/someday-maybe.org" :maxlevel . 2)
+                           ))
+;; Save Org buffers after refiling!
+(advice-add 'org-refile :after 'org-save-all-buffers)
+;; Refile in a single go
+(setq org-outline-path-complete-in-steps nil)
+(setq org-refile-use-outline-path 'file)
+
+;; other useful settings
+(setq org-clock-into-drawer "CLOCKING")
+(setq org-export-with-smart-quotes t)
+(setq org-src-fontify-natively t)
+(setq org-src-window-setup 'current-window)
+(add-hook 'org-mode-hook 'org-indent-mode)
+(setq org-confirm-babel-evaluate nil)
+
+(setq org-startup-indented t
+      org-cycle-include-plain-lists 'integrate
+      org-return-follows-link t
+      org-src-fontify-natively t
+      org-src-preserve-indentation t
+      org-enforce-todo-dependencies t
+      org-enforce-todo-checkbox-dependencies t
+      org-link-frame-setup '((file . find-file)))
+
+(setq org-export-backends '(ascii beamer html latex md))
+
+(require 'org-habit)
+(add-to-list 'org-modules 'org-habit)
+(setq org-habit-graph-column 60)
+  #+end_src
 *** Configure org contrib
 #+begin src emacs-lisp
 (straight-use-package 'org-contrib)
+#+end_src
+*** Org-ellipsis
+#+begin_src emacs-lisp
+(setq org-ellipsis " ▼")
 #+end_src
 *** Open Org agenda on startup
 - Automatically open org agenda on startup.
@@ -509,53 +566,6 @@
     (require 'org-superstar)
     (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
     (org-superstar-configure-like-org-bullets)
-  #+end_src
-*** Org General Configuration
-- This section configures org mode for my needs.
-  #+begin_src emacs-lisp
-(require 'org-id)
-(setq org-id-link-to-org-use-id 'create-if-interactive)
-(set 'org-habit-show-all-today t)
-(setq org-log-done 'time)
-(setq org-agenda-start-on-weekday 0)
-
-(setq org-agenda-files (list "~/gtd/inbox.org"
-                             "~/gtd/todo.org"
-                             "~/gtd/goals.org"
-                             "~/gtd/waiting.org"))
-
-(setq org-refile-targets '((nil :maxlevel . 2)
-                           (org-agenda-files :maxlevel . 2)
-                           ("~/gtd/nextactions.org" :maxlevel . 2)
-                           ("~/gtd/notes.org" :maxlevel . 2)
-                           ("~/gtd/waiting.org" :maxlevel . 2)
-                           ("~/gtd/reference.org" :maxlevel . 2)
-                           ("~/gtd/todo.org" :maxlevel . 2)
-                           ("~/gtd/someday-maybe.org" :maxlevel . 2)
-                           ))
-
-;; Refile in a single go
-(setq org-outline-path-complete-in-steps nil)
-(setq org-refile-use-outline-path 'file)
-
-;; other useful settings
-(setq org-clock-into-drawer "CLOCKING")
-(setq org-export-with-smart-quotes t)
-(setq org-src-fontify-natively t)
-(setq org-src-window-setup 'current-window)
-(add-hook 'org-mode-hook 'org-indent-mode)
-(setq org-confirm-babel-evaluate nil)
-
-(setq org-startup-indented t
-      org-cycle-include-plain-lists 'integrate
-      org-return-follows-link t
-      org-src-fontify-natively t
-      org-src-preserve-indentation t
-      org-enforce-todo-dependencies t
-      org-enforce-todo-checkbox-dependencies t
-      org-link-frame-setup '((file . find-file)))
-
-(setq org-export-backends '(ascii beamer html latex md))
   #+end_src
 *** Org TODO Keywords
 - Setup org TODO keywords.
