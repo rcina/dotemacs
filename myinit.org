@@ -667,7 +667,7 @@
 *** Org babel evaluation setup
 - Configure orb babel for programming languages.
   #+begin_src emacs-lisp
-    (org-babel-do-load-languages 'org-babel-load-languages '((js . t) (ruby . t)))
+    (org-babel-do-load-languages 'org-babel-load-languages '((emacs-lisp . t) (python . t) (js . t) (ruby . t)))
   #+end_src
 *** Ox-reveal for presentations
 - Let's org use reveal.js for creating and exporting presentations.
