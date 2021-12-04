@@ -1,7 +1,5 @@
 #+STARTUP: fold
 * Emacs Configuration
-- I have used this emacs configuration https://depp.brause.cc/dotemacs/
-  to base some of my configuration upon.
 ** Emacs General Configuration
 *** Interface Adjustments
 - Hide tool bar, hide menu bar, hide scrollbars, turn on show-paren-mode,
@@ -1723,4 +1721,31 @@ https://florian.adamsky.it/2018/03/09/emacs-add-acronyms.html
 *** Org-noter
 #+begin_src emacs-lisp
 (straight-use-package 'org-noter)
+#+end_src
+** Terminals
+*** term-mode
+#+begin_src emacs-lisp
+(use-package term
+  :straight t
+  :config
+  (setq explicit-shell-file-name "zsh")
+  ;;(setq explicit-zsh-args '())
+  ;;(setq term-prompt-regexp "^[^#$%>\n]*[#$%>] *")
+  )
+#+end_src
+*** For better color support
+#+begin_src emacs-lisp
+(use-package eterm-256color
+  :straight t
+  :hook
+  (add-hook 'term-mode-hook #'eterm-256color-mode)
+  )
+#+end_src
+*** vterm
+#+begin_src emacs-lisp
+(use-package vterm
+  :straight t
+  :commands vterm
+  :config
+  (setq vterm-max-scrollback 10000))
 #+end_src
