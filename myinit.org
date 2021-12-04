@@ -1310,11 +1310,15 @@ Package
 - LSP mode. Trying lsp-mode out. I used to use auto-complete for this.
   #+begin_src emacs-lisp
 (use-package lsp-mode :straight t
+  :commands (lsp lsp-deferred)
   :init
   (require 'lsp)
+  (setq lsp-keymap-prefix "C-c j")
   (add-to-list 'lsp-enabled-clients 'clangd)
   (add-hook 'c-mode-hook 'lsp)
-  (add-hook 'cpp-mode-hook 'lsp))
+  (add-hook 'cpp-mode-hook 'lsp)
+  :config
+  (lsp-enable-which-key-integration t))
 (use-package dap-mode :straight t)
 
 (which-key-mode)
