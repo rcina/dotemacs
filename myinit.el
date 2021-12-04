@@ -743,36 +743,39 @@
     ;; Set wraparound
     (setq windmove-wrap-around t)
 
-     (use-package company
-       :straight t)
-     (setq company-idle-delay 0.1
-           company-minimum-prefix-length 3
-           company-selection-wrap-around t
-           company-show-numbers t
-           company-require-match 'never
-           company-dabbrev-downcase nil
-           company-dabbrev-ignore-case t
-           company-backends '(company-jedi company-nxml
-                                           company-css company-capf
-                                           (company-dabbrev-code company-keywords)
-                                           company-files company-dabbrev company-clang)
-           company-jedi-python-bin "python")
+(use-package company
+  :straight t
+  :after lsp-mode
+  :hook
+  (prog-mode . company-mode)
+  :bind
+  (:map company-active-map
+        ("<tab>" . company-complete-selection))
+  (:map lsp-mode-map
+        ("<tab>" . company-indent-or-complete-common))
+  :custom
+  (company-minimum-prefix-length 1)
+  (company-idle-dealy 0.0)
+  )
 
-     (with-eval-after-load 'company
-       (define-key company-active-map (kbd "TAB") 'company-complete-common-or-cycle)
-       (define-key company-active-map (kbd "<tab>") 'company-complete-common-or-cycle)
+(setq
+ company-selection-wrap-around t
+ company-show-numbers t
+ company-require-match 'never
+ company-dabbrev-downcase nil
+ company-dabbrev-ignore-case t
+ company-backends '(company-jedi company-nxml
+                                 company-css company-capf
+                                 (company-dabbrev-code company-keywords)
+                                 company-files company-dabbrev company-clang)
+ company-jedi-python-bin "python")
 
-       (define-key company-active-map (kbd "S-TAB") 'company-select-previous)
-       (define-key company-active-map (kbd "<backtab>") 'company-select-previous))
- (let ((map company-active-map))
-    (define-key map (kbd "<tab>") 'company-complete-selection)
-    (define-key map (kbd "RET") 'nil))
-     (setq company-frontends
-           '(company-pseudo-tooltip-unless-just-one-frontend
-             company-echo-metadata-frontend
-             company-preview-frontend)
-           company-auto-complete t)
-     (add-hook 'prog-mode-hook 'company-mode)
+(setq company-frontends
+      '(company-pseudo-tooltip-unless-just-one-frontend
+        company-echo-metadata-frontend
+        company-preview-frontend)
+      company-auto-complete t)
+(add-hook 'prog-mode-hook 'company-mode)
 
     (use-package company-jedi
       :straight t
@@ -786,6 +789,20 @@
 (use-package company-box
   :straight t
   :hook (company-mode . company-box-mode))
+
+(use-package lsp-ui
+  :straight t
+  :hook
+  (lsp-mode . lsp-ui-mode)
+  :custom
+  (lsp-ui-doc-position 'bottom))
+
+(use-package lsp-treemacs
+  :straight t
+  :after lsp)
+
+(use-package lsp-ivy
+  :straight t)
 
     (add-hook 'prog-mode-hook '(lambda () (display-line-numbers-mode 1)))
 
@@ -928,11 +945,11 @@
   :commands (lsp lsp-deferred)
   :init
   (require 'lsp)
-  (setq lsp-keymap-prefix "C-c j")
   (add-to-list 'lsp-enabled-clients 'clangd)
   (add-hook 'c-mode-hook 'lsp)
   (add-hook 'cpp-mode-hook 'lsp)
   :config
+  (define-key lsp-mode-map (kbd "s-h") lsp-command-map)
   (lsp-enable-which-key-integration t))
 (use-package dap-mode :straight t)
 
@@ -943,8 +960,6 @@
 (setq gc-cons-threshold (* 100 1024 1024)
       read-process-output-max (* 1024 1024)
       treemacs-space-between-root-nodes nil
-      company-idle-delay 0.0
-      company-minimum-prefix-length 1
       lsp-idle-delay 0.1 ;; clangd is fast
       ;; be more ide-ish
       lsp-headerline-breadcrumb-enable t)
@@ -1014,6 +1029,14 @@
 ;; set eldoc default delay
 (setq eldoc-idle-delay 0.1
       eldoc-echo-area-use-multiline-p nil)
+
+(use-package typescript-mode
+  :straight t
+  :mode "\\.ts\\'"
+  :hook (typescript-mode . lsp-deferred)
+  :config
+  (add-to-list 'lsp-enabled-clients 'ts-ls)
+  (setq typescript-indent-level 2))
 
 (setq css-indent-offset 2)
 
