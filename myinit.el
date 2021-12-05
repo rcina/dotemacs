@@ -1085,9 +1085,9 @@ instead."
     (bind-key "C-x g" 'magit-status)
     ))
 
-(use-package forge
-  :straight t
-  :after magit)
+;;(use-package forge
+;;  :straight t
+;;  :after magit)
 
 (use-package git-gutter
   :straight t
@@ -1215,32 +1215,32 @@ document. Addtionally, it sorts all acronyms in the list."
       gnus-ignored-newsgroups "^to\\.\\|^[0-9. ]+\\( \\|$\\)\\|^[\"]\"[#'()]")
 
 (defhydra hydra-elfeed ()
-  "filter"
-  ("l" (elfeed-search-set-filter "@6-month-ago +lobsters") "lobsters")
-  ("m" (elfeed-search-set-filter "@6-month-ago +Math") "Math")
-  ("c" (elfeed-search-set-filter "@6-months-ago +cs") "cs")
-  ("e" (elfeed-search-set-filter "@6-months-ago +emacs") "emacs")
-  ("B" (elfeed-search-set-filter "@6-months-ago +BSD") "BSD")
-  ("p" (elfeed-search-set-filter "@6-months-ago +programming") "programming")
-  ("*" (elfeed-search-set-filter "@6-months-ago +star") "Starred")
-  ("M" elfeed-toggle-star "Mark")
-  ("A" (elfeed-search-set-filter "@6-months-ago") "All")
-  ("T" (elfeed-search-set-filter "@1-day-ago") "Today")
-  ("Q" bjm/elfeed-save-db-and-bury "Quit Elfeed" :color blue)
-  ("q" nil "quit" :color blue)
-  )
+      "filter"
+      ("l" (elfeed-search-set-filter "@6-month-ago +lobsters") "lobsters")
+      ("m" (elfeed-search-set-filter "@6-month-ago +Math") "Math")
+      ("c" (elfeed-search-set-filter "@6-months-ago +cs") "cs")
+      ("e" (elfeed-search-set-filter "@6-months-ago +emacs") "emacs")
+      ("B" (elfeed-search-set-filter "@6-months-ago +BSD") "BSD")
+      ("p" (elfeed-search-set-filter "@6-months-ago +programming") "programming")
+      ("*" (elfeed-search-set-filter "@6-months-ago +star") "Starred")
+      ("M" elfeed-toggle-star "Mark")
+      ("A" (elfeed-search-set-filter "@6-months-ago") "All")
+      ("T" (elfeed-search-set-filter "@1-day-ago") "Today")
+      ("Q" bjm/elfeed-save-db-and-bury "Quit Elfeed" :color blue)
+      ("q" nil "quit" :color blue)
+      )
 
-(use-package elfeed
-  :straight t
-  :bind (:map elfeed-search-mode-map
-              ("q" . bjm/elfeed-save-db-and-bury)
-              ("Q" . bjm/elfeed-save-db-and-bury)
-              ("m" . elfeed-toggle-star)
-              ("M" . elfeed-toggle-star)
-              ("j" . hydra-elfeed/body)
-              ("J" . hydra-elfeed/body)
-              )
-  )
+    (use-package elfeed
+      :straight t
+      :bind (:map elfeed-search-mode-map
+                  ("q" . bjm/elfeed-save-db-and-bury)
+                  ("Q" . bjm/elfeed-save-db-and-bury)
+                  ("m" . elfeed-toggle-star)
+                  ("M" . elfeed-toggle-star)
+                  ("j" . hydra-elfeed/body)
+                  ("J" . hydra-elfeed/body)
+                  )
+      )
 
 (use-package elfeed-goodies
   :straight t
@@ -1248,41 +1248,41 @@ document. Addtionally, it sorts all acronyms in the list."
   (elfeed-goodies/setup))
 
 
-(use-package elfeed-org
-  :straight t
-  :config
-  (elfeed-org)
-  (setq rmh-elfeed-org-files (list "~/elfeed/elfeed.org")))
+    (use-package elfeed-org
+      :straight t
+      :config
+      (elfeed-org)
+      (setq rmh-elfeed-org-files (list "~/elfeed/elfeed.org")))
 
-(setq elfeed-db-directory "~/elfeed/elfeeddb")
-
-
-(defun elfeed-mark-all-as-read ()
-  (interactive)
-  (mark-whole-buffer)
-  (elfeed-search-untag-all-unread))
+    (setq elfeed-db-directory "~/elfeed/elfeeddb")
 
 
-;;functions to support syncing .elfeed between machines
-;;makes sure elfeed reads index from disk before launching
-(defun bjm/elfeed-load-db-and-open ()
-  "Wrapper to load the elfeed db from disk before opening"
-  (interactive)
-  (elfeed-db-load)
-  (elfeed)
-  (elfeed-search-update--force))
-
-;;write to disk when quiting
-(defun bjm/elfeed-save-db-and-bury ()
-  "Wrapper to save the elfeed db to disk before burying buffer"
-  (interactive)
-  (elfeed-db-save)
-  (quit-window))
+    (defun elfeed-mark-all-as-read ()
+      (interactive)
+      (mark-whole-buffer)
+      (elfeed-search-untag-all-unread))
 
 
+    ;;functions to support syncing .elfeed between machines
+    ;;makes sure elfeed reads index from disk before launching
+    (defun bjm/elfeed-load-db-and-open ()
+      "Wrapper to load the elfeed db from disk before opening"
+      (interactive)
+      (elfeed-db-load)
+      (elfeed)
+      (elfeed-search-update--force))
 
-(defalias 'elfeed-toggle-star
-  (elfeed-expose #'elfeed-search-toggle-all 'star))
+    ;;write to disk when quiting
+    (defun bjm/elfeed-save-db-and-bury ()
+      "Wrapper to save the elfeed db to disk before burying buffer"
+      (interactive)
+      (elfeed-db-save)
+      (quit-window))
+
+
+
+    (defalias 'elfeed-toggle-star
+      (elfeed-expose #'elfeed-search-toggle-all 'star))
 
 (use-package ox-hugo
   :straight t            ;Auto-install the package from Melpa (optional)

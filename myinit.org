@@ -1503,9 +1503,9 @@ instead."
 #+end_src
 *** Forge
 #+begin_src emacs-lisp
-(use-package forge
-  :straight t
-  :after magit)
+;;(use-package forge
+;;  :straight t
+;;  :after magit)
 #+end_src
 *** Git-gutter
 ***
@@ -1687,10 +1687,10 @@ https://florian.adamsky.it/2018/03/09/emacs-add-acronyms.html
                   )
       )
 
-    (use-package elfeed-goodies
-      :straight t
-      :config
-      (elfeed-goodies/setup))
+(use-package elfeed-goodies
+  :straight t
+  :config
+  (elfeed-goodies/setup))
 
 
     (use-package elfeed-org
