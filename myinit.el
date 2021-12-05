@@ -1313,4 +1313,7 @@ instead."
   :straight t
   :hook (eshell-first-time-mode . efs/configure-shell)
   :config
+  (with-eval-after-load 'esh-opt
+    (setq eshell-destroy-buffer-when-process-dies t)
+    (setq eshell-visual-commands '("htop" "zsh" "vim")))
   (eshell-git-prompt-use-theme 'powerline))
