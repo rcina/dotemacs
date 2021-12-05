@@ -749,10 +749,10 @@ Package
   between projects much easier.
   #+begin_src emacs-lisp
 ;; Use coreutils ls
-(when (string= system-type "freebsd")
-  (setq dired-use-ls-dired t
-        insert-directory-program "/usr/local/bin/gls"
-        dired-listing-switches "-aBhl --group-directories-first"))
+;;(when (string= system-type "freebsd")
+;;  (setq dired-use-ls-dired t
+;;        insert-directory-program "/usr/local/bin/gls"
+;;        dired-listing-switches "-aBhl --group-directories-first"))
 ;; projectile
 (use-package projectile
   :straight t
@@ -770,6 +770,12 @@ Package
   :straight t
   :config
   (counsel-projectile-mode))
+#+end_src
+*** Dired
+#+begin_src emacs-lisp
+ (setq dired-use-ls-dired t
+       insert-directory-program "/usr/local/bin/gls")
+(setq dired-listing-switches "-laGh1v --group-directories-first")
 #+end_src
 *** Dired+
 - Library of features to extend dired mode.
