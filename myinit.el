@@ -1311,5 +1311,6 @@ instead."
 
 (use-package eshell
   :straight t
+  :hook (eshell-first-time-mode . efs/configure-shell)
   :config
   (eshell-git-prompt-use-theme 'powerline))

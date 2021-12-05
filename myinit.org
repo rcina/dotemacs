@@ -1769,6 +1769,7 @@ https://florian.adamsky.it/2018/03/09/emacs-add-acronyms.html
 
 (use-package eshell
   :straight t
+  :hook (eshell-first-time-mode . efs/configure-shell)
   :config
   (eshell-git-prompt-use-theme 'powerline))
 #+end_src
