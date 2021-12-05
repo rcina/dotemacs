@@ -537,6 +537,19 @@
 (setq dired-use-ls-dired t
        insert-directory-program "/usr/local/bin/gls")
 (setq dired-listing-switches "-laGh1v --group-directories-first")
+(setq delete-by-moving-to-trash t)
+
+(use-package all-the-icons-dired
+  :straight t
+  :hook (dired-mode . all-the-icons-dired-mode))
+
+(use-package dired-hide-dotfiles
+  :straight t
+  :hook
+  (dired-mode . dired-hide-dotfiles-mode)
+  :config
+  (define-key dired-mode-map (kbd "C-c t") 'dired-hide-dotfiles-mode)
+  )
 
 (use-package dired+
   :straight t
