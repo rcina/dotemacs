@@ -313,6 +313,7 @@
 (setq org-log-done 'time)
 (setq org-log-into-drawer t)
 (setq org-agenda-start-on-weekday 0)
+(setq org-log-repeat nil)
 
 (setq org-agenda-files (list "~/gtd/tasks.org"
                              "~/gtd/habits.org"
