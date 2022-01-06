@@ -569,20 +569,15 @@
   #+begin_src emacs-lisp
 ;; org TODO Keywords
 (setq org-todo-keywords
-    '((sequence "REPEAT(r)" "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
-      (sequence "BACKLOG(b)" "PLAN(p)" "READY(R)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")))
+    '((sequence "TODO(t)" "NEXT(n)" "REPEAT(r)" "WAITING(w)" "SOMEDAY(s)" "PROJ(p)" "|" "DONE(d!)" "CANCELLED(c)")))
 
     (setq org-todo-keyword-faces
           (quote (("TODO" :foreground "red" :weight bold)
                   ("NEXT" :foreground "#00ffff" :weight bold)
-                  ("BACKLOG" :foreground "magenta" :weight bold)
-                  ("PLAN" :foreground "orange" :weight bold)
-                  ("READY" :foreground "cyan" :weight bold)
-                  ("Active" :foreground "#ffc252" :weight bold)
-                  ("REVIEW" :foreground "#5252ff" :weight bold)
-                  ("WAIT" :foreground "#ff24ff" :weight bold)
-                  ("HOLD" :foreground "lime" :weight bold)
-                  ("CANC" :foreground "#00a8a8" :weight bold)
+                  ("REPEAT" :foreground "magenta" :weight bold)
+                  ("WAITING" :foreground "orange" :weight bold)
+                  ("SOMEDAY" :foreground "cyan" :weight bold)
+                  ("PROJ" :foreground "#ffc252" :weight bold)
                   ("DONE" :foreground "green" :weight bold)
                   ("CANCELLED" :foreground "yellow" :weight bold))))
 
