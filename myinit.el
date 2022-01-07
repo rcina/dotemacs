@@ -374,7 +374,7 @@
 
 ;; org TODO Keywords
 (setq org-todo-keywords
-    '((sequence "TODO(t)" "NEXT(n)" "REPEAT(r)" "WAITING(w)" "SOMEDAY(s)" "PROJ(p)" "|" "DONE(d!)" "CANCELLED(c)")))
+    '((sequence "REPEAT(r)" "NEXT(n@/!)" "TODO(t@/!)" "WAITING(w@/!)" "SOMEDAY(s@/!)" "PROJ(p)" "|" "DONE(d@)" "CANCELLED(c@)")))
 
     (setq org-todo-keyword-faces
           (quote (("TODO" :foreground "red" :weight bold)
