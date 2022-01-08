@@ -315,6 +315,8 @@
 (setq org-agenda-start-on-weekday 0)
 (setq org-log-repeat nil)
 (setq org-log-reschedule 'time)
+(setq org-todo-repeat-to-state "REPEAT")
+
 
 (setq org-agenda-files (list "~/gtd/tasks.org"
                              "~/gtd/habits.org"
