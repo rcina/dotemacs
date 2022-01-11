@@ -827,11 +827,45 @@ Package
   #+begin_src emacs-lisp
     (add-hook 'text-mode-hook 'turn-on-auto-fill)
   #+end_src
-*** Flyspell Mode
-- Turn on flyspell mode in text mode.
-  #+begin_src emacs-lisp
-    (add-hook 'text-mode-hook 'turn-on-flyspell)
-  #+end_src
+*** Flycheck-aspell
+#+begin_src emacs-lisp
+(use-package flycheck-aspell
+  :straight t
+  :config
+  (setq ispell-dictionary "en_GB")
+  (setq ispell-program-name "aspell")
+  (setq ispell-silently-savep t)
+  (setq ispell-personal-dictionary "~/.aspell.en.pws")
+  ;; Ensure `flycheck-aspell' is available
+  (require 'flycheck-aspell)
+  ;; If you want to check TeX/LaTeX/ConTeXt buffers
+  (add-to-list 'flycheck-checkers 'tex-aspell-dynamic)
+  ;; If you want to check Markdown/GFM buffers
+  (add-to-list 'flycheck-checkers 'markdown-aspell-dynamic)
+  ;; If you want to check HTML buffers
+  (add-to-list 'flycheck-checkers 'html-aspell-dynamic)
+  ;; If you want to check XML/SGML buffers
+  (add-to-list 'flycheck-checkers 'xml-aspell-dynamic)
+  ;; If you want to check Nroff/Troff/Groff buffers
+  (add-to-list 'flycheck-checkers 'nroff-aspell-dynamic)
+  ;; If you want to check Texinfo buffers
+  (add-to-list 'flycheck-checkers 'texinfo-aspell-dynamic)
+  ;; If you want to check comments and strings for C-like languages
+  (add-to-list 'flycheck-checkers 'c-aspell-dynamic)
+  ;; If you want to check message buffers
+  (add-to-list 'flycheck-checkers 'mail-aspell-dynamic)
+  )
+
+(flycheck-aspell-define-checker "org"
+  "Org" ("--add-filter" "url")
+  (org-mode))
+(add-to-list 'flycheck-checkers 'org-aspell-dynamic)
+
+(advice-add #'ispell-pdict-save :after #'flycheck-maybe-recheck)
+(defun flycheck-maybe-recheck (_)
+  (when (bound-and-true-p flycheck-mode)
+   (flycheck-buffer)))
+#+end_src
 *** Multiple Cursors Package
 - Useful package that lets you use multiple cursors to manipulate text.
   ([[https://github.com/magnars/multiple-cursors.el][Multiple cursors website)]]
