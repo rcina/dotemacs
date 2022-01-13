@@ -323,9 +323,9 @@
                              "~/gtd/goals.org"
                              "~/gtd/birthdays.org"))
 
-(setq org-refile-targets
-    '(("Archive.org" :maxlevel . 1)
-      ("Tasks.org" :maxlevel . 1)))
+(setq org-refile-targets '((nil :maxlevel . 9)
+                           (org-agenda-files :maxlevel . 3)
+                           (org-buffer-list :maxlevel . 2)))
 
 ;; Save Org buffers after refiling!
 (advice-add 'org-refile :after 'org-save-all-org-buffers)
@@ -343,13 +343,13 @@
 (setq org-confirm-babel-evaluate nil)
 
 (setq org-startup-indented t
-      org-cycle-include-plain-lists 'integrate
-      org-return-follows-link t
-      org-src-fontify-natively t
-      org-src-preserve-indentation t
-      org-enforce-todo-dependencies t
-      org-enforce-todo-checkbox-dependencies t
-      org-link-frame-setup '((file . find-file)))
+org-cycle-include-plain-lists 'integrate
+org-return-follows-link t
+org-src-fontify-natively t
+org-src-preserve-indentation t
+org-enforce-todo-dependencies t
+org-enforce-todo-checkbox-dependencies t
+org-link-frame-setup '((file . find-file)))
 
 (setq org-export-backends '(ascii beamer html latex md))
 
