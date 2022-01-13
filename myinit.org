@@ -549,6 +549,13 @@
 ;;(org-agenda nil "a")
 (add-hook 'after-init-hook 'org-agenda-list)
   #+end_src
+*** Org-agenda-list-current-buffer function
+#+begin_src emacs-lisp
+(defun my/org-agenda-list-current-buffer ()
+  (interactive)
+  (let ((org-agenda-files (list (buffer-file-name (current-buffer)))))
+      (call-interactively #'org-agenda)))
+#+end_src
 *** Org mode Keybindings
 - The default keybindings for org-mode agenda, storing a link, and org capture.
   #+begin_src emacs-lisp
