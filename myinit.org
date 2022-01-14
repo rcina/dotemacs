@@ -530,6 +530,8 @@
       org-track-ordered-property-with-tag t
       org-agenda-dim-blocked-tasks t
       org-enforce-todo-checkbox-dependencies t
+      org-attach-use-inheritance t
+      org-use-property-inheritance t
       org-link-frame-setup '((file . find-file)))
 
 (setq org-export-backends '(ascii beamer html latex md))
