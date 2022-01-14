@@ -1,5 +1,5 @@
 #+STARTUP: fold
-* Emacs Configuration
+`* Emacs Configuration
 ** Emacs General Configuration
 *** Interface Adjustments
 - Hide tool bar, hide menu bar, hide scrollbars, turn on show-paren-mode,
@@ -759,6 +759,22 @@
     (straight-use-package 'org-cliplink)
     (global-set-key (kbd "C-x p i") 'org-cliplink)
   #+end_src
+*** Create an ID and copy the UUID to the clipboard
+#+begin_src emacs-lisp
+(defun my/copy-id-to-clipboard() "Copy the ID property value
+to killring, if no ID is there then create a new unique ID.
+This function works only in org-mode buffers.
+The purpose of this function is to easily construct id:-links to
+org-mode items. If its assigned to a key it saves you marking the
+text and copying to the killring."
+(interactive)
+(when (eq major-mode 'org-mode) ; do this only in org-mode buffers
+(setq mytmpid (funcall 'org-id-get-create))
+(kill-new mytmpid)
+(message "Copied %s to killring (clipboard)" mytmpid)
+))
+(global-set-key (kbd "<f6>") 'my/copy-id-to-clipboard)
+#+end_src
 ** Buffers/Editing
 *** Projectile
 Package
