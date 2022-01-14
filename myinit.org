@@ -484,56 +484,63 @@
 *** Org General Configuration
 - This section configures org mode for my needs.
   #+begin_src emacs-lisp
-    (require 'org-id)
-    (setq org-id-link-to-org-use-id 'create-if-interactive)
-    (setq org-habit-show-all-today t)
-    (setq org-agenda-start-with-log-mode t)
-    (setq org-log-done 'time)
-    (setq org-log-into-drawer t)
-    (setq org-agenda-start-on-weekday 0)
-    ;;(setq org-log-repeat nil)
-    (setq org-log-reschedule 'time)
-    ;;(setq org-todo-repeat-to-state "REPEAT")
+(require 'org-id)
+(setq org-id-link-to-org-use-id 'create-if-interactive)
+(setq org-habit-show-all-today t)
+(setq org-agenda-start-with-log-mode t)
+(setq org-log-done 'time)
+(setq org-log-into-drawer t)
+(setq org-agenda-start-on-weekday 0)
+;;(setq org-log-repeat nil)
+(setq org-log-reschedule 'time)
+;;(setq org-todo-repeat-to-state "REPEAT")
 
 
-    (setq org-agenda-files (list "~/gtd/tasks.org"
-                                 "~/gtd/habits.org"
-                                 "~/gtd/goals.org"
-                                 "~/gtd/birthdays.org"))
+(setq org-agenda-files (list "~/gtd/tasks.org"
+                             "~/gtd/habits.org"
+                             "~/gtd/goals.org"
+                             "~/gtd/birthdays.org"))
 
-    (setq org-refile-targets '((nil :maxlevel . 9)
-                               (org-agenda-files :maxlevel . 3)
-                               (org-buffer-list :maxlevel . 2)))
+(setq org-refile-targets '((nil :maxlevel . 9)
+                           (org-agenda-files :maxlevel . 3)
+                           (org-buffer-list :maxlevel . 2)))
 
-    ;; Save Org buffers after refiling!
-    (advice-add 'org-refile :after 'org-save-all-org-buffers)
+;; Save Org buffers after refiling!
+(advice-add 'org-refile :after 'org-save-all-org-buffers)
 
-    ;; Refile in a single go
-    (setq org-outline-path-complete-in-steps nil)
-    (setq org-refile-use-outline-path 'file)
+;; Refile in a single go
+(setq org-outline-path-complete-in-steps nil)
+(setq org-refile-use-outline-path 'file)
+(setq org-refile-allow-creating-parent-nodes 'confirm)
 
-    ;; other useful settings
-    (setq org-clock-into-drawer "CLOCKING")
-    (setq org-export-with-smart-quotes t)
-    (setq org-src-fontify-natively t)
-    (setq org-src-window-setup 'current-window)
-    (add-hook 'org-mode-hook 'org-indent-mode)
-    (setq org-confirm-babel-evaluate nil)
+;; other useful settings
+(setq org-clock-into-drawer "CLOCKING")
+(setq org-export-with-smart-quotes t)
+(setq org-src-fontify-natively t)
+(setq org-src-window-setup 'current-window)
+(add-hook 'org-mode-hook 'org-indent-mode)
+(setq org-confirm-babel-evaluate nil)
 
-    (setq org-startup-indented t
-    org-cycle-include-plain-lists 'integrate
-    org-return-follows-link t
-    org-src-fontify-natively t
-    org-src-preserve-indentation t
-    org-enforce-todo-dependencies t
-    org-enforce-todo-checkbox-dependencies t
-    org-link-frame-setup '((file . find-file)))
+(setq org-startup-indented t
+      org-cycle-include-plain-lists 'integrate
+      org-return-follows-link t
+      org-src-fontify-natively t
+      org-src-preserve-indentation t
+      org-enforce-todo-dependencies t
+      org-track-ordered-property-with-tag t
+      org-agenda-dim-blocked-tasks t
+      org-enforce-todo-checkbox-dependencies t
+      org-link-frame-setup '((file . find-file)))
 
-    (setq org-export-backends '(ascii beamer html latex md))
+(setq org-export-backends '(ascii beamer html latex md))
 
-    (require 'org-habit)
-    (add-to-list 'org-modules 'org-habit)
-    (setq org-habit-graph-column 60)
+(require 'org-habit)
+(add-to-list 'org-modules 'org-habit)
+(setq org-habit-graph-column 60)
+
+(setq org-clock-sound t) ;; Standard Emacs beep
+(setq org-clock-sound "~/sounds/Smallbell.wav") ;; Play this sound file, fall back to beep
+
   #+end_src
 *** Configure org contrib
 #+begin src emacs-lisp
@@ -612,7 +619,7 @@
      ((agenda "" ((org-deadline-warning-days 7)))
       (todo "NEXT"
         ((org-agenda-overriding-header "Next Tasks")))
-      (tags-todo "agenda/ACTIVE" ((org-agenda-overriding-header "Active Projects")))))
+      (tags-todo "ACTIVE" ((org-agenda-overriding-header "Active Projects")))))
 
     ("n" "Next Tasks"
      ((todo "NEXT"
@@ -627,30 +634,30 @@
       (org-agenda-files org-agenda-files)))
 
     ("w" "Workflow Status"
-     ((todo "WAIT"
+     ((todo "WAITING"
             ((org-agenda-overriding-header "Waiting on External")
              (org-agenda-files org-agenda-files)))
-      (todo "REVIEW"
-            ((org-agenda-overriding-header "In Review")
+      (todo "TODO"
+            ((org-agenda-overriding-header "TODO")
              (org-agenda-files org-agenda-files)))
-      (todo "PLAN"
-            ((org-agenda-overriding-header "In Planning")
+      (todo "SOMEDAY"
+            ((org-agenda-overriding-header "Someday")
              (org-agenda-todo-list-sublevels nil)
              (org-agenda-files org-agenda-files)))
-      (todo "BACKLOG"
+      (todo "PROJ"
             ((org-agenda-overriding-header "Project Backlog")
              (org-agenda-todo-list-sublevels nil)
              (org-agenda-files org-agenda-files)))
-      (todo "READY"
-            ((org-agenda-overriding-header "Ready for Work")
+      (todo "NEXT"
+            ((org-agenda-overriding-header "Ready for Action")
              (org-agenda-files org-agenda-files)))
-      (todo "ACTIVE"
+      (tags-todo  "ACTIVE"
             ((org-agenda-overriding-header "Active Projects")
              (org-agenda-files org-agenda-files)))
-      (todo "COMPLETED"
-            ((org-agenda-overriding-header "Completed Projects")
+      (todo "DONE"
+            ((org-agenda-overriding-header "Completed Items")
              (org-agenda-files org-agenda-files)))
-      (todo "CANC"
+      (todo "CANCELLED"
             ((org-agenda-overriding-header "Cancelled Projects")
              (org-agenda-files org-agenda-files)))))))
 
@@ -696,7 +703,7 @@
     (setq org-capture-templates
           '(("t" "Tasks / Projects")
             ("tt" "Task" entry (file+olp "~/gtd/tasks.org" "Inbox")
-             "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
+             (file "~/gtd/tpl-todo.txt"))
             ("j" "Journal Entries")
             ("jj" "Journal" entry
              (file+olp+datetree "~/gtd/Journal.org")
@@ -711,11 +718,15 @@
             ("ll" "Link" entry(file+headline "~/gtd/links.org" "Links")
              "* %? %^L %^g \n%T" :prepend t)
             ("g" "Goals")
-            ("gg" "Goal" entry (file+headline "~/gtd/goals.org" "Goals") "* %i%? \n %U")
+            ("gg" "Goal" entry (file+headline "~/gtd/goals.org" "Goals") (file "~/gtd/tpl-goal.org"))
             ("p" "Projects")
-            ("pp" "Project" entry (file+headline "~/gtd/project.org" "Project")  "* %i%? \n %U")
+            ("pp" "Project" entry (file+headline "~/gtd/tasks.org" "Projects")(file "~/gtd/tpl-projects.txt"))
+            ("b" "Books")
+            ("bb" "Add book to read" entry (file+headline "~/gtd/tasks.org" "Books to read") (file "~/gtd/tpl-book.txt") :empty-lines-after 2)
             ("s" "Someday")
-            ("ss" "Someday" entry (file+headline "~/gtd/someday-maybe.org" "Someday/Maybe") "* %i%? \n %U")
+            ("ss" "Someday" entry (file+headline "~/gtd/tasks.org" "Someday") "* %i%? \n %U")
+            ("w" "Waiting")
+            ("ww" "Waiting" entry (file+headline "~/gtd/tasks.org" "Waiting") (file "~/gtd/tpl-waiting.txt"))
             ))
   #+end_src
 *** Org split-line behaviour on M-RET
