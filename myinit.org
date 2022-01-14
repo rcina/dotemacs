@@ -1,5 +1,5 @@
 #+STARTUP: fold
-`* Emacs Configuration
+* Emacs Configuration
 ** Emacs General Configuration
 *** Interface Adjustments
 - Hide tool bar, hide menu bar, hide scrollbars, turn on show-paren-mode,
@@ -711,6 +711,9 @@
           '(("t" "Tasks / Projects")
             ("tt" "Task" entry (file+olp "~/gtd/tasks.org" "Inbox")
              (file "~/gtd/tpl-todo.txt"))
+            ("d" "Daily Plan")
+            ("dp" "Plan" entry (file+olp+datetree "~/gtd/dailyplan.org")
+             (file "~/gtd/tpl-dailyplan.txt"))
             ("j" "Journal Entries")
             ("jj" "Journal" entry
              (file+olp+datetree "~/gtd/Journal.org")
@@ -768,19 +771,43 @@
   #+end_src
 *** Create an ID and copy the UUID to the clipboard
 #+begin_src emacs-lisp
-(defun my/copy-id-to-clipboard() "Copy the ID property value
-to killring, if no ID is there then create a new unique ID.
-This function works only in org-mode buffers.
+(defun my/copy-idlink-to-clipboard() "Copy an ID link with the
+headline to killring, if no ID is there then create a new unique
+ID. This function works only in org-mode or org-agenda buffers.
 The purpose of this function is to easily construct id:-links to
 org-mode items. If its assigned to a key it saves you marking the
 text and copying to the killring."
 (interactive)
+(when (eq major-mode 'org-agenda-mode)
+(org-agenda-show)
+(org-agenda-goto))
 (when (eq major-mode 'org-mode) ; do this only in org-mode buffers
+(setq mytmphead (nth 4 (org-heading-components)))
 (setq mytmpid (funcall 'org-id-get-create))
-(kill-new mytmpid)
-(message "Copied %s to killring (clipboard)" mytmpid)
+(setq mytmplink (format "[[id:%s][%s]]" mytmpid mytmphead))
+(kill-new mytmplink)
+(message "Copied %s to killring (clipboard)" mytmplink)
 ))
-(global-set-key (kbd "<f6>") 'my/copy-id-to-clipboard)
+(global-set-key (kbd "<f6>") 'my/copy-idlink-to-clipboard)
+#+end_src
+*** Clear checkboxes when repeating task marked done
+#+begin_src emacs-lisp
+(defun org-reset-checkbox-state-maybe ()
+"Reset all checkboxes in an entry
+if the `RESET_CHECK_BOXES' property is set"
+(interactive "∗")
+(if (org-entry-get (point) "RESET_CHECK_BOXES")
+    (org-reset-checkbox-state-subtree)))
+
+(defun org-checklist ()
+  (when (member org-state org-done-keywords)
+    (org-reset-checkbox-state-maybe)))
+
+(defun my-clockfiles ()
+  (append org-agenda-files
+          (file-expand-wildcards "~/gtd/track∗.org")))
+
+(add-hook 'org-after-todo-state-change-hook 'org-checklist)
 #+end_src
 ** Buffers/Editing
 *** Projectile
