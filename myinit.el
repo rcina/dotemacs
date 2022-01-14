@@ -356,6 +356,11 @@
       org-use-property-inheritance t
       org-link-frame-setup '((file . find-file)))
 
+(setq org-agenda-include-diary t
+      diary-display-function #'diary-fancy-display)
+     (add-hook 'diary-list-entries-hook #'diary-include-other-diary-files)
+     (add-hook 'diary-list-entries-hook #'diary-sort-entries t)
+
 (setq org-export-backends '(ascii beamer html latex md))
 
 (require 'org-habit)
