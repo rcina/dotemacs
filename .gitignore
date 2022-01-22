@@ -62,3 +62,4 @@ saveplace
 .dap-breakpoints
 .python-environments
 workspace/
+org-roam.db
