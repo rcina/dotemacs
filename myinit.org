@@ -811,11 +811,6 @@ if the `RESET_CHECK_BOXES' property is set"
 #+end_src
 *** Org-roam
 #+begin_src emacs-lisp
-(use-package sqlite3
-  :straight t
-  :config
-  (require 'sqlite3))
-
 (use-package emacsql-sqlite3
   :straight t
   :config

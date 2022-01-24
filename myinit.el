@@ -571,10 +571,10 @@ if the `RESET_CHECK_BOXES' property is set"
 
 (add-hook 'org-after-todo-state-change-hook 'org-checklist)
 
-(use-package sqlite3
-  :straight t
-  :config
-  (require 'sqlite3))
+;;(use-package sqlite3
+;;  :straight t
+;;  :config
+;;  (require 'sqlite3))
 
 (use-package emacsql-sqlite3
   :straight t
