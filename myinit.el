@@ -603,6 +603,7 @@ if the `RESET_CHECK_BOXES' property is set"
   :bind-keymap
   ("C-c n d" . org-roam-dailies-map)
   :config
+  (setq org-roam-database-connector 'sqlite3)
   (require 'org-roam-dailies) ;; Ensure the keymap is available
   (org-roam-db-autosync-mode))
 
