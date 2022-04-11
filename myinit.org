@@ -984,19 +984,11 @@ Package
   #+begin_src emacs-lisp
     (use-package aggressive-indent :straight t)
   #+end_src
-*** Undo-tree Package
-- Improve on emacs undo with undo-tree. Define a C-z and C-S-z for
-  undo and redo respectively.
+*** Undo/Redo
+- Define a C-z and C-S-z for undo and redo respectively.
   #+begin_src emacs-lisp
-    (use-package undo-tree
-      :straight t
-      :diminish undo-tree-mode
-      :init
-      (global-undo-tree-mode 1)
-      :config
-      (defalias 'redo 'undo-tree-redo)
-      :bind (("C-z" . undo)     ; Zap to character isn't helpful
-             ("C-S-z" . redo)))
+(global-set-key (kbd "C-z") 'undo-only)
+(global-set-key (kbd "C-S-z") 'undo-redo)
   #+end_src
 *** Popup-kill-ring Package
 - Useful package for easily retrieving or yanking from the

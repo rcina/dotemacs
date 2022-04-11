@@ -571,11 +571,6 @@ if the `RESET_CHECK_BOXES' property is set"
 
 (add-hook 'org-after-todo-state-change-hook 'org-checklist)
 
-;;(use-package sqlite3
-;;  :straight t
-;;  :config
-;;  (require 'sqlite3))
-
 (use-package emacsql-sqlite3
   :straight t
   :config
@@ -715,15 +710,8 @@ if the `RESET_CHECK_BOXES' property is set"
 
 (use-package aggressive-indent :straight t)
 
-(use-package undo-tree
-  :straight t
-  :diminish undo-tree-mode
-  :init
-  (global-undo-tree-mode 1)
-  :config
-  (defalias 'redo 'undo-tree-redo)
-  :bind (("C-z" . undo)     ; Zap to character isn't helpful
-         ("C-S-z" . redo)))
+(global-set-key (kbd "C-z") 'undo-only)
+(global-set-key (kbd "C-S-z") 'undo-redo)
 
 (straight-use-package 'popup-kill-ring)
 (global-set-key "\M-y" 'popup-kill-ring)
