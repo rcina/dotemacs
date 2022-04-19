@@ -891,7 +891,7 @@ if the `RESET_CHECK_BOXES' property is set"
         ("<tab>" . company-indent-or-complete-common))
   :custom
   (company-minimum-prefix-length 1)
-  (company-idle-dealy 0.0)
+  (company-idle-delay 0.7)
   )
 
 (setq
