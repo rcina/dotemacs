@@ -1618,6 +1618,11 @@ instead."
 (with-eval-after-load 'info
   (define-key Info-mode-map (kbd "c") 'my-info-copy-current-node-name))
   #+end_src
+*** Flymake
+#+begin_src emacs-lisp
+;; Enabled inline static analysis
+(add-hook 'prog-mode-hook #'flymake-mode)
+#+end_src
 ** Git
 *** Magit
 #+begin_src emacs-lisp
