@@ -911,6 +911,7 @@ Package
             try-complete-file-name-partially
             try-complete-file-name
             try-expand-all-abbrevs))
+(global-set-key [remap dabbrev-expand] 'hippie-expand)
   #+end_src
 *** Yasnippet package
 - YASnippet template system for Emacs.
