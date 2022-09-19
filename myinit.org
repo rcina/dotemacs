@@ -1658,7 +1658,7 @@ instead."
 #+end_src
 *** Git-timemachine
 #+begin_src emacs-lisp
-  (use-package git-timemachine
+  (straight-use-package 'git-timemachine
     :straight t
     )
 #+end_src
