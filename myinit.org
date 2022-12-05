@@ -802,6 +802,7 @@
 (add-to-list 'org-emphasis-alist
              '("*" (:foreground "green")
                ))
+(add-hook 'org-mode-hook 'org-cdlatex-mode)
   #+end_src
 *** Configure org contrib
 #+begin src emacs-lisp
@@ -1959,18 +1960,38 @@ instead."
     :init (setq markdown-command "multimarkdown"))
 #+end_src
 ** Latex
-*** AUCTeX
+*** AUCTeX/CDLatex
 - Set up AUCTeX for Emacs.
   #+begin_src emacs-lisp
-    (use-package tex-site
-      :straight t
-      :ensure auctex
-      :mode ("\\.tex\\'" . latex-mode)
-      :hook ((LaTeX-mode . prettify-symbols-mode))
-      :bind (:map LaTeX-mode-map
+   ;; AucTeX settings - almost no changes
+(use-package tex-site
+  :ensure auctex)
+
+(use-package latex
+  :ensure auctex
+  :hook ((LaTeX-mode . prettify-symbols-mode))
+  :bind (:map LaTeX-mode-map
          ("C-S-e" . latex-math-from-calc))
-      :config
-      (setq TeX-auto-save t)
+  :config
+  ;; Format math as a Latex string with Calc
+  (defun latex-math-from-calc ()
+    "Evaluate `calc' on the contents of line at point."
+    (interactive)
+    (cond ((region-active-p)
+           (let* ((beg (region-beginning))
+                  (end (region-end))
+                  (string (buffer-substring-no-properties beg end)))
+             (kill-region beg end)
+             (insert (calc-eval `(,string calc-language latex
+                                          calc-prefer-frac t
+                                          calc-angle-mode rad)))))
+          (t (let ((l (thing-at-point 'line)))
+               (end-of-line 1) (kill-line 0)
+               (insert (calc-eval `(,l
+                                    calc-language latex
+                                    calc-prefer-frac t
+                                    calc-angle-mode rad)))))))
+ (setq TeX-auto-save t)
       (setq TeX-parse-self t)
       (setq-default TeX-master nil)
       (add-hook 'LaTeX-mode-hook
@@ -1995,76 +2016,21 @@ instead."
       ;; to use pdfview with auctex
       (setq TeX-view-program-selection '((output-pdf "pdf-tools"))
             TeX-source-correlate-start-server t)
-      (setq TeX-view-program-list '(("pdf-tools" "TeX-pdf-tools-sync-view")))
+      (setq TeX-view-program-list '(("pdf-tools" "TeX-pdf-tools-sync-view")
+  )))
 
-       (defun latex-math-from-calc ()
-    "Evaluate `calc' on the contents of line at point."
-    (interactive)
-    (cond ((region-active-p)
-           (let* ((beg (region-beginning))
-                  (end (region-end))
-                  (string (buffer-substring-no-properties beg end)))
-             (kill-region beg end)
-             (insert (calc-eval `(,string calc-language latex
-                                          calc-prefer-frac t
-                                          calc-angle-mode rad)))))
-          (t (let ((l (thing-at-point 'line)))
-               (end-of-line 1) (kill-line 0)
-               (insert (calc-eval `(,l
-                                    calc-language latex
-                                    calc-prefer-frac t
-                                    calc-angle-mode rad))))))
 
-      )
-  #+end_src
-*** RefTeX
-- Setup reftex.
-  #+begin_src emacs-lisp
-    (use-package reftex
-      :straight t
-      :defer t
-      :config
-      (setq reftex-cite-prompt-optional-args t))
-  #+end_src
-*** Add Acronyms in easily in auctex
-- Source of this function comes from the following web page:
-https://florian.adamsky.it/2018/03/09/emacs-add-acronyms.html
-#+BEGIN_SRC emacs-lisp
-  (defun fa/add-latex-acronym (region-beg region-end)
-    "This function reads the written out form of an acronym via the
-  minibuffer and adds it to the acronym list in a latex
-  document. Addtionally, it sorts all acronyms in the list."
-    (interactive "r")
-    (save-excursion
-      (let ((acronym
-             (if (region-active-p)
-                 (buffer-substring region-beg region-end)
-               (read-from-minibuffer "Acronym: ")))
-            (full-name (read-from-minibuffer "Full Name: ")))
-        (beginning-of-buffer)
-        (if (search-forward "\\begin{acronym}" nil t)
-            (progn
-              (deactivate-mark)
-              (open-line 1)
-              (forward-line 1)
-              (insert (concat "  \\acro{" acronym "}{" full-name "}"))
-              (beginning-of-line)
-              (sort-lines nil (point) (search-forward "\\end{acronym}" nil nil)))
-          (user-error "No acronym environment found")))))
-#+END_SRC
-*** CDLatex
-#+begin_src emacs-lisp
+
 ;; CDLatex settings
 (use-package cdlatex
-  :straight t
+  :ensure t
   :hook (LaTeX-mode . turn-on-cdlatex)
-  :hook (org-mode . turn-on-cdlatex)
   :bind (:map cdlatex-mode-map
               ("<tab>" . cdlatex-tab)))
 
 ;; Yasnippet settings
 (use-package yasnippet
-  :straight t
+  :ensure t
   :hook ((LaTeX-mode . yas-minor-mode)
          (post-self-insert . my/yas-try-expanding-auto-snippets))
   :config
@@ -2086,7 +2052,6 @@ https://florian.adamsky.it/2018/03/09/emacs-add-acronyms.html
 ;; CDLatex integration with YaSnippet: Allow cdlatex tab to work inside Yas
 ;; fields
 (use-package cdlatex
-  :straight t
   :hook ((cdlatex-tab . yas-expand)
          (cdlatex-tab . cdlatex-in-yas-field))
   :config
@@ -2125,7 +2090,6 @@ https://florian.adamsky.it/2018/03/09/emacs-add-acronyms.html
 
 ;; Array/tabular input with org-tables and cdlatex
 (use-package org-table
-  :straight t
   :after cdlatex
   :bind (:map orgtbl-mode-map
               ("<tab>" . lazytab-org-table-next-field-maybe)
@@ -2206,7 +2170,42 @@ https://florian.adamsky.it/2018/03/09/emacs-add-acronyms.html
     (if (bound-and-true-p cdlatex-mode)
         (cdlatex-tab)
       (org-table-next-field))))
-#+end_src
+  #+end_src
+*** RefTeX
+- Setup reftex.
+  #+begin_src emacs-lisp
+    (use-package reftex
+      :straight t
+      :defer t
+      :config
+      (setq reftex-cite-prompt-optional-args t))
+  #+end_src
+*** Add Acronyms in easily in auctex
+- Source of this function comes from the following web page:
+https://florian.adamsky.it/2018/03/09/emacs-add-acronyms.html
+#+BEGIN_SRC emacs-lisp
+  (defun fa/add-latex-acronym (region-beg region-end)
+    "This function reads the written out form of an acronym via the
+  minibuffer and adds it to the acronym list in a latex
+  document. Addtionally, it sorts all acronyms in the list."
+    (interactive "r")
+    (save-excursion
+      (let ((acronym
+             (if (region-active-p)
+                 (buffer-substring region-beg region-end)
+               (read-from-minibuffer "Acronym: ")))
+            (full-name (read-from-minibuffer "Full Name: ")))
+        (beginning-of-buffer)
+        (if (search-forward "\\begin{acronym}" nil t)
+            (progn
+              (deactivate-mark)
+              (open-line 1)
+              (forward-line 1)
+              (insert (concat "  \\acro{" acronym "}{" full-name "}"))
+              (beginning-of-line)
+              (sort-lines nil (point) (search-forward "\\end{acronym}" nil nil)))
+          (user-error "No acronym environment found")))))
+#+END_SRC
 ** GNUS and gmail
 - Configuration to use GNUS with gmail.
   #+begin_src emacs-lisp

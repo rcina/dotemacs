@@ -607,6 +607,7 @@
 (add-to-list 'org-emphasis-alist
              '("*" (:foreground "green")
                ))
+(add-hook 'org-mode-hook 'org-cdlatex-mode)
 
 (setq org-ellipsis " ▼")
 
@@ -1506,98 +1507,74 @@ Git gutter:
          ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown"))
 
+;; AucTeX settings - almost no changes
 (use-package tex-site
-  :straight t
+  :ensure auctex)
+
+(use-package latex
   :ensure auctex
-  :mode ("\\.tex\\'" . latex-mode)
   :hook ((LaTeX-mode . prettify-symbols-mode))
+  :bind (:map LaTeX-mode-map
+         ("C-S-e" . latex-math-from-calc))
   :config
-  (setq TeX-auto-save t)
-  (setq TeX-parse-self t)
-  (setq-default TeX-master nil)
-  (add-hook 'LaTeX-mode-hook
-            (lambda ()
-              (rainbow-delimiters-mode)
-              (company-mode)
-              (smartparens-mode)
-              (turn-on-reftex)
-              (setq reftex-plug-into-AUCTeX t)
-              (reftex-isearch-minor-mode)
-              (setq TeX-PDF-mode t)
-              (setq TeX-source-correlate-method 'synctex)
-              (setq TeX-source-correlate-start-server t)))
+  ;; Format math as a Latex string with Calc
+  (defun latex-math-from-calc ()
+    "Evaluate `calc' on the contents of line at point."
+    (interactive)
+    (cond ((region-active-p)
+           (let* ((beg (region-beginning))
+                  (end (region-end))
+                  (string (buffer-substring-no-properties beg end)))
+             (kill-region beg end)
+             (insert (calc-eval `(,string calc-language latex
+                                          calc-prefer-frac t
+                                          calc-angle-mode rad)))))
+          (t (let ((l (thing-at-point 'line)))
+               (end-of-line 1) (kill-line 0)
+               (insert (calc-eval `(,l
+                                    calc-language latex
+                                    calc-prefer-frac t
+                                    calc-angle-mode rad)))))))
+ (setq TeX-auto-save t)
+      (setq TeX-parse-self t)
+      (setq-default TeX-master nil)
+      (add-hook 'LaTeX-mode-hook
+                (lambda ()
+                  (rainbow-delimiters-mode)
+                  (company-mode)
+                  (smartparens-mode)
+                  (turn-on-reftex)
+                  (setq reftex-plug-into-AUCTeX t)
+                  (reftex-isearch-minor-mode)
+                  (setq TeX-PDF-mode t)
+                  (setq TeX-source-correlate-method 'synctex)
+                  (setq TeX-source-correlate-start-server t)))
 
-  ;; Update PDF buffers after successful LaTeX runs
-  (add-hook 'TeX-after-TeX-LaTeX-command-finished-hook
-            #'TeX-revert-document-buffer)
+      ;; Update PDF buffers after successful LaTeX runs
+      (add-hook 'TeX-after-TeX-LaTeX-command-finished-hook
+                #'TeX-revert-document-buffer)
 
-  ;; to use pdfview with auctex
-  (add-hook 'LaTeX-mode-hook 'pdf-tools-install)
+      ;; to use pdfview with auctex
+      (add-hook 'LaTeX-mode-hook 'pdf-tools-install)
 
-  ;; to use pdfview with auctex
-  (setq TeX-view-program-selection '((output-pdf "pdf-tools"))
-        TeX-source-correlate-start-server t)
-  (setq TeX-view-program-list '(("pdf-tools" "TeX-pdf-tools-sync-view")))
+      ;; to use pdfview with auctex
+      (setq TeX-view-program-selection '((output-pdf "pdf-tools"))
+            TeX-source-correlate-start-server t)
+      (setq TeX-view-program-list '(("pdf-tools" "TeX-pdf-tools-sync-view")
+  )))
 
-   (defun latex-math-from-calc ()
-"Evaluate `calc' on the contents of line at point."
-(interactive)
-(cond ((region-active-p)
-       (let* ((beg (region-beginning))
-              (end (region-end))
-              (string (buffer-substring-no-properties beg end)))
-         (kill-region beg end)
-         (insert (calc-eval `(,string calc-language latex
-                                      calc-prefer-frac t
-                                      calc-angle-mode rad)))))
-      (t (let ((l (thing-at-point 'line)))
-           (end-of-line 1) (kill-line 0)
-           (insert (calc-eval `(,l
-                                calc-language latex
-                                calc-prefer-frac t
-                                calc-angle-mode rad))))))
 
-  )
-
-(use-package reftex
-  :straight t
-  :defer t
-  :config
-  (setq reftex-cite-prompt-optional-args t))
-
-(defun fa/add-latex-acronym (region-beg region-end)
-  "This function reads the written out form of an acronym via the
-minibuffer and adds it to the acronym list in a latex
-document. Addtionally, it sorts all acronyms in the list."
-  (interactive "r")
-  (save-excursion
-    (let ((acronym
-           (if (region-active-p)
-               (buffer-substring region-beg region-end)
-             (read-from-minibuffer "Acronym: ")))
-          (full-name (read-from-minibuffer "Full Name: ")))
-      (beginning-of-buffer)
-      (if (search-forward "\\begin{acronym}" nil t)
-          (progn
-            (deactivate-mark)
-            (open-line 1)
-            (forward-line 1)
-            (insert (concat "  \\acro{" acronym "}{" full-name "}"))
-            (beginning-of-line)
-            (sort-lines nil (point) (search-forward "\\end{acronym}" nil nil)))
-        (user-error "No acronym environment found")))))
 
 ;; CDLatex settings
 (use-package cdlatex
-  :straight t
+  :ensure t
   :hook (LaTeX-mode . turn-on-cdlatex)
-  :hook (org-mode . turn-on-cdlatex)
   :bind (:map cdlatex-mode-map
               ("<tab>" . cdlatex-tab)))
 
 ;; Yasnippet settings
 (use-package yasnippet
-  :straight t
+  :ensure t
   :hook ((LaTeX-mode . yas-minor-mode)
          (post-self-insert . my/yas-try-expanding-auto-snippets))
   :config
@@ -1619,7 +1596,6 @@ document. Addtionally, it sorts all acronyms in the list."
 ;; CDLatex integration with YaSnippet: Allow cdlatex tab to work inside Yas
 ;; fields
 (use-package cdlatex
-  :straight t
   :hook ((cdlatex-tab . yas-expand)
          (cdlatex-tab . cdlatex-in-yas-field))
   :config
@@ -1658,7 +1634,6 @@ document. Addtionally, it sorts all acronyms in the list."
 
 ;; Array/tabular input with org-tables and cdlatex
 (use-package org-table
-  :straight t
   :after cdlatex
   :bind (:map orgtbl-mode-map
               ("<tab>" . lazytab-org-table-next-field-maybe)
@@ -1739,6 +1714,34 @@ document. Addtionally, it sorts all acronyms in the list."
     (if (bound-and-true-p cdlatex-mode)
         (cdlatex-tab)
       (org-table-next-field))))
+
+(use-package reftex
+  :straight t
+  :defer t
+  :config
+  (setq reftex-cite-prompt-optional-args t))
+
+(defun fa/add-latex-acronym (region-beg region-end)
+  "This function reads the written out form of an acronym via the
+minibuffer and adds it to the acronym list in a latex
+document. Addtionally, it sorts all acronyms in the list."
+  (interactive "r")
+  (save-excursion
+    (let ((acronym
+           (if (region-active-p)
+               (buffer-substring region-beg region-end)
+             (read-from-minibuffer "Acronym: ")))
+          (full-name (read-from-minibuffer "Full Name: ")))
+      (beginning-of-buffer)
+      (if (search-forward "\\begin{acronym}" nil t)
+          (progn
+            (deactivate-mark)
+            (open-line 1)
+            (forward-line 1)
+            (insert (concat "  \\acro{" acronym "}{" full-name "}"))
+            (beginning-of-line)
+            (sort-lines nil (point) (search-forward "\\end{acronym}" nil nil)))
+        (user-error "No acronym environment found")))))
 
 (setq user-mail-address "transitive@gmail.com")
 (setq user-full-name "Robert Cina")
