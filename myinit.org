@@ -449,7 +449,7 @@
 *** Counsel package
 - Counsel provides various completion functions for ivy and swiper.
   #+begin_src emacs-lisp
-    (use-package counsel :straight t)
+    ;; (use-package counsel :straight t)
   #+end_src
 *** Swiper package
 - A generic completion method for emacs.

@@ -336,7 +336,7 @@
 
     (use-package amx :straight t)
 
-    (use-package counsel :straight t)
+    ;; (use-package counsel :straight t)
 
 (use-package swiper :straight t)
 (ivy-mode)
