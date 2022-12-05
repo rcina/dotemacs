@@ -1507,7 +1507,7 @@ Git gutter:
   :init (setq markdown-command "multimarkdown"))
 
 (use-package tex-site
-  :straight auctex
+  :straight t
   :ensure auctex
   :mode ("\\.tex\\'" . latex-mode)
   :hook ((LaTeX-mode . prettify-symbols-mode))

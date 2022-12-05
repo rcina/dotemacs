@@ -1963,10 +1963,12 @@ instead."
 - Set up AUCTeX for Emacs.
   #+begin_src emacs-lisp
     (use-package tex-site
-      :straight auctex
+      :straight t
       :ensure auctex
       :mode ("\\.tex\\'" . latex-mode)
       :hook ((LaTeX-mode . prettify-symbols-mode))
+      :bind (:map LaTeX-mode-map
+         ("C-S-e" . latex-math-from-calc))
       :config
       (setq TeX-auto-save t)
       (setq TeX-parse-self t)
