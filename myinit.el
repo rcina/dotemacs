@@ -380,6 +380,13 @@
 (use-package powerthesaurus
   :straight t)
 
+(use-package hyperbole
+  :straight t
+  :config
+  (setq hbmap:dir-user "~/.emacs.d/hyperbole/")
+  (setq hyrolo-file-list '("~/.emacs.d/hyperbole/ideas.org"))
+  (setq hyrolo-date-format "%Y-%m-%d %H:%M:%S"))
+
     (use-package which-key
       :straight t
       :config
