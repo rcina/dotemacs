@@ -528,8 +528,8 @@
 (use-package hyperbole
   :straight t
   :config
-  (setq hbmap:dir-user "~/.emacs.d/hyperbole/")
-  (setq hyrolo-file-list '("~/.emacs.d/hyperbole/ideas.org"))
+  (setq hbmap:dir-user "~/gtd/hyperbole/")
+  (setq hyrolo-file-list '("~/gtd/hyperbole/ideas.org"))
   (setq hyrolo-date-format "%Y-%m-%d %H:%M:%S"))
 #+end_src
 ** Keybindings
