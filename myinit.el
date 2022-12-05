@@ -91,6 +91,8 @@
 
 (setq system-uses-terminfo nil)
 
+(setq dictionary-server "dict.org")
+
     ;; (straight-use-package 'color-theme-modern)
     ;; (load-theme 'midnight t t)
     ;; (enable-theme 'midnight)
@@ -374,6 +376,9 @@
     (straight-use-package 'highlight-indent-guides)
     (setq highlight-indent-guides-method 'column)
     (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
+
+(use-package powerthesaurus
+  :straight t)
 
     (use-package which-key
       :straight t

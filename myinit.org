@@ -175,6 +175,10 @@
 #+begin_src emacs-lisp
 (setq system-uses-terminfo nil)
 #+end_src
+*** Set websters 1913 dictionary server
+#+begin_src emacs-lisp
+(setq dictionary-server "dict.org")
+#+end_src
 ** Theme/Mode Line
 *** Emacs Colour Theme
 - I prefer a dark colour theme.
@@ -514,6 +518,11 @@
     (setq highlight-indent-guides-method 'column)
     (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
   #+end_src
+*** PowerThesaurus
+#+begin_src emacs-lisp
+(use-package powerthesaurus
+  :straight t)
+#+end_src
 ** Keybindings
 *** Which key package
 - This package displays the key bindings following your currently
