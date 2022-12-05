@@ -414,6 +414,11 @@
   (setq hyrolo-file-list '("~/gtd/hyperbole/ideas.org"))
   (setq hyrolo-date-format "%Y-%m-%d %H:%M:%S"))
 
+(use-package inform
+  :straight t
+  :config
+  (require 'inform))
+
 (use-package which-key
   :straight t
   :config
