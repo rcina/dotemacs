@@ -414,11 +414,6 @@
   (setq hyrolo-file-list '("~/gtd/hyperbole/ideas.org"))
   (setq hyrolo-date-format "%Y-%m-%d %H:%M:%S"))
 
-(use-package selectrum
-  :straight t
-  :config
-  (selectrum-mode +1))
-
     (use-package which-key
       :straight t
       :config

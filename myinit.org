@@ -561,13 +561,7 @@
   (setq hyrolo-file-list '("~/gtd/hyperbole/ideas.org"))
   (setq hyrolo-date-format "%Y-%m-%d %H:%M:%S"))
 #+end_src
-*** Selectrum package
-#+begin_src emacs-lisp
-(use-package selectrum
-  :straight t
-  :config
-  (selectrum-mode +1))
-#+end_src
+
 ** Keybindings
 *** Which key package
 - This package displays the key bindings following your currently
