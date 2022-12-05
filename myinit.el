@@ -843,7 +843,9 @@ if the `RESET_CHECK_BOXES' property is set"
 
 (use-package all-the-icons-dired
   :straight t
-  :hook (dired-mode . all-the-icons-dired-mode))
+  :hook (dired-mode . all-the-icons-dired-mode)
+  :config
+  (setq all-the-icons-dired-monochrome nil))
 
 (use-package dired-hide-dotfiles
   :straight t
