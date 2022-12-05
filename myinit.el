@@ -565,6 +565,9 @@
 
 (setq org-clock-sound t) ;; Standard Emacs beep
 (setq org-clock-sound "~/sounds/Smallbell.wav") ;; Play this sound file, fall back to beep
+(add-to-list 'org-emphasis-alist
+             '("*" (:foreground "green")
+               ))
 
 (setq org-ellipsis " ▼")
 
