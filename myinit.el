@@ -366,6 +366,9 @@
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
 
+(use-package consult-lsp
+  :straight t)
+
     (use-package amx :straight t)
 
     ;; (use-package counsel :straight t)

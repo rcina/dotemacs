@@ -475,6 +475,11 @@
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
 #+end_src
+*** Consult LSP
+#+begin_src emacs-lisp
+(use-package consult-lsp
+  :straight t)
+#+end_src
 *** Amx mode
 - Amx is an alternative interface for M-x in Emacs.
   #+begin_src emacs-lisp
