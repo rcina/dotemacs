@@ -1,4 +1,7 @@
+
+;; -*- lexical-binding: t; -*-
 #+STARTUP: fold
+
 * Emacs Configuration
 ** Emacs General Configuration
 *** Interface Adjustments
