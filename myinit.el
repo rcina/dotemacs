@@ -96,8 +96,15 @@
 ;; (straight-use-package 'color-theme-modern)
     ;; (load-theme 'midnight t t)
     ;; (enable-theme 'midnight)
-(straight-use-package 'dracula-theme)
-(load-theme 'dracula t)
+;;(straight-use-package 'dracula-theme)
+;;(load-theme 'dracula t)
+(use-package spacegray-theme
+  :straight t
+  :defer t)
+(use-package doom-themes
+  :straight t
+  :defer t)
+(load-theme 'doom-palenight t)
 
 (use-package powerline
   :straight t
