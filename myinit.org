@@ -2413,3 +2413,21 @@ https://florian.adamsky.it/2018/03/09/emacs-add-acronyms.html
     (setq eshell-visual-commands '("htop" "zsh" "vim")))
   (eshell-git-prompt-use-theme 'powerline))
 #+end_src
+** Font
+#+begin_src emacs-lisp
+(set-face-attribute 'fixed-pitch nil
+                    :font "JetBrains Mono"
+                    :weight 'light
+                    :height 140)
+(set-face-attribute 'default nil
+                    :font "JetBrains Mono"
+                    :weight 'light
+                    :height 140)
+
+;; Set the variable pitch face
+(set-face-attribute 'variable-pitch nil
+                    ;; :font "Cantarell"
+                    :font "Iosevka Light"
+                    :height 140
+                    :weight 'light)
+#+end_src
