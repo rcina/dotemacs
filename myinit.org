@@ -1160,6 +1160,7 @@ if the `RESET_CHECK_BOXES' property is set"
   :custom
   (org-roam-directory "~/RoamNotes")
   (org-roam-completion-everywhere t)
+  (org-roam-dailies-directory "journal")
   (org-roam-capture-templates
    '(("b" "book notes" plain
       "\n* Source\n\nAuthor: %^{Author}\nTitle: ${title}\nYear: %^{Year}\n\n* Summary\n\n%?"
