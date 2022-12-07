@@ -1925,15 +1925,15 @@ instead."
 (set-face-attribute 'fixed-pitch nil
                     :font "JetBrains Mono"
                     :weight 'light
-                    :height 140)
+                    :height 120)
 (set-face-attribute 'default nil
                     :font "JetBrains Mono"
                     :weight 'light
-                    :height 140)
+                    :height 120)
 
 ;; Set the variable pitch face
 (set-face-attribute 'variable-pitch nil
                     ;; :font "Cantarell"
                     :font "Iosevka Light"
-                    :height 140
+                    :height 120
                     :weight 'light)
