@@ -906,7 +906,7 @@ if the `RESET_CHECK_BOXES' property is set"
       :unnarrowed t)
       ("d" "default" plain
        "%?"
-       :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+       :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n")
        :unnarrowed t))
      )
   (org-roam-dailies-capture-templates
