@@ -1758,14 +1758,6 @@ Package
   #+begin_src emacs-lisp
     (add-hook 'prog-mode-hook #'(lambda () (display-line-numbers-mode 1)))
   #+end_src
-*** Color-identifiers package
-- Colorize identifiers for programming modes.
-  #+begin_src emacs-lisp
-    (use-package color-identifiers-mode
-      :straight t
-      :init
-      (add-hook 'prog-mode-hook 'color-identifiers-mode))
-  #+end_src
 *** GO Programming
 - Go-mode package install and configuration.
   #+begin_src emacs-lisp

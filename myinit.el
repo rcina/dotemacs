@@ -1371,11 +1371,6 @@ capture was not aborted."
 
 (add-hook 'prog-mode-hook #'(lambda () (display-line-numbers-mode 1)))
 
-(use-package color-identifiers-mode
-  :straight t
-  :init
-  (add-hook 'prog-mode-hook 'color-identifiers-mode))
-
 (use-package go-mode :straight t)
 (defun my-go-mode-hook ()
   ;;Use goimports instead of go-fmt
