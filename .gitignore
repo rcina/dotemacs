@@ -63,4 +63,4 @@ saveplace
 .python-environments
 workspace/
 org-roam.db
-mastodon.pistore
+mastodon.plstore
