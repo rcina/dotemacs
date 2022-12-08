@@ -2571,3 +2571,11 @@ https://florian.adamsky.it/2018/03/09/emacs-add-acronyms.html
                     :height 120
                     :weight 'light)
 #+end_src
+** Mastodon
+#+begin_src emacs-lisp
+(use-package mastodon
+  :straight t
+  :config
+  (setq mastodon-instance-url "https://emacs.ch"
+        mastodon-active-user "polyrob"))
+#+end_src
