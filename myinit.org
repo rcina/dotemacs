@@ -774,7 +774,7 @@
       :straight t
       :config
       (add-to-list 'erc-modules 'notifications)
-      (add-to-list 'erc-modules 'spelling)
+      ;; (add-to-list 'erc-modules 'spelling)
       (require 'erc-desktop-notifications)
       (erc-update-modules))
 
