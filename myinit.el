@@ -4,18 +4,18 @@
 (set-face-attribute 'fixed-pitch nil
                     :font "JetBrains Mono"
                     :weight 'light
-                    :height 120)
+                    :height 140)
 
 (set-face-attribute 'default nil
                     :font "JetBrains Mono"
                     :weight 'light
-                    :height 120)
+                    :height 140)
 
 ;; Set the variable pitch face
 (set-face-attribute 'variable-pitch nil
                     ;; :font "Cantarell"
                     :font "Iosevka Light"
-                    :height 120
+                    :height 140
                     :weight 'light)
 
 (setq inhibit-startup-message t)
