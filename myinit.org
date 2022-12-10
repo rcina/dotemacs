@@ -1622,37 +1622,37 @@ Emacs minor mode to wrap region with tag or punctuation.
 
 
 #+begin_src emacs-lisp
-(use-package wrap-region
-  :straight   t
-  :config
-  (wrap-region-global-mode t)
-  (wrap-region-add-wrappers
-   '(("(" ")")
-     ("[" "]")
-     ("{" "}")
-     ("<" ">")
-     ("'" "'")
-     ("\"" "\"")
-     ("‘" "’"   "q")
-     ("“" "”"   "Q")
-     ("*" "*"   "b"   org-mode)                 ; bolden
-     ("*" "*"   "*"   org-mode)                 ; bolden
-     ("/" "/"   "i"   org-mode)                 ; italics
-     ("/" "/"   "/"   org-mode)                 ; italics
-     ("~" "~"   "c"   org-mode)                 ; code
-     ("~" "~"   "~"   org-mode)                 ; code
-     ("=" "="   "v"   org-mode)                 ; verbatim
-     ("=" "="   "="   org-mode)                 ; verbatim
-     ("_" "_"   "u" '(org-mode markdown-mode))  ; underline
-     ("**" "**" "b"   markdown-mode)            ; bolden
-     ("*" "*"   "i"   markdown-mode)            ; italics
-     ("`" "`"   "c" '(markdown-mode ruby-mode)) ; code
-     ("`" "'"   "c"   lisp-mode)                ; code
-     ))
-  :diminish wrap-region-mode)
-(add-to-list 'wrap-region-except-modes 'web-mode)
-(add-to-list 'wrap-region-except-modes 'cal-mode)
-(add-to-list 'wrap-region-except-modes 'dired-mode)
+;; (use-package wrap-region
+;;   :straight   t
+;;   :config
+;;   (wrap-region-global-mode t)
+;;   (wrap-region-add-wrappers
+;;    '(("(" ")")
+;;      ("[" "]")
+;;      ("{" "}")
+;;      ("<" ">")
+;;      ("'" "'")
+;;      ("\"" "\"")
+;;      ("‘" "’"   "q")
+;;      ("“" "”"   "Q")
+;;      ("*" "*"   "b"   org-mode)                 ; bolden
+;;      ("*" "*"   "*"   org-mode)                 ; bolden
+;;      ("/" "/"   "i"   org-mode)                 ; italics
+;;      ("/" "/"   "/"   org-mode)                 ; italics
+;;      ("~" "~"   "c"   org-mode)                 ; code
+;;      ("~" "~"   "~"   org-mode)                 ; code
+;;      ("=" "="   "v"   org-mode)                 ; verbatim
+;;      ("=" "="   "="   org-mode)                 ; verbatim
+;;      ("_" "_"   "u" '(org-mode markdown-mode))  ; underline
+;;      ("**" "**" "b"   markdown-mode)            ; bolden
+;;      ("*" "*"   "i"   markdown-mode)            ; italics
+;;      ("`" "`"   "c" '(markdown-mode ruby-mode)) ; code
+;;      ("`" "'"   "c"   lisp-mode)                ; code
+;;      ))
+;;   :diminish wrap-region-mode)
+;; (add-to-list 'wrap-region-except-modes 'web-mode)
+;; (add-to-list 'wrap-region-except-modes 'cal-mode)
+;; (add-to-list 'wrap-region-except-modes 'dired-mode)
 #+end_src
 
 *** Whitespace Package
@@ -1842,10 +1842,22 @@ and tries to be smart about it.
   :straight t
   :config
   (progn
-    (show-smartparens-global-mode t)))
+    (require 'smartparens-config)
+    (add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
+    (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
+    (add-hook 'org-mode-hook 'turn-on-smartparens-strict-mode)
+    (sp-local-pair 'org-mode "\\[" "\\]")
+  (sp-local-pair 'org-mode "$" "$")
+  (sp-local-pair 'org-mode "'" "'" :actions '(rem))
+  (sp-local-pair 'org-mode "=" "=" :actions '(rem))
+  (sp-local-pair 'org-mode "\\left(" "\\right)" :trigger "\\l(" :post-handlers '(sp-latex-insert-spaces-inside-pair))
+  (sp-local-pair 'org-mode "\\left[" "\\right]" :trigger "\\l[" :post-handlers '(sp-latex-insert-spaces-inside-pair))
+  (sp-local-pair 'org-mode "\\left\\{" "\\right\\}" :trigger "\\l{" :post-handlers '(sp-latex-insert-spaces-inside-pair))
+  (sp-local-pair 'org-mode "\\left|" "\\right|" :trigger "\\l|" :post-handlers '(sp-latex-insert-spaces-inside-pair))
+  (smartparens-global-mode t)
+  (show-smartparens-global-mode t)))
 
-(add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
-(add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
+
 #+end_src
 
 *** Windmove
