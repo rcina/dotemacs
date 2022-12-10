@@ -1,17 +1,34 @@
+(setq custom-file "~/.emacs-custom.el")
+(load custom-file)
+
+(set-face-attribute 'fixed-pitch nil
+                    :font "JetBrains Mono"
+                    :weight 'light
+                    :height 120)
+
+(set-face-attribute 'default nil
+                    :font "JetBrains Mono"
+                    :weight 'light
+                    :height 120)
+
+;; Set the variable pitch face
+(set-face-attribute 'variable-pitch nil
+                    ;; :font "Cantarell"
+                    :font "Iosevka Light"
+                    :height 120
+                    :weight 'light)
+
 (setq inhibit-startup-message t)
-(tool-bar-mode 0)
-(menu-bar-mode 0)
-(scroll-bar-mode 0)
-(show-paren-mode 1)
-(set-fringe-mode 10)
-(setq ring-bell-function #'ignore)
+    (tool-bar-mode 0)
+    (menu-bar-mode 0)
+    (scroll-bar-mode 0)
+    (show-paren-mode 1)
+    (set-fringe-mode 10)
+    (setq ring-bell-function #'ignore)
 
 (fset 'yes-or-no-p 'y-or-n-p)
 
 (setq-default fill-column 72 tab-width 4)
-
-(setq custom-file "~/.emacs-custom.el")
-(load custom-file)
 
 (make-directory "~/.emacs.d/autosave/" t)
 (make-directory "~/.emacs.d/backups/" t)
@@ -30,12 +47,13 @@
 (setq uniquify-buffer-name-style 'forward)
 
 (use-package auto-compile :straight t)
-  ;;; init.el --- user init file
+      ;;; init.el --- user init file
 (setq load-prefer-newer t)
 (add-to-list 'load-path "~/.emacs.d/straight/repos/packed")
 (add-to-list 'load-path "~/.emacs.d/straight/repos/auto-compile")
 (require 'auto-compile)
-(auto-compile-on-load-mode) (auto-compile-on-save-mode)
+(auto-compile-on-load-mode)
+(auto-compile-on-save-mode)
 
 (setq lpr-command "gtklp")
 (setq ps-lpr-command "gtklp")
@@ -66,7 +84,7 @@
   "Open the current link or image in Firefox."
   (interactive)
   (browse-url-firefox (or (w3m-anchor)
-                            (w3m-image))))
+                          (w3m-image))))
 (with-eval-after-load 'w3m
   (progn
     (define-key w3m-mode-map "f" 'wicked/w3m-open-current-page-in-firefox)
@@ -93,9 +111,6 @@
 
 (setq dictionary-server "dict.org")
 
-;; (straight-use-package 'color-theme-modern)
-    ;; (load-theme 'midnight t t)
-    ;; (enable-theme 'midnight)
 ;;(straight-use-package 'dracula-theme)
 ;;(load-theme 'dracula t)
 (use-package spacegray-theme
@@ -111,12 +126,6 @@
   :config
   (require 'powerline)
   (powerline-center-theme))
-
-;; (use-package ivy-rich :straight t
-;;   :after (ivy)
-;;   :config
-;;   (require 'ivy-rich)
-;;   (ivy-rich-mode 1))
 
 ;; Enable vertico
 (use-package vertico
@@ -378,8 +387,6 @@
 
 (use-package amx :straight t)
 
-;; (use-package counsel :straight t)
-
 ;; (use-package swiper :straight t)
 ;; (ivy-mode)
 ;; (setq ivy-use-virtual-buffers t)
@@ -452,12 +459,12 @@
   (dired-rainbow-define-chmod executable-unix "#38c172" "-.*x.*"))
 
 (use-package define-word
-       :straight t
-       :defer t
-       :bind (("C-c d" . define-word-at-point)
-             ("C-c D" . define-word))
-       :config
-       (setq define-word-default-service 'webster))
+  :straight t
+  :defer t
+  :bind (("C-c d" . define-word-at-point)
+         ("C-c D" . define-word))
+  :config
+  (setq define-word-default-service 'webster))
 ;;(global-set-key (kbd "C-c d") 'define-word-at-point)
 ;;(global-set-key (kbd "C-c D") 'define-word)
 
@@ -490,7 +497,7 @@
   :straight t
   :config
   (require 'which-key)
-  (which-key-mode)  )
+  (which-key-mode))
 
 (global-set-key (kbd "<f5>") 'revert-buffer)
 
@@ -500,27 +507,27 @@
 (global-set-key (kbd "C-c e") 'config-visit)
 
 (defun config-reload ()
-   "Reloads ~/.emacs.d/myinit.org at runtime"
-   (interactive)
-   (org-babel-load-file (expand-file-name "~/.emacs.d/myinit.org")))
+  "Reloads ~/.emacs.d/myinit.org at runtime"
+  (interactive)
+  (org-babel-load-file (expand-file-name "~/.emacs.d/myinit.org")))
 (global-set-key (kbd "C-c r") 'config-reload)
 
 (defvar my-cpp-other-file-alist
-       '(("\\.cpp\\'" (".hpp" ".ipp"))
-         ("\\.ipp\\'" (".hpp" ".cpp"))
-         ("\\.hpp\\'" (".ipp" ".cpp"))
-         ("\\.cxx\\'" (".hxx" ".ixx"))
-         ("\\.ixx\\'" (".cxx" ".hxx"))
-         ("\\.hxx\\'" (".ixx" ".cxx"))
-         ("\\.c\\'" (".h"))
-         ("\\.h\\'" (".c"))
-         ))
+  '(("\\.cpp\\'" (".hpp" ".ipp"))
+    ("\\.ipp\\'" (".hpp" ".cpp"))
+    ("\\.hpp\\'" (".ipp" ".cpp"))
+    ("\\.cxx\\'" (".hxx" ".ixx"))
+    ("\\.ixx\\'" (".cxx" ".hxx"))
+    ("\\.hxx\\'" (".ixx" ".cxx"))
+    ("\\.c\\'" (".h"))
+    ("\\.h\\'" (".c"))
+    ))
 
 (setq-default ff-other-file-alist 'my-cpp-other-file-alist)
 (add-hook
-     'c-mode-hook
-      (lambda ()
-      (local-set-key (kbd "M-o") #'ff-find-other-file)))
+ 'c-mode-hook
+ (lambda ()
+   (local-set-key (kbd "M-o") #'ff-find-other-file)))
 
 (use-package hydra :straight t)
 
@@ -706,79 +713,79 @@
 
 ;; org TODO Keywords
 (setq org-todo-keywords
-    '((sequence "REPEAT(r)" "NEXT(n@/!)" "TODO(t@/!)" "WAITING(w@/!)" "SOMEDAY(s@/!)" "PROJ(p)" "|" "DONE(d@)" "CANCELLED(c@)")))
+      '((sequence "REPEAT(r)" "NEXT(n@/!)" "TODO(t@/!)" "WAITING(w@/!)" "SOMEDAY(s@/!)" "PROJ(p)" "|" "DONE(d@)" "CANCELLED(c@)")))
 
-    (setq org-todo-keyword-faces
-          (quote (("TODO" :foreground "red" :weight bold)
-                  ("NEXT" :foreground "#00ffff" :weight bold)
-                  ("REPEAT" :foreground "magenta" :weight bold)
-                  ("WAITING" :foreground "orange" :weight bold)
-                  ("SOMEDAY" :foreground "cyan" :weight bold)
-                  ("PROJ" :foreground "#ffc252" :weight bold)
-                  ("DONE" :foreground "green" :weight bold)
-                  ("CANCELLED" :foreground "yellow" :weight bold))))
+(setq org-todo-keyword-faces
+      (quote (("TODO" :foreground "red" :weight bold)
+              ("NEXT" :foreground "#00ffff" :weight bold)
+              ("REPEAT" :foreground "magenta" :weight bold)
+              ("WAITING" :foreground "orange" :weight bold)
+              ("SOMEDAY" :foreground "cyan" :weight bold)
+              ("PROJ" :foreground "#ffc252" :weight bold)
+              ("DONE" :foreground "green" :weight bold)
+              ("CANCELLED" :foreground "yellow" :weight bold))))
 
 (setq org-tag-alist
-    '((:startgroup)
-       ; Put mutually exclusive tags here
-       (:endgroup)
-       ("@errand" . ?E)
-       ("@home" . ?H)
-       ("@work" . ?W)
-       ("agenda" . ?a)
-       ("planning" . ?p)
-       ("publish" . ?P)
-       ("batch" . ?b)
-       ("note" . ?n)
-       ("idea" . ?i)))
+      '((:startgroup)
+        ;; Put mutually exclusive tags here
+        (:endgroup)
+        ("@errand" . ?E)
+        ("@home" . ?H)
+        ("@work" . ?W)
+        ("agenda" . ?a)
+        ("planning" . ?p)
+        ("publish" . ?P)
+        ("batch" . ?b)
+        ("note" . ?n)
+        ("idea" . ?i)))
 
 ;; Configure custom agenda views
-  (setq org-agenda-custom-commands
-   '(("d" "Dashboard"
-     ((agenda "" ((org-deadline-warning-days 7)))
-      (todo "NEXT"
-        ((org-agenda-overriding-header "Next Tasks")))
-      (tags-todo "ACTIVE" ((org-agenda-overriding-header "Active Projects")))))
+(setq org-agenda-custom-commands
+      '(("d" "Dashboard"
+         ((agenda "" ((org-deadline-warning-days 7)))
+          (todo "NEXT"
+                ((org-agenda-overriding-header "Next Tasks")))
+          (tags-todo "ACTIVE" ((org-agenda-overriding-header "Active Projects")))))
 
-    ("n" "Next Tasks"
-     ((todo "NEXT"
-        ((org-agenda-overriding-header "Next Tasks")))))
+        ("n" "Next Tasks"
+         ((todo "NEXT"
+                ((org-agenda-overriding-header "Next Tasks")))))
 
-    ("W" "Work Tasks" tags-todo "+work-email")
+        ("W" "Work Tasks" tags-todo "+work-email")
 
-    ;; Low-effort next actions
-    ("e" tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
-     ((org-agenda-overriding-header "Low Effort Tasks")
-      (org-agenda-max-todos 20)
-      (org-agenda-files org-agenda-files)))
+        ;; Low-effort next actions
+        ("e" tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
+         ((org-agenda-overriding-header "Low Effort Tasks")
+          (org-agenda-max-todos 20)
+          (org-agenda-files org-agenda-files)))
 
-    ("w" "Workflow Status"
-     ((todo "WAITING"
-            ((org-agenda-overriding-header "Waiting on External")
-             (org-agenda-files org-agenda-files)))
-      (todo "TODO"
-            ((org-agenda-overriding-header "TODO")
-             (org-agenda-files org-agenda-files)))
-      (todo "SOMEDAY"
-            ((org-agenda-overriding-header "Someday")
-             (org-agenda-todo-list-sublevels nil)
-             (org-agenda-files org-agenda-files)))
-      (todo "PROJ"
-            ((org-agenda-overriding-header "Project Backlog")
-             (org-agenda-todo-list-sublevels nil)
-             (org-agenda-files org-agenda-files)))
-      (todo "NEXT"
-            ((org-agenda-overriding-header "Ready for Action")
-             (org-agenda-files org-agenda-files)))
-      (tags-todo  "ACTIVE"
-            ((org-agenda-overriding-header "Active Projects")
-             (org-agenda-files org-agenda-files)))
-      (todo "DONE"
-            ((org-agenda-overriding-header "Completed Items")
-             (org-agenda-files org-agenda-files)))
-      (todo "CANCELLED"
-            ((org-agenda-overriding-header "Cancelled Projects")
-             (org-agenda-files org-agenda-files)))))))
+        ("w" "Workflow Status"
+         ((todo "WAITING"
+                ((org-agenda-overriding-header "Waiting on External")
+                 (org-agenda-files org-agenda-files)))
+          (todo "TODO"
+                ((org-agenda-overriding-header "TODO")
+                 (org-agenda-files org-agenda-files)))
+          (todo "SOMEDAY"
+                ((org-agenda-overriding-header "Someday")
+                 (org-agenda-todo-list-sublevels nil)
+                 (org-agenda-files org-agenda-files)))
+          (todo "PROJ"
+                ((org-agenda-overriding-header "Project Backlog")
+                 (org-agenda-todo-list-sublevels nil)
+                 (org-agenda-files org-agenda-files)))
+          (todo "NEXT"
+                ((org-agenda-overriding-header "Ready for Action")
+                 (org-agenda-files org-agenda-files)))
+          (tags-todo  "ACTIVE"
+                      ((org-agenda-overriding-header "Active Projects")
+                       (org-agenda-files org-agenda-files)))
+          (todo "DONE"
+                ((org-agenda-overriding-header "Completed Items")
+                 (org-agenda-files org-agenda-files)))
+          (todo "CANCELLED"
+                ((org-agenda-overriding-header "Cancelled Projects")
+                 (org-agenda-files org-agenda-files)))))))
 
 (setq org-latex-create-formula-image-program 'dvipng)
 
@@ -809,7 +816,7 @@
         ("jj" "Journal" entry
          (file+olp+datetree "~/gtd/Journal.org")
          "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
-       ;; ,(dw/read-file-as-string "~/Notes/Templates/Daily.org")
+         ;; ,(dw/read-file-as-string "~/Notes/Templates/Daily.org")
          :clock-in :clock-resume
          :empty-lines 1)
         ("n" "Notes")
@@ -1045,6 +1052,8 @@ capture was not aborted."
   :straight t
   :config
   (counsel-projectile-mode))
+
+
 
 (setq dired-use-ls-dired t
        insert-directory-program "/usr/local/bin/gls")
@@ -1285,7 +1294,7 @@ capture was not aborted."
   :config
   (defun linum-new-mode ()
     "If line numbers aren't displayed, then display them.
-      Otherwise, toggle between absolute and relative numbers."
+     Otherwise, toggle between absolute and relative numbers."
     (interactive)
     (if linum-mode
         (linum-relative-toggle)
@@ -1348,8 +1357,7 @@ capture was not aborted."
   (defun my/python-mode-hook ()
     (add-to-list 'company-backends 'company-jedi))
 
-  (add-hook 'python-mode-hook 'my/python-mode-hook)
-  )
+  (add-hook 'python-mode-hook 'my/python-mode-hook))
 
 (use-package company-box
   :straight t
@@ -1414,15 +1422,6 @@ capture was not aborted."
 ;; (load "jdee")
 ;; (custom-set-variables '(jdee-server-dir "~/.emacs.d/straight/repos/jdee-server"))
 
-(use-package lsp-jedi
-  :straight t
-  :config
-  (with-eval-after-load "lsp-mode"
-    (add-to-list 'lsp-disabled-clients 'pyls)
-    (add-to-list 'lsp-enabled-clients 'jedi)))
-(add-hook 'python-mode-hook 'lsp)
-;;(setq python-shell-interpreter "/usr/local/bin/python3.7")
-
 ;; (use-package elpy
 ;;   :straight t
 ;;   :config
@@ -1485,6 +1484,8 @@ capture was not aborted."
             (local-set-key (kbd "C-c C-b") 'js-send-buffer-and-go)
             (local-set-key (kbd "C-c l") 'js-load-file-and-go)))
 
+
+
 (setq auto-mode-alist
       (cons '("\\.m$" . octave-mode) auto-mode-alist))
 
@@ -1499,7 +1500,7 @@ capture was not aborted."
                 (font-lock-mode 1))))
 
 (use-package htmlize
-  :straight t)
+      :straight t)
 
 (use-package lsp-mode :straight t
   :commands (lsp lsp-deferred)
@@ -1530,13 +1531,12 @@ capture was not aborted."
   (yas-global-mode))
 
 (use-package ggtags
-      :straight t
-      :config
-      (add-hook 'c-mode-common-hook
-                (lambda ()
-                  (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
-                    (ggtags-mode 1))))
-      )
+  :straight t
+  :config
+  (add-hook 'c-mode-common-hook
+            (lambda ()
+              (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+                (ggtags-mode 1)))))
 (setq lsp-clients-clangd-executable "/usr/local/bin/clangd13")
 
 (use-package web-mode
@@ -1645,8 +1645,7 @@ instead."
  '(git-gutter:update-interval 2))
 
 (straight-use-package 'git-timemachine
-  :straight t
-  )
+    :straight t)
 
 (defhydra hydra-git-gutter (:body-pre (git-gutter-mode 1)
 			    :hint nil)
@@ -1900,8 +1899,8 @@ Git gutter:
 
 (defun fa/add-latex-acronym (region-beg region-end)
   "This function reads the written out form of an acronym via the
-minibuffer and adds it to the acronym list in a latex
-document. Addtionally, it sorts all acronyms in the list."
+  minibuffer and adds it to the acronym list in a latex
+  document. Addtionally, it sorts all acronyms in the list."
   (interactive "r")
   (save-excursion
     (let ((acronym
@@ -1939,32 +1938,32 @@ document. Addtionally, it sorts all acronyms in the list."
       gnus-ignored-newsgroups "^to\\.\\|^[0-9. ]+\\( \\|$\\)\\|^[\"]\"[#'()]")
 
 (defhydra hydra-elfeed ()
-      "filter"
-      ("l" (elfeed-search-set-filter "@6-month-ago +lobsters") "lobsters")
-      ("m" (elfeed-search-set-filter "@6-month-ago +Math") "Math")
-      ("c" (elfeed-search-set-filter "@6-months-ago +cs") "cs")
-      ("e" (elfeed-search-set-filter "@6-months-ago +emacs") "emacs")
-      ("B" (elfeed-search-set-filter "@6-months-ago +BSD") "BSD")
-      ("p" (elfeed-search-set-filter "@6-months-ago +programming") "programming")
-      ("*" (elfeed-search-set-filter "@6-months-ago +star") "Starred")
-      ("M" elfeed-toggle-star "Mark")
-      ("A" (elfeed-search-set-filter "@6-months-ago") "All")
-      ("T" (elfeed-search-set-filter "@1-day-ago") "Today")
-      ("Q" bjm/elfeed-save-db-and-bury "Quit Elfeed" :color blue)
-      ("q" nil "quit" :color blue)
-      )
+  "filter"
+  ("l" (elfeed-search-set-filter "@6-month-ago +lobsters") "lobsters")
+  ("m" (elfeed-search-set-filter "@6-month-ago +Math") "Math")
+  ("c" (elfeed-search-set-filter "@6-months-ago +cs") "cs")
+  ("e" (elfeed-search-set-filter "@6-months-ago +emacs") "emacs")
+  ("B" (elfeed-search-set-filter "@6-months-ago +BSD") "BSD")
+  ("p" (elfeed-search-set-filter "@6-months-ago +programming") "programming")
+  ("*" (elfeed-search-set-filter "@6-months-ago +star") "Starred")
+  ("M" elfeed-toggle-star "Mark")
+  ("A" (elfeed-search-set-filter "@6-months-ago") "All")
+  ("T" (elfeed-search-set-filter "@1-day-ago") "Today")
+  ("Q" bjm/elfeed-save-db-and-bury "Quit Elfeed" :color blue)
+  ("q" nil "quit" :color blue)
+  )
 
-    (use-package elfeed
-      :straight t
-      :bind (:map elfeed-search-mode-map
-                  ("q" . bjm/elfeed-save-db-and-bury)
-                  ("Q" . bjm/elfeed-save-db-and-bury)
-                  ("m" . elfeed-toggle-star)
-                  ("M" . elfeed-toggle-star)
-                  ("j" . hydra-elfeed/body)
-                  ("J" . hydra-elfeed/body)
-                  )
-      )
+(use-package elfeed
+  :straight t
+  :bind (:map elfeed-search-mode-map
+              ("q" . bjm/elfeed-save-db-and-bury)
+              ("Q" . bjm/elfeed-save-db-and-bury)
+              ("m" . elfeed-toggle-star)
+              ("M" . elfeed-toggle-star)
+              ("j" . hydra-elfeed/body)
+              ("J" . hydra-elfeed/body)
+              )
+  )
 
 (use-package elfeed-goodies
   :straight t
@@ -1972,41 +1971,41 @@ document. Addtionally, it sorts all acronyms in the list."
   (elfeed-goodies/setup))
 
 
-    (use-package elfeed-org
-      :straight t
-      :config
-      (elfeed-org)
-      (setq rmh-elfeed-org-files (list "~/elfeed/elfeed.org")))
+(use-package elfeed-org
+  :straight t
+  :config
+  (elfeed-org)
+  (setq rmh-elfeed-org-files (list "~/elfeed/elfeed.org")))
 
-    (setq elfeed-db-directory "~/elfeed/elfeeddb")
-
-
-    (defun elfeed-mark-all-as-read ()
-      (interactive)
-      (mark-whole-buffer)
-      (elfeed-search-untag-all-unread))
+(setq elfeed-db-directory "~/elfeed/elfeeddb")
 
 
-    ;;functions to support syncing .elfeed between machines
-    ;;makes sure elfeed reads index from disk before launching
-    (defun bjm/elfeed-load-db-and-open ()
-      "Wrapper to load the elfeed db from disk before opening"
-      (interactive)
-      (elfeed-db-load)
-      (elfeed)
-      (elfeed-search-update--force))
-
-    ;;write to disk when quiting
-    (defun bjm/elfeed-save-db-and-bury ()
-      "Wrapper to save the elfeed db to disk before burying buffer"
-      (interactive)
-      (elfeed-db-save)
-      (quit-window))
+(defun elfeed-mark-all-as-read ()
+  (interactive)
+  (mark-whole-buffer)
+  (elfeed-search-untag-all-unread))
 
 
+;;functions to support syncing .elfeed between machines
+;;makes sure elfeed reads index from disk before launching
+(defun bjm/elfeed-load-db-and-open ()
+  "Wrapper to load the elfeed db from disk before opening"
+  (interactive)
+  (elfeed-db-load)
+  (elfeed)
+  (elfeed-search-update--force))
 
-    (defalias 'elfeed-toggle-star
-      (elfeed-expose #'elfeed-search-toggle-all 'star))
+;;write to disk when quiting
+(defun bjm/elfeed-save-db-and-bury ()
+  "Wrapper to save the elfeed db to disk before burying buffer"
+  (interactive)
+  (elfeed-db-save)
+  (quit-window))
+
+
+
+(defalias 'elfeed-toggle-star
+  (elfeed-expose #'elfeed-search-toggle-all 'star))
 
 (use-package ox-hugo
   :straight t            ;Auto-install the package from Melpa (optional)
@@ -2058,22 +2057,6 @@ document. Addtionally, it sorts all acronyms in the list."
     (setq eshell-destroy-buffer-when-process-dies t)
     (setq eshell-visual-commands '("htop" "zsh" "vim")))
   (eshell-git-prompt-use-theme 'powerline))
-
-(set-face-attribute 'fixed-pitch nil
-                    :font "JetBrains Mono"
-                    :weight 'light
-                    :height 120)
-(set-face-attribute 'default nil
-                    :font "JetBrains Mono"
-                    :weight 'light
-                    :height 120)
-
-;; Set the variable pitch face
-(set-face-attribute 'variable-pitch nil
-                    ;; :font "Cantarell"
-                    :font "Iosevka Light"
-                    :height 120
-                    :weight 'light)
 
 (use-package mastodon
   :straight t
