@@ -2331,6 +2331,13 @@ instead."
 (add-hook 'prog-mode-hook #'flymake-mode)
 #+end_src
 
+*** Geiser (Scheme)
+
+#+begin_src emacs-lisp
+(use-package geiser-mit :straight t)
+(require 'geiser-mit)
+#+end_src
+
 ** Git
 *** Magit
 
