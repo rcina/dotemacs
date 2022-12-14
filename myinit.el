@@ -1952,6 +1952,7 @@ instead."
 
 (defhydra hydra-elfeed ()
   "filter"
+  ("h" (elfeed-search-set-filter "@6-month-ago +hackernews") "hackernews")
   ("l" (elfeed-search-set-filter "@6-month-ago +lobsters") "lobsters")
   ("m" (elfeed-search-set-filter "@6-month-ago +Math") "Math")
   ("c" (elfeed-search-set-filter "@6-months-ago +cs") "cs")
