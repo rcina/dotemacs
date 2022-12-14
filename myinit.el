@@ -960,7 +960,7 @@ capture was not aborted."
         today-file
         pos)
     (save-window-excursion
-      (org-roam-dailies--capture (current-time) t)
+      ;;(org-roam-dailies--capture (current-time) t)
       (setq today-file (buffer-file-name))
       (setq pos (point)))
 
