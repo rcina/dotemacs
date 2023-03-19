@@ -722,6 +722,14 @@ Emacs minor mode to highlight indentation.
   (require 'inform))
 #+end_src
 
+*** Drag-Stuff
+#+begin_src emacs-lisp
+(use-package drag-stuff
+  :straight t
+  :config
+  (require 'drag-stuff)
+  (drag-stuff-mode t))
+#+end_src
 ** Keybindings
 *** Which key package
 This package displays the key bindings following your currently
