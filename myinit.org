@@ -728,7 +728,8 @@ Emacs minor mode to highlight indentation.
   :straight t
   :config
   (require 'drag-stuff)
-  (drag-stuff-mode t))
+  (drag-stuff-global-mode 1)
+  (drag-stuff-define-keys))
 #+end_src
 ** Keybindings
 *** Which key package
