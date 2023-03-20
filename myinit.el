@@ -497,7 +497,8 @@
   :straight t
   :config
   (require 'drag-stuff)
-  (drag-stuff-mode t))
+  (drag-stuff-global-mode 1)
+  (drag-stuff-define-keys))
 
 (use-package which-key
   :straight t
