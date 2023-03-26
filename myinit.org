@@ -2037,7 +2037,9 @@ Go-mode package install and configuration.
 *** Python Programming
 **** LSP jedi. Using LSP mode with jedi server.
 
-#+begin_export latex
+#+begin_export emacs-lisp
+(setq python-shell-interpreter "/usr/local/bin/python")
+
 (use-package lsp-jedi
   :straight t
   :config
@@ -2045,7 +2047,6 @@ Go-mode package install and configuration.
     (add-to-list 'lsp-disabled-clients 'pyls)
     (add-to-list 'lsp-enabled-clients 'jedi)))
 (add-hook 'python-mode-hook 'lsp)
-;;(setq python-shell-interpreter "/usr/local/bin/python3.7")
 #+end_export
 
 **** Elpy package.
