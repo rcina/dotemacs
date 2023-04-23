@@ -493,6 +493,12 @@
   :config
   (require 'inform))
 
+(use-package pdf-view-restore
+  :straight t
+  :after pdf-tools
+  :config
+  (add-hook 'pdf-view-mode-hook 'pdf-view-restore-mode))
+
 (use-package drag-stuff
   :straight t
   :config
