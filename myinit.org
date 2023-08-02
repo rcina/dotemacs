@@ -2650,7 +2650,10 @@ Set up AUCTeX for Emacs.
         (cdlatex-tab)
       (org-table-next-field))))
 #+end_src
-
+*** Latex-run-command
+#+begin_src emacs-lisp
+(setq latex-run-command "lualatex")
+#+end_src
 *** RefTeX
 Setup reftex.
 
