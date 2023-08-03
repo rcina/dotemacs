@@ -2442,7 +2442,8 @@ instead."
 Set up AUCTeX for Emacs.
 
 #+begin_src emacs-lisp
- ;; AucTeX settings - almost no changes
+(global-set-key (kbd "C-c i") 'tab-to-tab-stop)
+;; AucTeX settings - almost no changes
 (use-package tex-site
   :ensure auctex)
 

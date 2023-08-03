@@ -1709,6 +1709,7 @@ Git gutter:
          ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown"))
 
+(global-set-key (kbd "C-c i") 'tab-to-tab-stop)
 ;; AucTeX settings - almost no changes
 (use-package tex-site
   :ensure auctex)
