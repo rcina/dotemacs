@@ -128,24 +128,34 @@
   (powerline-center-theme))
 
 ;; Enable vertico
-(use-package vertico
-  :straight t
-  :init
-  (vertico-mode)
+;; (use-package vertico
+;;   :straight t
+;;   :init
+;;   (vertico-mode)
 
-  ;; Different scroll margin
-  ;; (setq vertico-scroll-margin 0)
+;;   ;; Different scroll margin
+;;   ;; (setq vertico-scroll-margin 0)
 
-  ;; Show more candidates
-  ;; (setq vertico-count 20)
+;;   ;; Show more candidates
+;;   ;; (setq vertico-count 20)
 
-  ;; Grow and shrink the Vertico minibuffer
-  ;; (setq vertico-resize t)
+;;   ;; Grow and shrink the Vertico minibuffer
+;;   ;; (setq vertico-resize t)
 
-  ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
-  ;; (setq vertico-cycle t)
-  )
+;;   ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
+;;   ;; (setq vertico-cycle t)
+;;   )
 
+(straight-use-package '( vertico :files (:defaults "extensions/*")
+                         :includes (vertico-buffer
+                                    vertico-directory
+                                    vertico-flat
+                                    vertico-indexed
+                                    vertico-mouse
+                                    vertico-quick
+                                    vertico-repeat
+                                    vertico-reverse)))
+(vertico-mode)
 ;; Persist history over Emacs restarts. Vertico sorts by history position.
 (use-package savehist
   :straight t
