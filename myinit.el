@@ -363,7 +363,9 @@
   ;; This is recommended since Dabbrev can be used globally (M-/).
   ;; See also `corfu-excluded-modes'.
   :init
-  (global-corfu-mode))
+  (global-corfu-mode)
+  (setq tab-always-indent 'complete)
+)
 
 (use-package embark
   :straight t

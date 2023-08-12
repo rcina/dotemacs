@@ -520,7 +520,9 @@ I prefer a dark colour theme.
   ;; This is recommended since Dabbrev can be used globally (M-/).
   ;; See also `corfu-excluded-modes'.
   :init
-  (global-corfu-mode))
+  (global-corfu-mode)
+  (setq tab-always-indent 'complete)
+)
 #+end_src
 *** Embark package
 #+begin_src emacs-lisp
