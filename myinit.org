@@ -755,6 +755,7 @@ Emacs minor mode to highlight indentation.
   :config
   (require 'drag-stuff)
   ;;(drag-stuff-global-mode 1)
+  (add-hook 'prog-mode-hook #'drag-stuff-mode)
   (drag-stuff-define-keys))
 #+end_src
 *** Pdf-view-restore package

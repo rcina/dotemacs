@@ -524,6 +524,7 @@
   :config
   (require 'drag-stuff)
   ;;(drag-stuff-global-mode 1)
+  (add-hook 'prog-mode-hook #'drag-stuff-mode)
   (drag-stuff-define-keys))
 
 (use-package pdf-view-restore
