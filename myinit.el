@@ -523,7 +523,7 @@
   :straight t
   :config
   (require 'drag-stuff)
-  (drag-stuff-global-mode 1)
+  ;;(drag-stuff-global-mode 1)
   (drag-stuff-define-keys))
 
 (use-package pdf-view-restore
