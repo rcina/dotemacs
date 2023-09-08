@@ -1077,7 +1077,7 @@ capture was not aborted."
 ;; Use coreutils ls
 ;;(when (string= system-type "freebsd")
 ;;  (setq dired-use-ls-dired t
-;;        insert-directory-program "/usr/local/bin/gls"
+;;        insert-directory-program "gls"
 ;;        dired-listing-switches "-aBhl --group-directories-first"))
 ;; projectile
 (use-package projectile
@@ -1100,7 +1100,7 @@ capture was not aborted."
 
 
 (setq dired-use-ls-dired t
-       insert-directory-program "/usr/local/bin/gls")
+       insert-directory-program "gls")
 (setq dired-listing-switches "-laGh1v --group-directories-first")
 (setq delete-by-moving-to-trash t)
 
