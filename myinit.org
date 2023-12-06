@@ -274,6 +274,11 @@ I prefer a dark colour theme.
       (powerline-center-theme))
   #+end_src
 ** Useful Packages and functions
+*** Debbugs
+#+begin_src emacs-lisp
+(use-package debbugs
+  :straight t)
+#+end_src
 *** Vertico package
 #+begin_src emacs-lisp
   ;; Enable vertico
