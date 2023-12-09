@@ -127,6 +127,11 @@
   (require 'powerline)
   (powerline-center-theme))
 
+(use-package md4rd
+  :straight t
+  :config
+  (setq md4rd-subs-active '(emacs math compsci askcomputerscience learnprogramming vim learnmath cprog)))
+
 (use-package debbugs
   :straight t)
 
