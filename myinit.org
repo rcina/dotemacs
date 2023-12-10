@@ -267,11 +267,11 @@ I prefer a dark colour theme.
 *** Powerline package for mode line
 - Customize mode line with powerline theme.
   #+begin_src emacs-lisp
-    (use-package powerline
-      :straight t
-      :config
-      (require 'powerline)
-      (powerline-center-theme))
+ ;;   (use-package powerline
+ ;;     :straight t
+ ;;     :config
+ ;;     (require 'powerline)
+ ;;     (powerline-center-theme))
   #+end_src
 ** Useful Packages and functions
 *** md4rd reddit mode
