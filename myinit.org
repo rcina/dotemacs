@@ -289,8 +289,6 @@ I prefer a dark colour theme.
   :straight t)
 #+end_src
 *** md4rd reddit mode
-*** REPEAT
-*** REPEAT
 #+begin_src emacs-lisp
 (use-package md4rd
   :straight t
