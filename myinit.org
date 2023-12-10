@@ -273,6 +273,12 @@ I prefer a dark colour theme.
  ;;     (require 'powerline)
  ;;     (powerline-center-theme))
   #+end_src
+*** Doom mode line
+#+begin_src emacs-lisp
+(use-package doom-modeline
+  :straight t
+  :init (doom-modeline-mode 1))
+#+end_src
 ** Useful Packages and functions
 *** md4rd reddit mode
 #+begin_src emacs-lisp
@@ -1218,7 +1224,7 @@ Configure org to use alphabetical lists.
 Configure orb babel for programming languages.
 
 #+begin_src emacs-lisp
-(org-babel-do-load-languages 'org-babel-load-languages '((emacs-lisp . t) (python . t) (js . t) (ruby . t)))
+(org-babel-do-load-languages 'org-babel-load-languages '((emacs-lisp . t) (python . t) (js . t) (ruby . t) (shell . t)))
 (setq org-config-babel-evaluate nil)
 #+end_src
 
