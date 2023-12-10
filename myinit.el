@@ -130,12 +130,12 @@
 (use-package md4rd
   :straight t
   :config
-  (setq md4rd-subs-active '(emacs math compsci askcomputerscience
-                                  learnprogramming vim learnmath
-                                  cprog python java javascript ruby
-                                  rust lisp artificial machinelearning
+  (setq md4rd-subs-active '(emacs math freebsd bsd compsci askcomputerscience computerarchitecture
+                                  programming learnprogramming vim learnmath
+                                  cprog c_language c_programming cplusplus python learnpython java javascript ruby
+                                  rust learnrust lisp artificial machinelearning
                                   neuralnetworks linearalgebra explainlikeimfive
-                                  css react)))
+                                  css react webdev latex technology)))
 
 (use-package debbugs
   :straight t)
