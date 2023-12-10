@@ -279,7 +279,12 @@ I prefer a dark colour theme.
 (use-package md4rd
   :straight t
   :config
-  (setq md4rd-subs-active '(emacs math compsci askcomputerscience learnprogramming vim learnmath cprog)))
+  (setq md4rd-subs-active '(emacs math compsci askcomputerscience
+                                  learnprogramming vim learnmath
+                                  cprog python java javascript ruby
+                                  rust lisp artificial machinelearning
+                                  neuralnetworks linearalgebra explainlikeimfive
+                                  css react)))
 #+end_src
 *** Debbugs
 #+begin_src emacs-lisp
