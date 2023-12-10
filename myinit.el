@@ -131,6 +131,12 @@
   :straight t
   :init (doom-modeline-mode 1))
 
+(use-package hackernews
+  :straight t)
+
+(use-package hnreader
+  :straight t)
+
 (use-package md4rd
   :straight t
   :config
