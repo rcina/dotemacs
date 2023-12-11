@@ -282,6 +282,9 @@ I prefer a dark colour theme.
 (use-package doom-modeline
   :straight t
   :init (doom-modeline-mode 1))
+(display-time-mode 1)
+(setq display-time-format "%I:%M:%S")
+(setq display-time-interval 1)
 #+end_src
 ** Useful Packages and functions
 *** hacker news packages
