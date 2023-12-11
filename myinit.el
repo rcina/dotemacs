@@ -57,8 +57,6 @@
 (setq lpr-command "gtklp")
 (setq ps-lpr-command "gtklp")
 
-(setq load-prefer-newer t)
-
 (setq help-window-select t)
 
 (recentf-mode t)

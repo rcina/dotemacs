@@ -118,14 +118,6 @@ Set gtklp as the command for lpr.
 (setq ps-lpr-command "gtklp")
 #+end_src
 
-*** Prefer newer Bytecode
-Quite simple trick to avoid a few bugs that might arise from older
-bytecode being used, even though the elisp file has changed.
-
-#+begin_src emacs-lisp
-(setq load-prefer-newer t)
-#+end_src
-
 *** Help Buffers
 Usually when using Emacs' online-help system, it doesn't move the
 active point to the new buffer, making me type C-x o every time
