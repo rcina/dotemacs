@@ -108,6 +108,12 @@
 
 (setq dictionary-server "dict.org")
 
+(use-package all-the-icons-ivy
+  :straight t
+  :init (add-hook 'after-init-hook 'all-the-icons-ivy-setup)
+  :config (setq all-the-icons-ivy-file-commands
+      '(counsel-find-file counsel-file-jump counsel-recentf counsel-projectile-find-file counsel-projectile-find-dir counsel-switch-buffer)))
+
 (use-package all-the-icons
   :straight t
   :if (display-graphic-p))

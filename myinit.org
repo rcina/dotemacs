@@ -240,6 +240,14 @@ save file and history length first.
 #+end_src
 
 ** Theme/Mode Line
+*** All the icons ivy
+#+begin_src emacs-lisp
+(use-package all-the-icons-ivy
+  :straight t
+  :init (add-hook 'after-init-hook 'all-the-icons-ivy-setup)
+  :config (setq all-the-icons-ivy-file-commands
+      '(counsel-find-file counsel-file-jump counsel-recentf counsel-projectile-find-file counsel-projectile-find-dir counsel-switch-buffer)))
+#+end_src
 *** All the Icons
 #+begin_src emacs-lisp
 (use-package all-the-icons
