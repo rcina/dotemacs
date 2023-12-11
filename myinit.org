@@ -1946,17 +1946,6 @@ and tries to be smart about it.
 
 #+end_src
 
-*** Windmove
-It lets you move point from window to window using Shift and
-the arrow keys.
-
-#+begin_src emacs-lisp
-(when (fboundp 'windmove-default-keybindings)
-  (windmove-default-keybindings))
-
-;; Set wraparound
-(setq windmove-wrap-around t)
-#+end_src
 
 ** Programming
 *** Company mode

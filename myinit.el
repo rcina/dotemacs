@@ -127,11 +127,11 @@
   :defer t)
 (load-theme 'doom-palenight t)
 
- ;;   (use-package powerline
- ;;     :straight t
- ;;     :config
- ;;     (require 'powerline)
- ;;     (powerline-center-theme))
+;;   (use-package powerline
+;;     :straight t
+;;     :config
+;;     (require 'powerline)
+;;     (powerline-center-theme))
 
 (use-package doom-modeline
   :straight t
@@ -156,75 +156,75 @@
 (use-package debbugs
   :straight t)
 
-  ;; Enable vertico
-  ;; (use-package vertico
-  ;;   :straight t
-  ;;   :init
-  ;;   (vertico-mode)
+;; Enable vertico
+;; (use-package vertico
+;;   :straight t
+;;   :init
+;;   (vertico-mode)
 
-  ;;   ;; Different scroll margin
-  ;;   ;; (setq vertico-scroll-margin 0)
+;;   ;; Different scroll margin
+;;   ;; (setq vertico-scroll-margin 0)
 
-  ;;   ;; Show more candidates
-  ;;   ;; (setq vertico-count 20)
+;;   ;; Show more candidates
+;;   ;; (setq vertico-count 20)
 
-  ;;   ;; Grow and shrink the Vertico minibuffer
-  ;;   ;; (setq vertico-resize t)
+;;   ;; Grow and shrink the Vertico minibuffer
+;;   ;; (setq vertico-resize t)
 
-  ;;   ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
-  ;;   ;; (setq vertico-cycle t)
-  ;;   )
+;;   ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
+;;   ;; (setq vertico-cycle t)
+;;   )
 
-  (straight-use-package '( vertico :files (:defaults "extensions/*")
-                           :includes (vertico-buffer
-                                      vertico-directory
-                                      vertico-flat
-                                      vertico-indexed
-                                      vertico-mouse
-                                      vertico-quick
-                                      vertico-repeat
-                                      vertico-reverse)))
-  (vertico-mode)
-  ;; Persist history over Emacs restarts. Vertico sorts by history position.
-  (use-package savehist
-    :straight t
-    :init
-    (savehist-mode))
+(straight-use-package '( vertico :files (:defaults "extensions/*")
+                         :includes (vertico-buffer
+                                    vertico-directory
+                                    vertico-flat
+                                    vertico-indexed
+                                    vertico-mouse
+                                    vertico-quick
+                                    vertico-repeat
+                                    vertico-reverse)))
+(vertico-mode)
+;; Persist history over Emacs restarts. Vertico sorts by history position.
+(use-package savehist
+  :straight t
+  :init
+  (savehist-mode))
 
-  ;; A few more useful configurations...
-  (use-package emacs
-    :straight t
-    :init
-    ;; Add prompt indicator to `completing-read-multiple'.
-    ;; We display [CRM<separator>], e.g., [CRM,] if the separator is a comma.
-    (defun crm-indicator (args)
-      (cons (format "[CRM%s] %s"
-                    (replace-regexp-in-string
-                     "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
-                     crm-separator)
-                    (car args))
-            (cdr args)))
-    (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
+;; A few more useful configurations...
+(use-package emacs
+  :straight t
+  :init
+  ;; Add prompt indicator to `completing-read-multiple'.
+  ;; We display [CRM<separator>], e.g., [CRM,] if the separator is a comma.
+  (defun crm-indicator (args)
+    (cons (format "[CRM%s] %s"
+                  (replace-regexp-in-string
+                   "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
+                   crm-separator)
+                  (car args))
+          (cdr args)))
+  (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
 
-    ;; Do not allow the cursor in the minibuffer prompt
-    (setq minibuffer-prompt-properties
-          '(read-only t cursor-intangible t face minibuffer-prompt))
-    (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+  ;; Do not allow the cursor in the minibuffer prompt
+  (setq minibuffer-prompt-properties
+        '(read-only t cursor-intangible t face minibuffer-prompt))
+  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
 
-    ;; TAB cycle if there are only few candidates
-    (setq completion-cycle-threshold 3)
+  ;; TAB cycle if there are only few candidates
+  (setq completion-cycle-threshold 3)
 
-    ;; Enable indentation+completion using the TAB key.
-    ;; `completion-at-point' is often bound to M-TAB.
-    (setq tab-always-indent 'complete)
+  ;; Enable indentation+completion using the TAB key.
+  ;; `completion-at-point' is often bound to M-TAB.
+  (setq tab-always-indent 'complete)
 
-    ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
-    ;; Vertico commands are hidden in normal buffers.
-    ;; (setq read-extended-command-predicate
-    ;;       #'command-completion-default-include-p)
+  ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
+  ;; Vertico commands are hidden in normal buffers.
+  ;; (setq read-extended-command-predicate
+  ;;       #'command-completion-default-include-p)
 
-    ;; Enable recursive minibuffers
-    (setq enable-recursive-minibuffers t))
+  ;; Enable recursive minibuffers
+  (setq enable-recursive-minibuffers t))
 
 ;; Optionally use the `orderless' completion style.
 (use-package orderless
@@ -1147,12 +1147,12 @@ capture was not aborted."
   (define-key dired-mode-map (kbd "C-c t") 'dired-hide-dotfiles-mode)
   )
 
-    (use-package dired+
-      :straight t
-      :config
-      (require 'dired+))
+(use-package dired+
+  :straight t
+  :config
+  (require 'dired+))
 
-    (setq hippie-expand-try-functions-list
+(setq hippie-expand-try-functions-list
           '(try-expand-dabbrev-visible
             try-expand-dabbrev
             try-expand-dabbrev-all-buffers
@@ -1172,9 +1172,9 @@ capture was not aborted."
 ;; Bind `C-c y' to `yas-expand' ONLY.
 (define-key yas-minor-mode-map (kbd "C-c y") #'yas-expand)
 
-    (use-package yasnippet-snippets :straight t)
+(use-package yasnippet-snippets :straight t)
 
-    (add-hook 'text-mode-hook 'turn-on-auto-fill)
+(add-hook 'text-mode-hook 'turn-on-auto-fill)
 
 (use-package flycheck-aspell
   :straight t
@@ -1213,11 +1213,11 @@ capture was not aborted."
   (when (bound-and-true-p flycheck-mode)
    (flycheck-buffer)))
 
-    (use-package multiple-cursors :straight t)
-    (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
-    (global-set-key (kbd "C->") 'mc/mark-next-like-this)
-    (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
-    (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+(use-package multiple-cursors :straight t)
+(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+(global-set-key (kbd "C->") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
 
 (use-package aggressive-indent :straight t)
 
@@ -1292,34 +1292,34 @@ capture was not aborted."
   :config
   (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
 
-    (use-package expand-region
-      :straight t
-      :config
-      (defun ha/expand-region (lines)
-        "Prefix-oriented wrapper around Magnar's `er/expand-region'.
+(use-package expand-region
+  :straight t
+  :config
+  (defun ha/expand-region (lines)
+    "Prefix-oriented wrapper around Magnar's `er/expand-region'.
 
-         Call with LINES equal to 1 (given no prefix), it expands the
-         region as normal.  When LINES given a positive number, selects
-         the current line and number of lines specified.  When LINES is a
-         negative number, selects the current line and the previous lines
-         specified.  Select the current line if the LINES prefix is zero."
-        (interactive "p")
-        (cond ((= lines 1)   (er/expand-region 1))
-              ((< lines 0)   (ha/expand-previous-line-as-region lines))
-              (t             (ha/expand-next-line-as-region (1+ lines)))))
+     Call with LINES equal to 1 (given no prefix), it expands the
+     region as normal.  When LINES given a positive number, selects
+     the current line and number of lines specified.  When LINES is a
+     negative number, selects the current line and the previous lines
+     specified.  Select the current line if the LINES prefix is zero."
+    (interactive "p")
+    (cond ((= lines 1)   (er/expand-region 1))
+          ((< lines 0)   (ha/expand-previous-line-as-region lines))
+          (t             (ha/expand-next-line-as-region (1+ lines)))))
 
-      (defun ha/expand-next-line-as-region (lines)
-        (message "lines = %d" lines)
-        (beginning-of-line)
-        (set-mark (point))
-        (end-of-line lines))
+  (defun ha/expand-next-line-as-region (lines)
+    (message "lines = %d" lines)
+    (beginning-of-line)
+    (set-mark (point))
+    (end-of-line lines))
 
-      (defun ha/expand-previous-line-as-region (lines)
-        (end-of-line)
-        (set-mark (point))
-        (beginning-of-line (1+ lines)))
+  (defun ha/expand-previous-line-as-region (lines)
+    (end-of-line)
+    (set-mark (point))
+    (beginning-of-line (1+ lines)))
 
-      :bind ("C-=" . ha/expand-region))
+  :bind ("C-=" . ha/expand-region))
 
 (use-package hungry-delete
   :straight t
@@ -1393,12 +1393,6 @@ capture was not aborted."
   (sp-local-pair 'org-mode "\\left|" "\\right|" :trigger "\\l|" :post-handlers '(sp-latex-insert-spaces-inside-pair))
   (smartparens-global-mode t)
   (show-smartparens-global-mode t)))
-
-(when (fboundp 'windmove-default-keybindings)
-  (windmove-default-keybindings))
-
-;; Set wraparound
-(setq windmove-wrap-around t)
 
 (use-package company
   :straight t
@@ -1540,8 +1534,8 @@ capture was not aborted."
 
   (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode)))
 
- (add-hook 'js2-mode-hook
-           (lambda () (flycheck-select-checker "javascript-eslint")))
+(add-hook 'js2-mode-hook
+          (lambda () (flycheck-select-checker "javascript-eslint")))
 
 (use-package js-comint
   :straight t)
@@ -1722,27 +1716,27 @@ instead."
 ;;  :straight t
 ;;  :after magit)
 
-  (use-package git-gutter
-    :straight t
-    :init
-    (global-git-gutter-mode +1))
+(use-package git-gutter
+  :straight t
+  :init
+  (global-git-gutter-mode +1))
 
-  (custom-set-variables
-   '(git-gutter:update-interval 2))
+(custom-set-variables
+ '(git-gutter:update-interval 2))
 
 (straight-use-package 'git-timemachine
     :straight t)
 
-        (defhydra hydra-git-gutter (:body-pre (git-gutter-mode 1)
+(defhydra hydra-git-gutter (:body-pre (git-gutter-mode 1)
 				  :hint nil)
 	"
-      Git gutter:
+Git gutter:
 	_j_: next hunk        _s_tage hunk     _q_uit
 	_k_: previous hunk    _r_evert hunk    _Q_uit and deactivate git-gutter
 	^ ^                   _p_opup hunk
 	_h_: first hunk
 	_l_: last hunk        set start _R_evision
-      "
+"
 	("j" git-gutter:next-hunk)
 	("k" git-gutter:previous-hunk)
 	("h" (progn (goto-char (point-min))
@@ -1761,13 +1755,13 @@ instead."
 		    (git-gutter:clear))
 	     :color blue))
 
-  (use-package markdown-mode
-    :straight t
-    :commands (markdown-mode gfm-mode)
-    :mode (("README\\.md\\'" . gfm-mode)
-           ("\\.md\\'" . markdown-mode)
-           ("\\.markdown\\'" . markdown-mode))
-    :init (setq markdown-command "multimarkdown"))
+(use-package markdown-mode
+  :straight t
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init (setq markdown-command "multimarkdown"))
 
 (global-set-key (kbd "C-c i") 'tab-to-tab-stop)
 ;; AucTeX settings - almost no changes
