@@ -1945,8 +1945,6 @@ and tries to be smart about it.
 
 
 #+end_src
-
-
 ** Programming
 *** Company mode
 Company is a text completion framework for Emacs. The name stands for
