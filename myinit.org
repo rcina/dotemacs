@@ -249,6 +249,19 @@ save file and history length first.
 #+end_src
 
 ** Theme/Mode Line
+*** All the Icons
+#+begin_src emacs-lisp
+(use-package all-the-icons
+  :straight t
+  :if (display-graphic-p))
+#+end_src
+*** Nerd Icons
+#+begin_src emacs-lisp
+(use-package nerd-icons
+  :straight t
+  :config
+  (setq nerd-icons-font-family "Symbols Nerd Font Mono"))
+#+end_src
 *** Emacs Colour Theme
 I prefer a dark colour theme.
 

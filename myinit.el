@@ -111,6 +111,15 @@
 
 (setq dictionary-server "dict.org")
 
+(use-package all-the-icons
+  :straight t
+  :if (display-graphic-p))
+
+(use-package nerd-icons
+  :straight t
+  :config
+  (setq nerd-icons-font-family "Symbols Nerd Font Mono"))
+
 ;;(straight-use-package 'dracula-theme)
 ;;(load-theme 'dracula t)
 (use-package spacegray-theme
