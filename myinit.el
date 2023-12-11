@@ -140,6 +140,10 @@
 (setq display-time-format "%I:%M:%S")
 (setq display-time-interval 1)
 
+(use-package minions
+  :straight t
+  :config (minions-mode 1))
+
 (use-package hackernews
   :straight t)
 

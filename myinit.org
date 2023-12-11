@@ -286,6 +286,12 @@ I prefer a dark colour theme.
 (setq display-time-format "%I:%M:%S")
 (setq display-time-interval 1)
 #+end_src
+*** Minions mode
+#+begin_src emacs-lisp
+(use-package minions
+  :straight t
+  :config (minions-mode 1))
+#+end_src
 ** Useful Packages and functions
 *** hacker news packages
 #+begin_src emacs-lisp
