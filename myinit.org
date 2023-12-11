@@ -290,7 +290,8 @@ I prefer a dark colour theme.
 #+begin_src emacs-lisp
 (use-package minions
   :straight t
-  :config (minions-mode 1))
+  :config (minions-mode 1)
+  (keymap-global-set "<f7>" #'minions-minor-modes-menu))
 #+end_src
 ** Useful Packages and functions
 *** hacker news packages

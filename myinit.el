@@ -142,7 +142,8 @@
 
 (use-package minions
   :straight t
-  :config (minions-mode 1))
+  :config (minions-mode 1)
+  (keymap-global-set "<f7>" #'minions-minor-modes-menu))
 
 (use-package hackernews
   :straight t)
