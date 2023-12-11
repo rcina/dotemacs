@@ -104,7 +104,6 @@ loads outdated byte code files.
 (use-package auto-compile :straight t)
       ;;; init.el --- user init file
 (setq load-prefer-newer t)
-(add-to-list 'load-path "~/.emacs.d/straight/repos/packed")
 (add-to-list 'load-path "~/.emacs.d/straight/repos/auto-compile")
 (require 'auto-compile)
 (auto-compile-on-load-mode)
