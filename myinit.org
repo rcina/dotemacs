@@ -2958,3 +2958,12 @@ Zamansky [[http://cestlaz.github.io/posts/using-emacs-29%2520elfeed/][here]].
   (setq mastodon-instance-url "https://emacs.ch"
         mastodon-active-user "polyrob"))
 #+end_src
+
+** Denote
+#+begin_src emacs-lisp
+(use-package denote
+  :straight t
+  :config
+  (require 'denote)
+  (setq denote-directory (expand-file-name "~/denote/notes/")))
+#+end_src
