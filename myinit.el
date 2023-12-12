@@ -553,10 +553,11 @@
 (use-package hyperbole
   :straight t
   :config
+  (require 'hyperbole)
   (setq hbmap:dir-user "~/gtd/hyperbole/")
   (setq hyrolo-file-list '("~/gtd/hyperbole/ideas.org"))
   (setq hyrolo-date-format "%Y-%m-%d %H:%M:%S")
-  :bind* ("<M-return" . hkey-either))
+  :bind* ("<M-return>" . hkey-either))
 
 (use-package inform
   :straight t
