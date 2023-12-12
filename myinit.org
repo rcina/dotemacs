@@ -324,8 +324,8 @@ I prefer a dark colour theme.
 #+end_src
 *** Debbugs
 #+begin_src emacs-lisp
-(use-package debbugs
-  :straight t)
+;;(use-package debbugs
+;;  :straight t)
 #+end_src
 *** Vertico package
 #+begin_src emacs-lisp
