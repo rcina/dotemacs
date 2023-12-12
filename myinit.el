@@ -560,6 +560,7 @@
   (setq hbmap:dir-user "~/gtd/hyperbole/")
   (setq hyrolo-file-list '("~/gtd/hyperbole/ideas.org"))
   (setq hyrolo-date-format "%Y-%m-%d %H:%M:%S")
+  (global-set-key [f7] 'hyrolo-fgrep)
   :bind* ("<M-return>" . hkey-either))
 
 (use-package inform
