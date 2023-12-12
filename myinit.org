@@ -786,6 +786,9 @@ Emacs minor mode to highlight indentation.
 #+begin_src emacs-lisp
 (use-package hyperbole
   :straight t
+  :init
+  (load "hyperbole-autoloads")
+  (load "hyperbole")
   :config
   (require 'hyperbole)
   (setq hbmap:dir-user "~/gtd/hyperbole/")
