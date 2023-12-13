@@ -594,6 +594,9 @@
 (advice-add 'pdf-view-bookmark-jump-handler
             :after 'my-bmk-pdf-handler-advice)
 
+(use-package crux
+  :straight t)
+
 (use-package which-key
   :straight t
   :config

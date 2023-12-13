@@ -839,6 +839,11 @@ Emacs minor mode to highlight indentation.
 (advice-add 'pdf-view-bookmark-jump-handler
             :after 'my-bmk-pdf-handler-advice)
 #+end_src
+*** Crux
+#+begin_src emacs-lisp
+(use-package crux
+  :straight t)
+#+end_src
 ** Keybindings
 *** Which key package
 This package displays the key bindings following your currently
