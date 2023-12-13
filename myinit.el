@@ -583,6 +583,17 @@
   :config
   (add-hook 'pdf-view-mode-hook 'pdf-view-restore-mode))
 
+(use-package bookmark+
+  :straight t
+  :config
+  (load "bookmark+"))
+
+(defun my-bmk-pdf-handler-advice (bookmark)
+  (bookmark-default-handler (bookmark-get-bookmark bookmark)))
+
+(advice-add 'pdf-view-bookmark-jump-handler
+            :after 'my-bmk-pdf-handler-advice)
+
 (use-package which-key
   :straight t
   :config

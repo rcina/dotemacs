@@ -826,6 +826,19 @@ Emacs minor mode to highlight indentation.
   :config
   (add-hook 'pdf-view-mode-hook 'pdf-view-restore-mode))
 #+end_src
+*** Bookmark+
+#+begin_src emacs-lisp
+(use-package bookmark+
+  :straight t
+  :config
+  (load "bookmark+"))
+
+(defun my-bmk-pdf-handler-advice (bookmark)
+  (bookmark-default-handler (bookmark-get-bookmark bookmark)))
+
+(advice-add 'pdf-view-bookmark-jump-handler
+            :after 'my-bmk-pdf-handler-advice)
+#+end_src
 ** Keybindings
 *** Which key package
 This package displays the key bindings following your currently
