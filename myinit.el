@@ -1124,11 +1124,26 @@ capture was not aborted."
 (straight-use-package
  '(org-timeblock :type git :host github :repo "ichernyshovvv/org-timeblock"))
 
+(use-package djvu
+  :straight t
+  :config
+  (load "djvu"))
+
+(straight-use-package
+  `(djvu3 :type git :host github :repo "dalanicolai/djvu3"))
+(load "djvu3")
+
+(use-package nov
+  :straight t
+  :config
+  (load "nov"))
+
 (use-package org-noter
   :straight t
   :config
   ;; Your org-noter config ........
-  (require 'org-noter-pdftools))
+  (require 'org-noter-pdftools)
+  (setq org-noter-auto-save-last-location t))
 
 (use-package org-pdftools
   :straight t
