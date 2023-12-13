@@ -1269,13 +1269,14 @@ With a prefix ARG, remove start location."
 
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 
+(setq ispell-program-name "aspell")
+(setq ispell-dictionary "english")
+(setq ispell-personal-dictionary "~/.aspell.en.pws")
+(setq flycheck-checker-error-threshold 5000)
 (use-package flycheck-aspell
   :straight t
   :config
-  (setq ispell-dictionary "en_GB")
-  (setq ispell-program-name "aspell")
-  (setq ispell-silently-savep t)
-  (setq ispell-personal-dictionary "~/.aspell.en.pws")
+    (setq ispell-silently-savep t)
   ;; Ensure `flycheck-aspell' is available
   (require 'flycheck-aspell)
   ;; If you want to check TeX/LaTeX/ConTeXt buffers
