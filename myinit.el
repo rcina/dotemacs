@@ -1164,6 +1164,7 @@ capture was not aborted."
   :hook (org-mode . org-pdftools-setup-link))
 
 (use-package org-noter-pdftools
+  :straight t
   :after org-noter
   :config
   ;; Add a function to ensure precise note is inserted
@@ -1272,7 +1273,7 @@ With a prefix ARG, remove start location."
 (setq ispell-program-name "aspell")
 (setq ispell-dictionary "english")
 (setq ispell-personal-dictionary "~/.aspell.en.pws")
-(setq flycheck-checker-error-threshold 5000)
+(setq flycheck-checker-error-threshold 400)
 (use-package flycheck-aspell
   :straight t
   :config
