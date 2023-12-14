@@ -1270,43 +1270,43 @@ With a prefix ARG, remove start location."
 
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 
-(setq ispell-program-name "aspell")
-(setq ispell-dictionary "english")
-(setq ispell-personal-dictionary "~/.aspell.en.pws")
-(setq flycheck-checker-error-threshold 400)
-(use-package flycheck-aspell
-  :straight t
-  :config
-    (setq ispell-silently-savep t)
-  ;; Ensure `flycheck-aspell' is available
-  (require 'flycheck-aspell)
-  ;; If you want to check TeX/LaTeX/ConTeXt buffers
-  (add-to-list 'flycheck-checkers 'tex-aspell-dynamic)
-  ;; If you want to check Markdown/GFM buffers
-  (add-to-list 'flycheck-checkers 'markdown-aspell-dynamic)
-  ;; If you want to check HTML buffers
-  (add-to-list 'flycheck-checkers 'html-aspell-dynamic)
-  ;; If you want to check XML/SGML buffers
-  (add-to-list 'flycheck-checkers 'xml-aspell-dynamic)
-  ;; If you want to check Nroff/Troff/Groff buffers
-  (add-to-list 'flycheck-checkers 'nroff-aspell-dynamic)
-  ;; If you want to check Texinfo buffers
-  (add-to-list 'flycheck-checkers 'texinfo-aspell-dynamic)
-  ;; If you want to check comments and strings for C-like languages
-  (add-to-list 'flycheck-checkers 'c-aspell-dynamic)
-  ;; If you want to check message buffers
-  (add-to-list 'flycheck-checkers 'mail-aspell-dynamic)
-  )
+;; (setq ispell-program-name "aspell")
+;; (setq ispell-dictionary "english")
+;; (setq ispell-personal-dictionary "~/.aspell.en.pws")
+;; (setq flycheck-checker-error-threshold 400)
+;; (use-package flycheck-aspell
+;;   :straight t
+;;   :config
+;;     (setq ispell-silently-savep t)
+;;   ;; Ensure `flycheck-aspell' is available
+;;   (require 'flycheck-aspell)
+;;   ;; If you want to check TeX/LaTeX/ConTeXt buffers
+;;   (add-to-list 'flycheck-checkers 'tex-aspell-dynamic)
+;;   ;; If you want to check Markdown/GFM buffers
+;;   (add-to-list 'flycheck-checkers 'markdown-aspell-dynamic)
+;;   ;; If you want to check HTML buffers
+;;   (add-to-list 'flycheck-checkers 'html-aspell-dynamic)
+;;   ;; If you want to check XML/SGML buffers
+;;   (add-to-list 'flycheck-checkers 'xml-aspell-dynamic)
+;;   ;; If you want to check Nroff/Troff/Groff buffers
+;;   (add-to-list 'flycheck-checkers 'nroff-aspell-dynamic)
+;;   ;; If you want to check Texinfo buffers
+;;   (add-to-list 'flycheck-checkers 'texinfo-aspell-dynamic)
+;;   ;; If you want to check comments and strings for C-like languages
+;;   (add-to-list 'flycheck-checkers 'c-aspell-dynamic)
+;;   ;; If you want to check message buffers
+;;   (add-to-list 'flycheck-checkers 'mail-aspell-dynamic)
+;;   )
 
-(flycheck-aspell-define-checker "org"
-  "Org" ("--add-filter" "url")
-  (org-mode))
-(add-to-list 'flycheck-checkers 'org-aspell-dynamic)
+;; (flycheck-aspell-define-checker "org"
+;;   "Org" ("--add-filter" "url")
+;;   (org-mode))
+;; (add-to-list 'flycheck-checkers 'org-aspell-dynamic)
 
-(advice-add #'ispell-pdict-save :after #'flycheck-maybe-recheck)
-(defun flycheck-maybe-recheck (_)
-  (when (bound-and-true-p flycheck-mode)
-   (flycheck-buffer)))
+;; (advice-add #'ispell-pdict-save :after #'flycheck-maybe-recheck)
+;; (defun flycheck-maybe-recheck (_)
+;;   (when (bound-and-true-p flycheck-mode)
+;;    (flycheck-buffer)))
 
 (use-package multiple-cursors :straight t)
 (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
