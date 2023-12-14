@@ -1625,6 +1625,10 @@ With a prefix ARG, remove start location."
     (add-hook 'pdf-annot-activate-handler-functions #'org-noter-pdftools-jump-to-note)))
 #+end_src
 ** Buffers/Editing
+*** Prescient
+#+begin_src emacs-lisp
+(straight-use-package 'company-prescient)
+#+end_src
 *** Projectile Package
 Projectile is a really nice package that makes navigating in and
 between projects much easier.
