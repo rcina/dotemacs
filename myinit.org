@@ -1722,6 +1722,14 @@ between projects much easier.
   #+begin_src emacs-lisp
     (add-hook 'text-mode-hook 'turn-on-auto-fill)
   #+end_src
+*** Flyspell mode
+#+begin_src emacs-lisp
+(setq ispell-program-name "aspell")
+(setq ispell-dictionary "english")
+(setq ispell-personal-dictionary "~/.aspell.en.pws")
+(add-hook 'text-mode-hook #'flyspell-mode)
+(add-hook 'prog-mode-hook #'flyspell-mode)
+#+end_src
 *** Flycheck-aspell
 #+begin_src emacs-lisp
 ;; (setq ispell-program-name "aspell")

@@ -1270,6 +1270,12 @@ With a prefix ARG, remove start location."
 
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 
+(setq ispell-program-name "aspell")
+(setq ispell-dictionary "english")
+(setq ispell-personal-dictionary "~/.aspell.en.pws")
+(add-hook 'text-mode-hook #'flyspell-mode)
+(add-hook 'prog-mode-hook #'flyspell-mode)
+
 ;; (setq ispell-program-name "aspell")
 ;; (setq ispell-dictionary "english")
 ;; (setq ispell-personal-dictionary "~/.aspell.en.pws")
