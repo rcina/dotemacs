@@ -67,10 +67,10 @@
   :init (save-place-mode 1))
 (setq save-place-file "~/.emacs.d/saveplace")
 
+(setq browse-url-browser-function 'browse-url-firefox)
+;;(setq browse-url-browser-function 'w3m-browse-url)
 (use-package w3m
-  :straight t
-  :config
-  (setq browse-url-browser-function 'w3m-browse-url))
+  :straight t)
 
 (defun wicked/w3m-open-current-page-in-firefox ()
   "Open the current URL in Mozilla Firefox."

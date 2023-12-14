@@ -152,10 +152,10 @@ a buffer and later return to it.
 I like to use w3m inside Emacs.
 
 #+begin_src emacs-lisp
+(setq browse-url-browser-function 'browse-url-firefox)
+;;(setq browse-url-browser-function 'w3m-browse-url)
 (use-package w3m
-  :straight t
-  :config
-  (setq browse-url-browser-function 'w3m-browse-url))
+  :straight t)
 
 (defun wicked/w3m-open-current-page-in-firefox ()
   "Open the current URL in Mozilla Firefox."
