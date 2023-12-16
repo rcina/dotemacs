@@ -322,6 +322,11 @@ I prefer a dark colour theme.
                                   neuralnetworks linearalgebra explainlikeimfive
                                   css react webdev latex technology)))
 #+end_src
+*** Greader package
+#+begin_src emacs-lisp
+(use-package greader
+  :straight t)
+#+end_src
 *** Debbugs
 #+begin_src emacs-lisp
 ;;(use-package debbugs
