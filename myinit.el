@@ -620,6 +620,9 @@
   ;; if you use multiple-cursors, this is for you:
   (define-key global-map (kbd "C-c j") 'vr/mc-mark))
 
+(use-package olivetti
+  :straight t)
+
 (use-package which-key
   :straight t
   :config
