@@ -1500,6 +1500,8 @@ With a prefix ARG, remove start location."
   (smartparens-global-mode t)
   (show-smartparens-global-mode t)))
 
+(setq-default abbrev-mode t)
+
 (use-package company
   :straight t
   :after lsp-mode
