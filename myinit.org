@@ -836,7 +836,7 @@ Emacs minor mode to highlight indentation.
 (use-package bookmark+
   :straight t
   :config
-  (load "bookmark+"))
+  (require 'bookmark+))
 
 (defun my-bmk-pdf-handler-advice (bookmark)
   (bookmark-default-handler (bookmark-get-bookmark bookmark)))
@@ -1573,20 +1573,22 @@ capture was not aborted."
 (use-package djvu
   :straight t
   :config
-  (load "djvu"))
+  (require 'djvu))
 
 (straight-use-package
   `(djvu3 :type git :host github :repo "dalanicolai/djvu3"))
-(load "djvu3")
+(require 'djvu3)
 
 (use-package nov
   :straight t
   :config
-  (load "nov"))
+  (require 'nov))
 
 
 (use-package org-pdftools
   :straight t
+  :config
+  (require 'org-pdftools)
   :hook (org-mode . org-pdftools-setup-link))
 
 (use-package org-noter-pdftools
