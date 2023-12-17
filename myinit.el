@@ -600,6 +600,17 @@
 (use-package crux
   :straight t)
 
+(use-package substitute
+  :straight t
+  :config
+  (require 'substitute))
+
+(let ((map global-map))
+  (define-key map (kbd "M-p s") #'substitute-target-below-point)
+  (define-key map (kbd "M-p r") #'substitute-target-above-point)
+  (define-key map (kbd "M-p d") #'substitute-target-in-defun)
+  (define-key map (kbd "M-p b") #'substitute-target-in-buffer))
+
 (use-package which-key
   :straight t
   :config
