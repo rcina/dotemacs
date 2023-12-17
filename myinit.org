@@ -2900,7 +2900,23 @@ Configuration to use GNUS with gmail.
       smtpmail-default-smtp-server "smtp.gmail.com"
       smtpmail-smtp-server "smtp.gmail.com"
       smtpmail-smtp-service 587
-      gnus-ignored-newsgroups "^to\\.\\|^[0-9. ]+\\( \\|$\\)\\|^[\"]\"[#'()]")
+      gnus-ignored-newsgroups "^to\\.\\|^[0-9. ]+\\( \w\|$\\)\\|^[\"]\"[#'()]")
+
+(defun gm-nnir-group-make-gmail-group (query)
+  "Use GMail search syntax.
+See https://support.google.com/mail/answer/7190?hl=en for syntax. "
+  (interactive "sGMail Query: ")
+  (let ((nnir-imap-default-search-key "imap")
+        (q (format "X-GM-RAW \"%s\"" query)))
+    (cond
+     ((gnus-group-group-name)           ; Search current group
+      (gnus-group-make-nnir-group
+       nil                              ; no extra params needed
+       `(nnir-specs (nnir-query-spec (query ,q)))))
+     (t (error "Not on a group.")))))
+
+(define-key gnus-group-mode-map "/" 'gm-nnir-group-make-gmail-group)
+
 #+end_src
 
 ** Elfeed
