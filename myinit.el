@@ -1155,12 +1155,6 @@ capture was not aborted."
   :config
   (load "nov"))
 
-(use-package org-noter
-  :straight t
-  :config
-  ;; Your org-noter config ........
-  (require 'org-noter-pdftools)
-  (setq org-noter-auto-save-last-location t))
 
 (use-package org-pdftools
   :straight t
@@ -1199,6 +1193,13 @@ With a prefix ARG, remove start location."
                            (org-noter--pretty-print-location location))))))))
   (with-eval-after-load 'pdf-annot
     (add-hook 'pdf-annot-activate-handler-functions #'org-noter-pdftools-jump-to-note)))
+
+(use-package org-noter
+  :straight t
+  :config
+  ;; Your org-noter config ........
+  (require 'org-noter-pdftools)
+  (setq org-noter-auto-save-last-location t))
 
 (straight-use-package 'company-prescient)
 
