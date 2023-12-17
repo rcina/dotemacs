@@ -1711,6 +1711,12 @@ between projects much easier.
             try-expand-all-abbrevs))
 (global-set-key [remap dabbrev-expand] 'hippie-expand)
   #+end_src
+*** Yasnippet-snippets
+  #+end_src
+- This package is a collection of yasnippet snippets for many languages.
+  #+begin_src emacs-lisp
+    (use-package yasnippet-snippets :straight t)
+  #+end_src
 *** Yasnippet package
 - YASnippet template system for Emacs.
   #+begin_src emacs-lisp
@@ -1721,12 +1727,6 @@ between projects much easier.
 (define-key yas-minor-mode-map (kbd "C-c j") yas-maybe-expand)
 ;; Bind `C-c y' to `yas-expand' ONLY.
 (define-key yas-minor-mode-map (kbd "C-c y") #'yas-expand)
-  #+end_src
-*** Yasnippet-snippets
-- This package is a collection of yasnippet snippets for many languages.
-  #+begin_src emacs-lisp
-    (use-package yasnippet-snippets :straight t)
-  #+end_src
 *** Auto-Fill mode
 - Turn on auto-fill mode in text mode.
   #+begin_src emacs-lisp

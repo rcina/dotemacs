@@ -1264,17 +1264,7 @@ With a prefix ARG, remove start location."
             try-expand-all-abbrevs))
 (global-set-key [remap dabbrev-expand] 'hippie-expand)
 
-(straight-use-package 'yasnippet)
-(yas-global-mode 1)
-;; Bind `SPC' to `yas-expand' when snippet expansion available (it
-;; will still call `self-insert-command' otherwise).
-(define-key yas-minor-mode-map (kbd "C-c j") yas-maybe-expand)
-;; Bind `C-c y' to `yas-expand' ONLY.
-(define-key yas-minor-mode-map (kbd "C-c y") #'yas-expand)
-
 (use-package yasnippet-snippets :straight t)
-
-(add-hook 'text-mode-hook 'turn-on-auto-fill)
 
 (setq ispell-program-name "aspell")
 (setq ispell-dictionary "english")
