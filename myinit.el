@@ -611,6 +611,15 @@
   (define-key map (kbd "M-p d") #'substitute-target-in-defun)
   (define-key map (kbd "M-p b") #'substitute-target-in-buffer))
 
+(use-package visual-regexp
+  :straight t
+  :config
+  (require 'visual-regexp)
+  (define-key global-map (kbd "C-c s") 'vr/replace)
+  (define-key global-map (kbd "C-c q") 'vr/query-replace)
+  ;; if you use multiple-cursors, this is for you:
+  (define-key global-map (kbd "C-c j") 'vr/mc-mark))
+
 (use-package which-key
   :straight t
   :config
