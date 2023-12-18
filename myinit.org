@@ -1309,11 +1309,22 @@ Configure org to use alphabetical lists.
 (add-to-list 'org-structure-template-alist '("py" . "src python"))
 #+end_src
 
+*** Jupyter
+#+begin_src emacs-lisp
+(use-package zmq
+  :straight t
+  :config
+  (require 'zmq))
+(use-package jupyter
+  :straight t
+  :config
+  (require 'jupyter))
+#+end_src
 *** Org babel evaluation setup
 Configure orb babel for programming languages.
 
 #+begin_src emacs-lisp
-(org-babel-do-load-languages 'org-babel-load-languages '((emacs-lisp . t) (python . t) (js . t) (ruby . t) (shell . t)))
+(org-babel-do-load-languages 'org-babel-load-languages '((emacs-lisp . t) (python . t) (js . t) (ruby . t) (shell . t) (jupyter . t)))
 (setq org-config-babel-evaluate nil)
 #+end_src
 
