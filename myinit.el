@@ -937,6 +937,10 @@
   :config
   (require 'jupyter))
 
+(use-package ein
+  :straight t
+  :bind ("<f9>" . ein:worksheet-execute-cell-and-goto-next-km))
+
 (org-babel-do-load-languages 'org-babel-load-languages '((emacs-lisp . t) (python . t) (js . t) (ruby . t) (shell . t) (jupyter . t)))
 (setq org-config-babel-evaluate nil)
 

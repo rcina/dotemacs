@@ -1320,6 +1320,12 @@ Configure org to use alphabetical lists.
   :config
   (require 'jupyter))
 #+end_src
+*** emacs-ipython-notebook
+#+begin_src emacs-lisp
+(use-package ein
+  :straight t
+  :bind ("<f9>" . ein:worksheet-execute-cell-and-goto-next-km))
+#+end_src
 *** Org babel evaluation setup
 Configure orb babel for programming languages.
 
