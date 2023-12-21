@@ -1768,12 +1768,13 @@ between projects much easier.
       (require 'dired+))
   #+end_src
 *** Dired-x
+
 #+begin_src emacs-lisp
 (with-eval-after-load 'dired
   (require 'dired-x)
   ;; Set dired-x global variables here.  For example:
   ;; (setq dired-x-hands-off-my-keys nil)
-  ))
+  )
 (add-hook 'dired-mode-hook
           (lambda ()
             ;; Set dired-x buffer-local variables here.  For example:

@@ -1317,7 +1317,7 @@ With a prefix ARG, remove start location."
   (require 'dired-x)
   ;; Set dired-x global variables here.  For example:
   ;; (setq dired-x-hands-off-my-keys nil)
-  ))
+  )
 (add-hook 'dired-mode-hook
           (lambda ()
             ;; Set dired-x buffer-local variables here.  For example:
