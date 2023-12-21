@@ -453,7 +453,7 @@
   :straight t
 
   :bind
-  (("C-." . embark-act)         ;; pick some comfortable binding
+  (("C-c C-SPC" . embark-act)         ;; pick some comfortable binding
    ("C-;" . embark-dwim)        ;; good alternative: M-.
    ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
 
@@ -1338,12 +1338,6 @@ With a prefix ARG, remove start location."
 
 (use-package yasnippet-snippets :straight t)
 
-(setq ispell-program-name "aspell")
-(setq ispell-dictionary "english")
-(setq ispell-personal-dictionary "~/.aspell.en.pws")
-(add-hook 'text-mode-hook #'flyspell-mode)
-(add-hook 'prog-mode-hook #'flyspell-mode)
-
 ;; (setq ispell-program-name "aspell")
 ;; (setq ispell-dictionary "english")
 ;; (setq ispell-personal-dictionary "~/.aspell.en.pws")
@@ -1381,6 +1375,12 @@ With a prefix ARG, remove start location."
 ;; (defun flycheck-maybe-recheck (_)
 ;;   (when (bound-and-true-p flycheck-mode)
 ;;    (flycheck-buffer)))
+
+(setq ispell-program-name "aspell")
+(setq ispell-dictionary "english")
+(setq ispell-personal-dictionary "~/.aspell.en.pws")
+(add-hook 'text-mode-hook #'flyspell-mode)
+(add-hook 'prog-mode-hook #'flyspell-mode)
 
 (use-package multiple-cursors :straight t)
 (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)

@@ -624,7 +624,7 @@ I prefer a dark colour theme.
   :straight t
 
   :bind
-  (("C-." . embark-act)         ;; pick some comfortable binding
+  (("C-c C-SPC" . embark-act)         ;; pick some comfortable binding
    ("C-;" . embark-dwim)        ;; good alternative: M-.
    ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
 
@@ -1817,14 +1817,6 @@ between projects much easier.
   #+begin_src emacs-lisp
     (add-hook 'text-mode-hook 'turn-on-auto-fill)
   #+end_src
-*** Flyspell mode
-#+begin_src emacs-lisp
-(setq ispell-program-name "aspell")
-(setq ispell-dictionary "english")
-(setq ispell-personal-dictionary "~/.aspell.en.pws")
-(add-hook 'text-mode-hook #'flyspell-mode)
-(add-hook 'prog-mode-hook #'flyspell-mode)
-#+end_src
 *** Flycheck-aspell
 #+begin_src emacs-lisp
 ;; (setq ispell-program-name "aspell")
@@ -1865,6 +1857,14 @@ between projects much easier.
 ;;   (when (bound-and-true-p flycheck-mode)
 ;;    (flycheck-buffer)))
 #+end_src
+*** Flyspell mode
+#+begin_src emacs-lisp
+(setq ispell-program-name "aspell")
+(setq ispell-dictionary "english")
+(setq ispell-personal-dictionary "~/.aspell.en.pws")
+(add-hook 'text-mode-hook #'flyspell-mode)
+(add-hook 'prog-mode-hook #'flyspell-mode)
+#+End_src
 *** Multiple Cursors Package
 - Useful package that lets you use multiple cursors to manipulate text.
   ([[https://github.com/magnars/multiple-cursors.el][Multiple cursors website)]]
