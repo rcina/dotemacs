@@ -655,6 +655,9 @@
 (use-package olivetti
   :straight t)
 
+(use-package simple-httpd
+  :straight t)
+
 (use-package which-key
   :straight t
   :config

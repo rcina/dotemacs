@@ -912,6 +912,11 @@ Emacs minor mode to highlight indentation.
 (use-package olivetti
   :straight t)
 #+end_src
+*** Simple-httpd package
+#+begin_src emacs-lisp
+(use-package simple-httpd
+  :straight t)
+#+end_src
 ** Keybindings
 *** Which key package
 This package displays the key bindings following your currently
