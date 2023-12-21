@@ -1313,6 +1313,17 @@ With a prefix ARG, remove start location."
   :config
   (require 'dired+))
 
+(with-eval-after-load 'dired
+  (require 'dired-x)
+  ;; Set dired-x global variables here.  For example:
+  ;; (setq dired-x-hands-off-my-keys nil)
+  ))
+(add-hook 'dired-mode-hook
+          (lambda ()
+            ;; Set dired-x buffer-local variables here.  For example:
+            ;; (dired-omit-mode 1)
+            ))
+
 (setq hippie-expand-try-functions-list
           '(try-expand-dabbrev-visible
             try-expand-dabbrev
