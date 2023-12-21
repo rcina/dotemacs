@@ -173,6 +173,16 @@
   :config (minions-mode 1)
   (keymap-global-set "<f7>" #'minions-minor-modes-menu))
 
+(setq ispell-program-name "aspell")
+(setq ispell-dictionary "english")
+(setq ispell-personal-dictionary "~/.aspell.en.pws")
+(add-hook 'text-mode-hook #'flyspell-mode)
+(add-hook 'prog-mode-hook #'flyspell-mode)
+(eval-after-load "flyspell"
+  '(define-key flyspell-mode-map (kbd "C-.") nil))
+(eval-after-load "flyspell"
+  '(define-key flyspell-mode-map (kbd "C-;") nil))
+
 (use-package hackernews
   :straight t)
 
@@ -453,8 +463,8 @@
   :straight t
 
   :bind
-  (("C-c C-'" . embark-act)         ;; pick some comfortable binding
-   ("C-c C-;" . embark-dwim)        ;; good alternative: M-.
+  (("C-." . embark-act)         ;; pick some comfortable binding
+   ("C-;" . embark-dwim)        ;; good alternative: M-.
    ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
 
   :init
@@ -1375,12 +1385,6 @@ With a prefix ARG, remove start location."
 ;; (defun flycheck-maybe-recheck (_)
 ;;   (when (bound-and-true-p flycheck-mode)
 ;;    (flycheck-buffer)))
-
-(setq ispell-program-name "aspell")
-(setq ispell-dictionary "english")
-(setq ispell-personal-dictionary "~/.aspell.en.pws")
-(add-hook 'text-mode-hook #'flyspell-mode)
-(add-hook 'prog-mode-hook #'flyspell-mode)
 
 (use-package multiple-cursors :straight t)
 (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
