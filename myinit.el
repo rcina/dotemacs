@@ -1274,6 +1274,9 @@ With a prefix ARG, remove start location."
   (require 'org-noter-pdftools)
   (setq org-noter-auto-save-last-location t))
 
+(use-package org-web-tools
+  :straight t)
+
 (straight-use-package 'company-prescient)
 
 ;; Use coreutils ls

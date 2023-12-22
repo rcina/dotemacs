@@ -1717,6 +1717,12 @@ With a prefix ARG, remove start location."
   (require 'org-noter-pdftools)
   (setq org-noter-auto-save-last-location t))
 #+end_src
+*** Org-web-tools
+#+begin_src emacs-lisp
+(use-package org-web-tools
+  :straight t)
+#+end_src
+
 ** Buffers/Editing
 *** Prescient
 #+begin_src emacs-lisp
