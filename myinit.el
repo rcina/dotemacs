@@ -2224,6 +2224,7 @@ See https://support.google.com/mail/answer/7190?hl=en for syntax. "
 
 (defhydra hydra-elfeed ()
   "filter"
+  ("S" (elfeed-search-set-filter "@6-month-ago +systemcrafters") "systemcrafters")
   ("h" (elfeed-search-set-filter "@6-month-ago +hackernews") "hackernews")
   ("l" (elfeed-search-set-filter "@6-month-ago +lobsters") "lobsters")
   ("m" (elfeed-search-set-filter "@6-month-ago +Math") "Math")
