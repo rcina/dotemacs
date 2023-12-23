@@ -59,6 +59,11 @@ Set the tab width and fill column length
 (setq-default fill-column 72 tab-width 4)
 #+end_src
 
+Wrap lines based on visual appearance rather than actual length
+#+begin_src emacs-lisp
+(global-visual-line-mode t)
+#+end_src
+
 *** Auto-save and Backup Files
 - Create new auto-save and backup directories if necessary.
   #+begin_src emacs-lisp
