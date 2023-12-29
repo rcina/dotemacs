@@ -1864,6 +1864,12 @@ With a prefix ARG, remove start location."
   (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
   )
 
+(use-package prettier
+  :straight t)
+
+(add-hook 'js2-mode-hook 'prettier--mode)
+(add-hook 'web-mode-hook 'prettier-mode)
+
 (use-package dumb-jump
   :straight t
   :config

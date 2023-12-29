@@ -2588,6 +2588,14 @@ Trying lsp-mode out. I used to use auto-complete for this.
   )
 #+end_src
 
+**** Prettier-Emacs package
+#+begin_src emacs-lisp
+(use-package prettier
+  :straight t)
+
+(add-hook 'js2-mode-hook 'prettier--mode)
+(add-hook 'web-mode-hook 'prettier-mode)
+#+end_src
 *** Dumb Jump
 
 #+begin_src emacs-lisp
