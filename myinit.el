@@ -1920,11 +1920,8 @@ instead."
 (require 'geiser-mit)
 
 (use-package magit
-  :straight t
-  :init
-  (progn
-    (bind-key "C-x g" 'magit-status)
-    ))
+  :init (use-package transient :straight (transient :type git :host github :repo "magit/transient"))
+  :bind ("C-x g" . magit-status))
 
 ;;(use-package forge
 ;;  :straight t
