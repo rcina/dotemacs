@@ -1822,7 +1822,7 @@ With a prefix ARG, remove start location."
             (lambda ()
               (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
                 (ggtags-mode 1)))))
-(setq lsp-clients-clangd-executable "/usr/local/bin/clangd13")
+(setq lsp-clients-clangd-executable "/usr/local/bin/clangd17")
 
 (use-package web-mode
   :straight t)
