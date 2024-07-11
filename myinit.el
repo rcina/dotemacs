@@ -1636,13 +1636,13 @@ With a prefix ARG, remove start location."
       company-auto-complete t)
 (add-hook 'prog-mode-hook 'company-mode)
 
-(use-package company-jedi
-  :straight t
-  :config
-  (defun my/python-mode-hook ()
-    (add-to-list 'company-backends 'company-jedi))
+;; (use-package company-jedi
+;;   :straight t
+;;   :config
+;;   (defun my/python-mode-hook ()
+;;     (add-to-list 'company-backends 'company-jedi))
 
-  (add-hook 'python-mode-hook 'my/python-mode-hook))
+;;   (add-hook 'python-mode-hook 'my/python-mode-hook))
 
 (use-package company-box
   :straight t

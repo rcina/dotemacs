@@ -2248,13 +2248,13 @@ Company is a text completion framework for Emacs. The name stands for
 Company-mode completion back-end for Python JEDI.
 
 #+begin_src emacs-lisp
-(use-package company-jedi
-  :straight t
-  :config
-  (defun my/python-mode-hook ()
-    (add-to-list 'company-backends 'company-jedi))
+;; (use-package company-jedi
+;;   :straight t
+;;   :config
+;;   (defun my/python-mode-hook ()
+;;     (add-to-list 'company-backends 'company-jedi))
 
-  (add-hook 'python-mode-hook 'my/python-mode-hook))
+;;   (add-hook 'python-mode-hook 'my/python-mode-hook))
 #+end_src
 
 *** Company-box
