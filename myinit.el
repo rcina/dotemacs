@@ -110,6 +110,90 @@
 
 (setq dictionary-server "dict.org")
 
+(use-package casual-lib
+  :straight (casual-lib :type git :host github :repo "kickingvegas/casual-lib")
+  :ensure nil)
+(use-package casual-agenda
+  :straight (casual-suite :type git :host github :repo "kickingvegas/casual-agenda")
+  :ensure nil
+  :bind (:map
+         org-agenda-mode-map
+         ("C-o" . casual-agenda-tmenu)
+         ("M-j" . org-agenda-clock-goto) ; optional
+         ("J" . bookmark-jump))) ; optional)
+
+(use-package casual-calc
+  :straight t
+  :ensure nil
+  :bind (:map calc-mode-map ("C-o" . casual-calc-tmenu)))
+
+(use-package casual-info
+  :straight t
+  :ensure nil
+  :bind (:map Info-mode-map ("C-o" . casual-info-tmenu)))
+
+(use-package casual-dired
+  :straight t
+  :ensure nil
+  :bind (:map dired-mode-map ("C-o" . casual-dired-tmenu)))
+
+(use-package casual-avy
+  :straight t
+  :ensure nil
+  :bind ("C-o" . casual-avy-tmenu))
+
+(use-package casual-isearch
+  :straight t
+  :ensure nil
+  :bind (:map isearch-mode-map ("C-o" . casual-isearch-tmenu)))
+
+(use-package ibuffer
+  :straight t
+  :hook (ibuffer-mode . ibuffer-auto-mode)
+  :defer t)
+
+(use-package casual-ibuffer
+  :straight t
+  :ensure nil
+  :bind (:map
+         ibuffer-mode-map
+         ("C-o" . casual-ibuffer-tmenu)
+         ("F" . casual-ibuffer-filter-tmenu)
+         ("s" . casual-ibuffer-sortby-tmenu)
+         ("<double-mouse-1>" . ibuffer-visit-buffer) ; optional
+         ("M-<double-mouse-1>" . ibuffer-visit-buffer-other-window) ; optional
+         ("{" . ibuffer-backwards-next-marked) ; optional
+         ("}" . ibuffer-forward-next-marked)   ; optional
+         ("[" . ibuffer-backward-filter-group) ; optional
+         ("]" . ibuffer-forward-filter-group)  ; optional
+         ("$" . ibuffer-toggle-filter-group))  ; optional
+  :after (ibuffer))
+
+(use-package re-builder
+  :straight t
+  :defer t)
+(use-package casual-re-builder
+  :straight t
+  :ensure nil
+  :bind (:map
+         reb-mode-map ("C-o" . casual-re-builder-tmenu)
+         :map
+         reb-lisp-mode-map ("C-o" . casual-re-builder-tmenu))
+  :after (re-builder))
+
+(use-package bookmark
+  :straight t
+  :ensure nil
+  :defer t)
+(use-package casual-bookmarks
+  :straight t
+  :ensure nil
+  :bind (:map bookmark-bmenu-mode-map
+              ("C-o" . casual-bookmarks-tmenu)
+              ("S" . casual-bookmarks-sortby-tmenu)
+              ("J" . bookmark-jump))
+  :after (bookmark))
+
 (use-package all-the-icons-ivy
   :straight t
   :init (add-hook 'after-init-hook 'all-the-icons-ivy-setup)
