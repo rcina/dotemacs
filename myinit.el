@@ -1974,6 +1974,12 @@ With a prefix ARG, remove start location."
   (add-to-list 'lsp-enabled-clients 'ts-ls)
   (setq typescript-indent-level 2))
 
+(defun run-typescript-file ()
+  "Run the current TypeScript file."
+  (interactive)
+  (let ((file (buffer-file-name)))
+    (shell-command (concat "npx ts-node " file))))
+
 (setq css-indent-offset 2)
 
 (defun my-info-copy-current-node-name (arg)
