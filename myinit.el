@@ -1690,7 +1690,8 @@ With a prefix ARG, remove start location."
   :straight t
   :after lsp-mode
   :hook
-  (prog-mode . company-mode)
+  (after-init . global-company-mode)
+  ;;(prog-mode . company-mode)
   :bind
   (:map company-active-map
         ("<tab>" . company-complete-selection))
@@ -1720,28 +1721,109 @@ With a prefix ARG, remove start location."
       company-auto-complete t)
 (add-hook 'prog-mode-hook 'company-mode)
 
-;; (use-package company-jedi
-;;   :straight t
-;;   :config
-;;   (defun my/python-mode-hook ()
-;;     (add-to-list 'company-backends 'company-jedi))
+(use-package company-lsp
+  :straight t
+  :commands company-lsp
+  :config
+  (require 'company-lsp)
+  (push 'company-lsp company-backends))
 
-;;   (add-hook 'python-mode-hook 'my/python-mode-hook))
+(use-package tide
+  :straight t
+  :config
+  (add-hook 'js-mode-hook #'setup-tide-mode)
+  (add-hook 'typescript-mode-hook #'setup-tide-mode))
+
+(defun setup-tide-mode ()
+  (interactive)
+  (tide-setup)
+  (flycheck-mode +1)
+  (setq flycheck-check-syntax-automatically '(save mode-enabled))
+  (eldoc-mode +1)
+  (tide-hl-identifier-mode +1)
+  (company-mode +1))
 
 (use-package company-box
   :straight t
   :hook (company-mode . company-box-mode))
 
+(use-package lsp-mode :straight t
+  :commands (lsp lsp-deferred)
+  :init
+  (require 'lsp)
+  (add-to-list 'lsp-enabled-clients 'clangd)
+  (add-hook 'c-mode-hook 'lsp)
+  (add-hook 'cpp-mode-hook 'lsp)
+  ;;(add-hook 'js-mode-hook 'lsp)
+  (add-hook 'js2-mode-hook 'lsp)
+  :config
+  (define-key lsp-mode-map (kbd "C-c i") lsp-command-map)
+  (lsp-enable-which-key-integration t)
+  )
+
+(use-package dap-mode
+  :straight t
+  :hook ((lsp-mode . dap-mode)
+         (lsp-mode . dap-ui-mode))
+  :config
+  (dap-mode 1))
+
+  (use-package company
+  :straight t
+  :config
+  (add-hook 'after-init-hook 'global-company-mode))
+
+
+(which-key-mode)
+(add-hook 'c-mode-hook 'lsp)
+(add-hook 'c++-mode-hook 'lsp)
+
+(setq gc-cons-threshold (* 100 1024 1024)
+      read-process-output-max (* 1024 1024)
+      treemacs-space-between-root-nodes nil
+      lsp-idle-delay 0.1 ;; clangd is fast
+      ;; be more ide-ish
+      lsp-headerline-breadcrumb-enable t)
+
+(with-eval-after-load 'lsp-mode
+  (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
+  (require 'dap-cpptools)
+  (yas-global-mode))
+
+;; (use-package lsp-ui
+;;   :straight t
+;;   :hook
+;;   (lsp-mode . lsp-ui-mode)
+;;   :custom
+;;   (lsp-ui-doc-position 'at-point)
+;;   (lsp-ui-sideline-show-hover))'
 (use-package lsp-ui
   :straight t
-  :hook
-  (lsp-mode . lsp-ui-mode)
+  :commands (lsp-ui-mode)
   :custom
-  (lsp-ui-doc-position 'bottom))
+  ;; Sideline
+  (lsp-ui-sideline-show-diagnostics t)
+  (lsp-ui-sideline-show-hover t)
+  (lsp-ui-sideline-show-code-actions t)
+  (lsp-ui-sideline-update-mode 'line)
+  (lsp-ui-sideline-delay 0)
+  ;; Peek
+  (lsp-ui-peek-enable t)
+  (lsp-ui-peek-show-directory nil)
+  ;; Documentation
+  (lsp-ui-doc-enable t)
+  (lsp-ui-doc-position 'at-point)
+  (lsp-ui-doc-delay 0.2)
+  ;; IMenu
+  (lsp-ui-imenu-window-width 0)
+  (lsp-ui-imenu--custom-mode-line-format nil)
+  :hook (lsp-mode . lsp-ui-mode))
 
 (use-package lsp-treemacs
   :straight t
-  :after lsp)
+  :after lsp
+  :config
+  (lsp-treemacs-sync-mode 1))
 
 (use-package lsp-ivy
   :straight t)
@@ -1783,22 +1865,9 @@ With a prefix ARG, remove start location."
   :straight t
   :config
   (require 'lsp-java)
+  (require 'dap-java)
   (add-hook 'java-mode-hook #'lsp)
   (add-to-list 'lsp-enabled-clients 'jdtls))
-
-;; (use-package jdee
-;;   :straight t)
-;; (load "jdee")
-;; (custom-set-variables '(jdee-server-dir "~/.emacs.d/straight/repos/jdee-server"))
-
-;; (use-package elpy
-;;   :straight t
-;;   :config
-;;   (when (require 'elpy nil t)
-;;     (elpy-enable))
-;;   (setq elpy-rpc-backend "jedi"))
-;; (setq elpy-rpc-python-command "python3.7")
-;; (setq python-shell-interpreter "/usr/local/bin/python3.7")
 
 (use-package py-autopep8
   :straight t)
@@ -1808,52 +1877,7 @@ With a prefix ARG, remove start location."
 (setq js-indent-level 2)
 (add-to-list 'auto-mode-alist '("\\.es6\\'" . js2-mode))
 
-(use-package js2-mode
-  :straight t
-  :init
-  (setq js-basic-indent 2)
-  (setq-default js2-basic-indent 2
-                js2-basic-offset 2
-                js2-auto-indent-p t
-                js2-cleanup-whitespace t
-                js2-enter-indents-newline t
-                js2-indent-on-enter-key t
-                js2-global-externs (list "window" "module" "require" "buster" "sinon" "assert" "refute" "setTimeout" "clearTimeout" "setInterval" "clearInterval" "location" "__dirname" "console" "JSON" "jQuery" "$"))
-
-  (add-hook 'js2-mode-hook
-            (lambda ()
-              (push '("function" . ?ƒ) prettify-symbols-alist)))
-
-  (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode)))
-
-(add-hook 'js2-mode-hook
-          (lambda () (flycheck-select-checker "javascript-eslint")))
-
-(use-package js-comint
-  :straight t)
-(require 'js-comint)
-
-(defun inferior-js-mode-hook-setup ()
-  (add-hook 'comint-output-filter-functions 'js-comint-process-output))
-(add-hook 'inferior-js-mode-hook 'inferior-js-mode-hook-setup t)
-
-;; You can also customize `js-comint-drop-regexp' to filter output
-(when (eq system-type 'gnu/linux)
-  (setq inferior-js-program-command "nodejs")
-  (setq inferior-js-program-arguments '("--interactive")))
-(when (eq system-type 'berkeley-unix)
-  (setq inferior-js-program-command "node")
-  (setq inferior-js-program-arguments '("--interactive")))
-
-(add-hook 'js2-mode-hook
-          (lambda ()
-            (local-set-key (kbd "C-x C-e") 'js-send-last-sexp)
-            (local-set-key (kbd "C-M-x") 'js-send-last-sexp-and-go)
-            (local-set-key (kbd "C-c b") 'js-send-buffer)
-            (local-set-key (kbd "C-c C-b") 'js-send-buffer-and-go)
-            (local-set-key (kbd "C-c l") 'js-load-file-and-go)))
-
-
+(require 'dap-firefox)
 
 (setq auto-mode-alist
       (cons '("\\.m$" . octave-mode) auto-mode-alist))
@@ -1871,34 +1895,6 @@ With a prefix ARG, remove start location."
 (use-package htmlize
       :straight t)
 
-(use-package lsp-mode :straight t
-  :commands (lsp lsp-deferred)
-  :init
-  (require 'lsp)
-  (add-to-list 'lsp-enabled-clients 'clangd)
-  (add-hook 'c-mode-hook 'lsp)
-  (add-hook 'cpp-mode-hook 'lsp)
-  :config
-  (define-key lsp-mode-map (kbd "s-h") lsp-command-map)
-  (lsp-enable-which-key-integration t))
-(use-package dap-mode :straight t)
-
-(which-key-mode)
-(add-hook 'c-mode-hook 'lsp)
-(add-hook 'c++-mode-hook 'lsp)
-
-(setq gc-cons-threshold (* 100 1024 1024)
-      read-process-output-max (* 1024 1024)
-      treemacs-space-between-root-nodes nil
-      lsp-idle-delay 0.1 ;; clangd is fast
-      ;; be more ide-ish
-      lsp-headerline-breadcrumb-enable t)
-
-(with-eval-after-load 'lsp-mode
-  (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
-  (require 'dap-cpptools)
-  (yas-global-mode))
-
 (use-package ggtags
   :straight t
   :config
@@ -1908,50 +1904,19 @@ With a prefix ARG, remove start location."
                 (ggtags-mode 1)))))
 (setq lsp-clients-clangd-executable "/usr/local/bin/clangd17")
 
-(use-package web-mode
-  :straight t)
-(require 'web-mode)
-(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-(setq web-mode-enable-auto-pairing t)
-(setq web-mode-enable-css-colorization t)
-
-;; Set Indentation
-(setq web-mode-markup-indent-offset 2)
-(setq web-mode-css-indent-offset 2)
-(setq web-mode-code-indent-offset 2)
-
-;; For Emmet to switch between html and css properly in the same document,
-;; this hook is added.
-(add-hook 'web-mode-before-auto-complete-hooks
-          #'(lambda ()
-             (let ((web-mode-cur-language
-                    (web-mode-language-at-pos)))
-               (if (string= web-mode-cur-language "php")
-                   (yas-activate-extra-mode 'php-mode)
-                 (yas-deactivate-extra-mode 'php-mode))
-               (if (string= web-mode-cur-language "css")
-                   (setq emmet-use-css-transform t)
-                 (setq emmet-use-css-transform nil)))))
-
 (use-package emmet-mode
   :straight t
   :config
   (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
   (add-hook 'web-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
   (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
+  (add-hook 'lsp-mode-hook 'emmet-mode)
   )
 
 (use-package prettier
   :straight t)
 
-(add-hook 'js2-mode-hook 'prettier--mode)
+(add-hook 'js2-mode-hook 'prettier-mode)
 (add-hook 'web-mode-hook 'prettier-mode)
 
 (use-package dumb-jump
@@ -2002,9 +1967,6 @@ instead."
 
 (with-eval-after-load 'info
   (define-key Info-mode-map (kbd "c") 'my-info-copy-current-node-name))
-
-;; Enabled inline static analysis
-(add-hook 'prog-mode-hook #'flymake-mode)
 
 (use-package geiser-mit :straight t)
 (require 'geiser-mit)
