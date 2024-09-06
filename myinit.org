@@ -998,6 +998,12 @@ Emacs minor mode to highlight indentation.
   ;; if you use multiple-cursors, this is for you:
   (define-key global-map (kbd "C-c j") 'vr/mc-mark))
 #+end_src
+*** Comment-dwim-2 package
+#+begin_src emacs-lisp
+(use-package comment-dwim-2
+  :straight t
+  :bind (("M-;" . comment-dwim-2)))
+#+end_src
 *** Olivetti package
 #+begin_src emacs-lisp
 (use-package olivetti
