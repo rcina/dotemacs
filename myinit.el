@@ -1728,20 +1728,20 @@ With a prefix ARG, remove start location."
   (require 'company-lsp)
   (push 'company-lsp company-backends))
 
-(use-package tide
-  :straight t
-  :config
-  (add-hook 'js-mode-hook #'setup-tide-mode)
-  (add-hook 'typescript-mode-hook #'setup-tide-mode))
+;; (use-package tide
+;;   :straight t
+;;   :config
+;;   (add-hook 'js-mode-hook #'setup-tide-mode)
+;;   (add-hook 'typescript-mode-hook #'setup-tide-mode))
 
-(defun setup-tide-mode ()
-  (interactive)
-  (tide-setup)
-  (flycheck-mode +1)
-  (setq flycheck-check-syntax-automatically '(save mode-enabled))
-  (eldoc-mode +1)
-  (tide-hl-identifier-mode +1)
-  (company-mode +1))
+;; (defun setup-tide-mode ()
+;;   (interactive)
+;;   (tide-setup)
+;;   (flycheck-mode +1)
+;;   (setq flycheck-check-syntax-automatically '(save mode-enabled))
+;;   (eldoc-mode +1)
+;;   (tide-hl-identifier-mode +1)
+;;   (company-mode +1))
 
 (use-package company-box
   :straight t
@@ -1749,14 +1749,18 @@ With a prefix ARG, remove start location."
 
 (use-package lsp-mode :straight t
   :commands (lsp lsp-deferred)
+  :hook ((js-mode . lsp)
+         (typescript-mode . lsp))
   :init
   (require 'lsp)
   (add-to-list 'lsp-enabled-clients 'clangd)
   (add-hook 'c-mode-hook 'lsp)
   (add-hook 'cpp-mode-hook 'lsp)
-  ;;(add-hook 'js-mode-hook 'lsp)
-  (add-hook 'js2-mode-hook 'lsp)
   :config
+  (require 'lsp-mode)
+;; Optional: Configure lsp-mode settings
+(setq lsp-prefer-flymake nil) ;; Use flycheck instead of flymake
+
   (define-key lsp-mode-map (kbd "C-c i") lsp-command-map)
   (lsp-enable-which-key-integration t)
   )
@@ -1768,7 +1772,7 @@ With a prefix ARG, remove start location."
   :config
   (dap-mode 1))
 
-  (use-package company
+(use-package company
   :straight t
   :config
   (add-hook 'after-init-hook 'global-company-mode))
