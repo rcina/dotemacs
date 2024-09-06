@@ -1708,7 +1708,7 @@ With a prefix ARG, remove start location."
  company-require-match 'never
  company-dabbrev-downcase nil
  company-dabbrev-ignore-case t
- company-backends '(company-jedi company-nxml
+ company-backends '(company-nxml
                                  company-css company-capf
                                  (company-dabbrev-code company-keywords)
                                  company-files company-dabbrev company-clang)
@@ -1747,23 +1747,40 @@ With a prefix ARG, remove start location."
   :straight t
   :hook (company-mode . company-box-mode))
 
+(use-package js2-mode
+  :straight t
+  :config
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
+
 (use-package lsp-mode :straight t
   :commands (lsp lsp-deferred)
   :hook ((js-mode . lsp)
-         (typescript-mode . lsp))
+         (js2-mode . lsp)
+         (typescript-mode . lsp)
+         (python-mode . lsp)
+         (rust-mode . lsp))
   :init
   (require 'lsp)
   (add-to-list 'lsp-enabled-clients 'clangd)
+  (setq lsp-rust-server 'rust-analyzer)
+  (setq lsp-semgrep-server-command '("semgrep" "lsp"))
   (add-hook 'c-mode-hook 'lsp)
   (add-hook 'cpp-mode-hook 'lsp)
   :config
   (require 'lsp-mode)
-;; Optional: Configure lsp-mode settings
-(setq lsp-prefer-flymake nil) ;; Use flycheck instead of flymake
+  (setq lsp-enabled-clients '(ts-ls eslint clangd jedi pylsp rls rust-analyzer semgrep-ls))
+
+  ;; Optional: Configure lsp-mode settings
+  (setq lsp-prefer-flymake nil) ;; Use flycheck instead of flymake
 
   (define-key lsp-mode-map (kbd "C-c i") lsp-command-map)
   (lsp-enable-which-key-integration t)
   )
+
+(with-eval-after-load 'lsp-mode
+  (add-hook 'lsp-mode-hook #'lsp-ui-mode)
+  (add-hook 'lsp-mode-hook #'flycheck-mode))
+
 
 (use-package dap-mode
   :straight t
@@ -1831,6 +1848,17 @@ With a prefix ARG, remove start location."
 
 (use-package lsp-ivy
   :straight t)
+
+(use-package rust-mode
+  :straight t
+  :config
+  (require 'rust-mode)
+  (add-hook 'rust-mode-hook
+          (lambda () (setq indent-tabs-mode nil))))
+
+(use-package cargo
+  :straight t
+  :hook (rust-mode . cargo-minor-mode))
 
 (add-hook 'prog-mode-hook #'(lambda () (display-line-numbers-mode 1)))
 
@@ -1922,6 +1950,7 @@ With a prefix ARG, remove start location."
 
 (add-hook 'js2-mode-hook 'prettier-mode)
 (add-hook 'web-mode-hook 'prettier-mode)
+(add-hook 'typescript-mode-hook 'prettier-mode)
 
 (use-package dumb-jump
   :straight t
