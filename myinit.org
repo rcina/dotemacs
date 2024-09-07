@@ -2393,7 +2393,8 @@ Trying lsp-mode out. I used to use auto-complete for this.
          (python-mode . lsp)
          (rust-mode . lsp)
          (html-mode . lsp)
-         (css-mode . lsp))
+         (css-mode . lsp)
+         (scss-mode . lsp))
   :init
   (require 'lsp)
   (add-to-list 'lsp-enabled-clients 'clangd)
@@ -2714,6 +2715,14 @@ Indentation could be a bit more narrow.
 (setq css-indent-offset 2)
 #+end_src
 
+*** SCSS-mode package
+#+begin_src emacs-lisp
+(use-package scss-mode
+  :straight t
+  :mode ("\\.scss\\'" . scss-mode)
+  :config
+  (setq scss-compile-at-save nil))  ; Disable automatic compilation on save
+#+end_src
 *** Info
 Make copying use the lispy syntax by default and with a normal syntax
 argument copy the HTML link.
