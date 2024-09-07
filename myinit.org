@@ -2404,7 +2404,7 @@ Trying lsp-mode out. I used to use auto-complete for this.
   (add-hook 'cpp-mode-hook 'lsp)
   :config
   (require 'lsp-mode)
-  (setq lsp-enabled-clients '(emmet-ls html-ls css-ls ts-ls eslint clangd jedi pylsp rls rust-analyzer semgrep-ls))
+  (setq lsp-enabled-clients '(emmet-wls html-ls css-ls ts-ls eslint clangd jedi pylsp rls rust-analyzer semgrep-ls))
 
   ;; Optional: Configure lsp-mode settings
   (setq lsp-prefer-flymake nil) ;; Use flycheck instead of flymake
@@ -2655,6 +2655,7 @@ javascript extensions.
   (add-hook 'web-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
   (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
   (add-hook 'lsp-mode-hook 'emmet-mode)
+  (define-key emmet-mode-keymap [tab] 'emmet-expand-line)
   )
 #+end_src
 
