@@ -1959,6 +1959,9 @@ With a prefix ARG, remove start location."
   :straight t)
 
 (add-hook 'js2-mode-hook 'prettier-mode)
+(add-hook 'html-mode-hook 'prettier-mode)
+(add-hook 'js-mode-hook 'prettier-mode)
+(add-hook 'css-mode-hook 'prettier-mode)
 (add-hook 'web-mode-hook 'prettier-mode)
 (add-hook 'typescript-mode-hook 'prettier-mode)
 
