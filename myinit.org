@@ -2275,7 +2275,7 @@ and tries to be smart about it.
   :config
   (progn
     (require 'smartparens-config)
-    (add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
+    ;;(add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
     (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
     (add-hook 'org-mode-hook 'turn-on-smartparens-strict-mode)
     (sp-local-pair 'org-mode "\\[" "\\]")
@@ -2391,7 +2391,9 @@ Trying lsp-mode out. I used to use auto-complete for this.
          (js2-mode . lsp)
          (typescript-mode . lsp)
          (python-mode . lsp)
-         (rust-mode . lsp))
+         (rust-mode . lsp)
+         (html-mode . lsp)
+         (css-mode . lsp))
   :init
   (require 'lsp)
   (add-to-list 'lsp-enabled-clients 'clangd)
@@ -2401,7 +2403,7 @@ Trying lsp-mode out. I used to use auto-complete for this.
   (add-hook 'cpp-mode-hook 'lsp)
   :config
   (require 'lsp-mode)
-  (setq lsp-enabled-clients '(ts-ls eslint clangd jedi pylsp rls rust-analyzer semgrep-ls))
+  (setq lsp-enabled-clients '(emmet-ls html-ls css-ls ts-ls eslint clangd jedi pylsp rls rust-analyzer semgrep-ls))
 
   ;; Optional: Configure lsp-mode settings
   (setq lsp-prefer-flymake nil) ;; Use flycheck instead of flymake
