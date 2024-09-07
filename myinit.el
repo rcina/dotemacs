@@ -1569,9 +1569,9 @@ With a prefix ARG, remove start location."
   (set-face-attribute 'whitespace-indentation nil :foreground "#666666" :background nil)
   :diminish whitespace-mode)
 
-(use-package smart-comment
-  :straight t
-  :bind ("M-;" . smart-comment))
+;; (use-package smart-comment
+;;   :straight t
+;;   :bind ("M-;" . smart-comment))
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
