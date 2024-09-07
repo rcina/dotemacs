@@ -1939,7 +1939,7 @@ between projects much easier.
 (global-set-key [remap dabbrev-expand] 'hippie-expand)
   #+end_src
 *** Yasnippet-snippets
-  #+end_src
+
 - This package is a collection of yasnippet snippets for many languages.
   #+begin_src emacs-lisp
     (use-package yasnippet-snippets :straight t)
@@ -2400,6 +2400,7 @@ Trying lsp-mode out. I used to use auto-complete for this.
   (add-to-list 'lsp-enabled-clients 'clangd)
   (setq lsp-rust-server 'rust-analyzer)
   (setq lsp-semgrep-server-command '("semgrep" "lsp"))
+  (setq lsp-enable-snippet t)
   (add-hook 'c-mode-hook 'lsp)
   (add-hook 'cpp-mode-hook 'lsp)
   :config
@@ -2651,6 +2652,7 @@ javascript extensions.
 (use-package emmet-mode
   :straight t
   :config
+  (add-hook 'html-mode-hook 'emmet-mode)
   (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
   (add-hook 'web-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
   (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
@@ -2667,6 +2669,15 @@ javascript extensions.
 (add-hook 'js2-mode-hook 'prettier-mode)
 (add-hook 'web-mode-hook 'prettier-mode)
 (add-hook 'typescript-mode-hook 'prettier-mode)
+#+end_src
+*** Auto rename tag
+#+begin_src emacs-lisp
+(use-package auto-rename-tag
+  :straight t
+  :config
+  (add-hook 'html-mode-hook 'auto-rename-tag-mode)
+  (add-hook 'web-mode-hook 'auto-rename-tag-mode)
+)
 #+end_src
 *** Dumb Jump
 
