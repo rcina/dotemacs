@@ -329,6 +329,9 @@ save file and history length first.
               ("J" . bookmark-jump))
   :after (bookmark))
 
+(use-package casual-editkit
+  :straight t
+  :bind (("C-o" . casual-editkit-main-tmenu)))
   #+end_src
 ** Theme/Mode Line
 *** All the icons ivy

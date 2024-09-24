@@ -194,6 +194,10 @@
               ("J" . bookmark-jump))
   :after (bookmark))
 
+(use-package casual-editkit
+  :straight t
+  :bind (("C-o" . casual-editkit-main-tmenu)))
+
 (use-package all-the-icons-ivy
   :straight t
   :init (add-hook 'after-init-hook 'all-the-icons-ivy-setup)
