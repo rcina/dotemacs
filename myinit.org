@@ -3309,11 +3309,11 @@ Zamansky [[http://cestlaz.github.io/posts/using-emacs-29%2520elfeed/][here]].
 ** Mastodon
 
 #+begin_src emacs-lisp
-(use-package mastodon
-  :straight t
-  :config
-  (setq mastodon-instance-url "https://emacs.ch"
-        mastodon-active-user "polyrob"))
+;; (use-package mastodon
+;;   :straight t
+;;   :config
+;;   (setq mastodon-instance-url "https://emacs.ch"
+;;         mastodon-active-user "polyrob"))
 #+end_src
 
 ** Denote
