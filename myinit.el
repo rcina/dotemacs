@@ -110,8 +110,8 @@
 
 (setq dictionary-server "dict.org")
 
-(use-package casual-lib
-  :straight (casual-lib :type git :host github :repo "kickingvegas/casual-lib")
+(use-package casual
+  :straight (casual :type git :host github :repo "kickingvegas/casual")
   :ensure nil)
 (use-package casual-agenda
   :straight (casual-suite :type git :host github :repo "kickingvegas/casual-agenda")
