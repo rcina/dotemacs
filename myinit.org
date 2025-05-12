@@ -2647,7 +2647,7 @@ javascript extensions.
             (lambda ()
               (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
                 (ggtags-mode 1)))))
-(setq lsp-clients-clangd-executable "/usr/local/bin/clangd17")
+(setq lsp-clients-clangd-executable "/usr/local/bin/clangd19")
 #+end_src
 *** Emmet mode install and configuration.
 
