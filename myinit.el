@@ -1780,8 +1780,13 @@ With a prefix ARG, remove start location."
   (add-hook 'cpp-mode-hook 'lsp)
   :config
   (require 'lsp-mode)
-  (setq lsp-enabled-clients '(jdtls emmet-wls html-ls css-ls ts-ls eslint clangd jedi pylsp rls rust-analyzer semgrep-ls))
+  (setq lsp-enabled-clients '(jdtls emmet-wls html-ls css-ls ts-ls eslint clangd jedi pylsp rls rust-analyzer))
 
+  (setq lsp-clients-semgrep-executable "/home/rob/.local/bin/semgrep
+")
+  (setq lsp-enable-symbol-highlighting nil)  ; Disable document highlighting
+(setq lsp-lens-enable nil)  ; Disable code lens
+(setq lsp-eldoc-enable-hover nil)  ; Disable hover info
   ;; Optional: Configure lsp-mode settings
   (setq lsp-prefer-flymake nil) ;; Use flycheck instead of flymake
 
@@ -1836,8 +1841,8 @@ With a prefix ARG, remove start location."
   :custom
   ;; Sideline
   (lsp-ui-sideline-show-diagnostics t)
-  (lsp-ui-sideline-show-hover t)
-  (lsp-ui-sideline-show-code-actions t)
+  (lsp-ui-sideline-show-hover nil)
+  (lsp-ui-sideline-show-code-actions nil)
   (lsp-ui-sideline-update-mode 'line)
   (lsp-ui-sideline-delay 0)
   ;; Peek
