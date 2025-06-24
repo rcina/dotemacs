@@ -2589,6 +2589,13 @@ Go-mode package install and configuration.
     (add-to-list 'lsp-disabled-clients 'pyls)
     (add-to-list 'lsp-enabled-clients 'jedi)))
 (add-hook 'python-mode-hook 'lsp)
+
+(setq lsp-ui-doc-enable nil            ; Stop automatic hover popups
+      lsp-ui-sideline-enable nil)      ; Stop diagnostics/info in the right margin
+
+;; Crucially, disable automatic hover on cursor/mouse movement:
+(setq lsp-ui-doc-show-with-mouse nil
+      lsp-ui-doc-show-with-cursor nil) ; This prevents many `textDocument/hover` cancellations
 #+end_export
 **** Py-autopep8
 py-autopep8 package to format python code on save.
