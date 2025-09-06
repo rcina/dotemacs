@@ -2863,264 +2863,6 @@ instead."
            ("\\.markdown\\'" . markdown-mode))
     :init (setq markdown-command "multimarkdown"))
 #+end_src
-
-** Latex
-*** AUCTeX/CDLatex
-Set up AUCTeX for Emacs.
-
-#+begin_src emacs-lisp
-(global-set-key (kbd "C-c i") 'tab-to-tab-stop)
-;; AucTeX settings - almost no changes
-(use-package tex-site
-  :ensure auctex)
-
-(use-package latex
-  :ensure auctex
-  :hook ((LaTeX-mode . prettify-symbols-mode))
-  :bind (:map LaTeX-mode-map
-         ("C-S-e" . latex-math-from-calc))
-  :config
-  ;; Format math as a Latex string with Calc
-  (defun latex-math-from-calc ()
-    "Evaluate `calc' on the contents of line at point."
-    (interactive)
-    (cond ((region-active-p)
-           (let* ((beg (region-beginning))
-                  (end (region-end))
-                  (string (buffer-substring-no-properties beg end)))
-             (kill-region beg end)
-             (insert (calc-eval `(,string calc-language latex
-                                          calc-prefer-frac t
-                                          calc-angle-mode rad)))))
-          (t (let ((l (thing-at-point 'line)))
-               (end-of-line 1) (kill-line 0)
-               (insert (calc-eval `(,l
-                                    calc-language latex
-                                    calc-prefer-frac t
-                                    calc-angle-mode rad)))))))
- (setq TeX-auto-save t)
-      (setq TeX-parse-self t)
-      (setq-default TeX-master nil)
-      (add-hook 'LaTeX-mode-hook
-                (lambda ()
-                  (rainbow-delimiters-mode)
-                  (company-mode)
-                  (smartparens-mode)
-                  (turn-on-reftex)
-                  (setq reftex-plug-into-AUCTeX t)
-                  (reftex-isearch-minor-mode)
-                  (setq TeX-PDF-mode t)
-                  (setq TeX-source-correlate-method 'synctex)
-                  (setq TeX-source-correlate-start-server t)))
-
-      ;; Update PDF buffers after successful LaTeX runs
-      (add-hook 'TeX-after-TeX-LaTeX-command-finished-hook
-                #'TeX-revert-document-buffer)
-
-      ;; to use pdfview with auctex
-      (add-hook 'LaTeX-mode-hook 'pdf-tools-install)
-
-      ;; to use pdfview with auctex
-      (setq TeX-view-program-selection '((output-pdf "pdf-tools"))
-            TeX-source-correlate-start-server t)
-      (setq TeX-view-program-list '(("pdf-tools" "TeX-pdf-tools-sync-view")
-  )))
-
-
-
-;; CDLatex settings
-(use-package cdlatex
-  :ensure t
-  :hook (LaTeX-mode . turn-on-cdlatex)
-  :bind (:map cdlatex-mode-map
-              ("<tab>" . cdlatex-tab)))
-
-;; Yasnippet settings
-(use-package yasnippet
-  :ensure t
-  :hook ((LaTeX-mode . yas-minor-mode)
-         (post-self-insert . my/yas-try-expanding-auto-snippets))
-  :config
-  (use-package warnings
-    :config
-    (cl-pushnew '(yasnippet backquote-change)
-                warning-suppress-types
-                :test 'equal))
-
-  (setq yas-triggers-in-field t)
-
-  ;; Function that tries to autoexpand YaSnippets
-  ;; The double quoting is NOT a typo!
-  (defun my/yas-try-expanding-auto-snippets ()
-    (when (and (boundp 'yas-minor-mode) yas-minor-mode)
-      (let ((yas-buffer-local-condition ''(require-snippet-condition . auto)))
-        (yas-expand)))))
-
-;; CDLatex integration with YaSnippet: Allow cdlatex tab to work inside Yas
-;; fields
-(use-package cdlatex
-  :hook ((cdlatex-tab . yas-expand)
-         (cdlatex-tab . cdlatex-in-yas-field))
-  :config
-  (use-package yasnippet
-    :bind (:map yas-keymap
-           ("<tab>" . yas-next-field-or-cdlatex)
-           ("TAB" . yas-next-field-or-cdlatex))
-    :config
-    (defun cdlatex-in-yas-field ()
-      ;; Check if we're at the end of the Yas field
-      (when-let* ((_ (overlayp yas--active-field-overlay))
-                  (end (overlay-end yas--active-field-overlay)))
-        (if (>= (point) end)
-            ;; Call yas-next-field if cdlatex can't expand here
-            (let ((s (thing-at-point 'sexp)))
-              (unless (and s (assoc (substring-no-properties s)
-                                    cdlatex-command-alist-comb))
-                (yas-next-field-or-maybe-expand)
-                t))
-          ;; otherwise expand and jump to the correct location
-          (let (cdlatex-tab-hook minp)
-            (setq minp
-                  (min (save-excursion (cdlatex-tab)
-                                       (point))
-                       (overlay-end yas--active-field-overlay)))
-            (goto-char minp) t))))
-
-    (defun yas-next-field-or-cdlatex nil
-      (interactive)
-      "Jump to the next Yas field correctly with cdlatex active."
-      (if
-          (or (bound-and-true-p cdlatex-mode)
-              (bound-and-true-p org-cdlatex-mode))
-          (cdlatex-tab)
-        (yas-next-field-or-maybe-expand)))))
-
-;; Array/tabular input with org-tables and cdlatex
-(use-package org-table
-  :after cdlatex
-  :bind (:map orgtbl-mode-map
-              ("<tab>" . lazytab-org-table-next-field-maybe)
-              ("TAB" . lazytab-org-table-next-field-maybe))
-  :init
-  (add-hook 'cdlatex-tab-hook 'lazytab-cdlatex-or-orgtbl-next-field 90)
-  ;; Tabular environments using cdlatex
-  (add-to-list 'cdlatex-command-alist '("smat" "Insert smallmatrix env"
-                                       "\\left( \\begin{smallmatrix} ? \\end{smallmatrix} \\right)"
-                                       lazytab-position-cursor-and-edit
-                                       nil nil t))
-  (add-to-list 'cdlatex-command-alist '("bmat" "Insert bmatrix env"
-                                       "\\begin{bmatrix} ? \\end{bmatrix}"
-                                       lazytab-position-cursor-and-edit
-                                       nil nil t))
-  (add-to-list 'cdlatex-command-alist '("pmat" "Insert pmatrix env"
-                                       "\\begin{pmatrix} ? \\end{pmatrix}"
-                                       lazytab-position-cursor-and-edit
-                                       nil nil t))
-  (add-to-list 'cdlatex-command-alist '("tbl" "Insert table"
-                                        "\\begin{table}\n\\centering ? \\caption{}\n\\end{table}\n"
-                                       lazytab-position-cursor-and-edit
-                                       nil t nil))
-  :config
-  ;; Tab handling in org tables
-  (defun lazytab-position-cursor-and-edit ()
-    ;; (if (search-backward "\?" (- (point) 100) t)
-    ;;     (delete-char 1))
-    (cdlatex-position-cursor)
-    (lazytab-orgtbl-edit))
-
-  (defun lazytab-orgtbl-edit ()
-    (advice-add 'orgtbl-ctrl-c-ctrl-c :after #'lazytab-orgtbl-replace)
-    (orgtbl-mode 1)
-    (open-line 1)
-    (insert "\n|"))
-
-  (defun lazytab-orgtbl-replace (_)
-    (interactive "P")
-    (unless (org-at-table-p) (user-error "Not at a table"))
-    (let* ((table (org-table-to-lisp))
-           params
-           (replacement-table
-            (if (texmathp)
-                (lazytab-orgtbl-to-amsmath table params)
-              (orgtbl-to-latex table params))))
-      (kill-region (org-table-begin) (org-table-end))
-      (open-line 1)
-      (push-mark)
-      (insert replacement-table)
-      (align-regexp (region-beginning) (region-end) "\\([:space:]*\\)& ")
-      (orgtbl-mode -1)
-      (advice-remove 'orgtbl-ctrl-c-ctrl-c #'lazytab-orgtbl-replace)))
-
-  (defun lazytab-orgtbl-to-amsmath (table params)
-    (orgtbl-to-generic
-     table
-     (org-combine-plists
-      '(:splice t
-                :lstart ""
-                :lend " \\\\"
-                :sep " & "
-                :hline nil
-                :llend "")
-      params)))
-
-  (defun lazytab-cdlatex-or-orgtbl-next-field ()
-    (when (and (bound-and-true-p orgtbl-mode)
-               (org-table-p)
-               (looking-at "[[:space:]]*\\(?:|\\|$\\)")
-               (let ((s (thing-at-point 'sexp)))
-                 (not (and s (assoc s cdlatex-command-alist-comb)))))
-      (call-interactively #'org-table-next-field)
-      t))
-
-  (defun lazytab-org-table-next-field-maybe ()
-    (interactive)
-    (if (bound-and-true-p cdlatex-mode)
-        (cdlatex-tab)
-      (org-table-next-field))))
-#+end_src
-*** Latex-run-command
-#+begin_src emacs-lisp
-(setq latex-run-command "lualatex")
-#+end_src
-*** RefTeX
-Setup reftex.
-
-#+begin_src emacs-lisp
-(use-package reftex
-  :straight t
-  :defer t
-  :config
-  (setq reftex-cite-prompt-optional-args t))
-#+end_src
-
-*** Add Acronyms in easily in auctex
-Source of this function comes from the following web page:
-https://florian.adamsky.it/2018/03/09/emacs-add-acronyms.html
-
-#+begin_src emacs-lisp
-(defun fa/add-latex-acronym (region-beg region-end)
-  "This function reads the written out form of an acronym via the
-  minibuffer and adds it to the acronym list in a latex
-  document. Addtionally, it sorts all acronyms in the list."
-  (interactive "r")
-  (save-excursion
-    (let ((acronym
-           (if (region-active-p)
-               (buffer-substring region-beg region-end)
-             (read-from-minibuffer "Acronym: ")))
-          (full-name (read-from-minibuffer "Full Name: ")))
-      (beginning-of-buffer)
-      (if (search-forward "\\begin{acronym}" nil t)
-          (progn
-            (deactivate-mark)
-            (open-line 1)
-            (forward-line 1)
-            (insert (concat "  \\acro{" acronym "}{" full-name "}"))
-            (beginning-of-line)
-            (sort-lines nil (point) (search-forward "\\end{acronym}" nil nil)))
-        (user-error "No acronym environment found")))))
-#+end_src
-
 ** GNUS and gmail
 Configuration to use GNUS with gmail.
 
@@ -3335,4 +3077,68 @@ Zamansky [[http://cestlaz.github.io/posts/using-emacs-29%2520elfeed/][here]].
   :config
   (require 'denote)
   (setq denote-directory (expand-file-name "~/denote/notes/")))
+#+end_src
+** Latex
+#+begin_src emacs-lisp
+;; --- LaTeX Configuration ---
+(use-package auctex
+  :straight t
+  :config
+  ;; Enable TeX-fold-mode for better readability of LaTeX code
+  (setq TeX-fold-mode-default-list '(("\\section\\*?" TeX-fold-section)))
+  (add-hook 'latex-mode-hook #'TeX-fold-mode)
+
+  ;; Configure AUCTeX to use a specific LaTeX compiler if needed.
+  (setq TeX-engine 'xetex) ;; or 'luatex, 'pdflatex, etc.
+  (setq TeX-command-extra-options "")
+
+  ;; Set the viewer for PDF files.
+  (setq TeX-view-program-selection '((output-pdf "PDF Tools"))))
+
+(use-package cdlatex
+  :straight t
+  :hook (latex-mode-hook . cdlatex-mode)
+  :config
+  (define-key cdlatex-mode-map (kbd "TAB") 'cdlatex-tab)
+  (define-key cdlatex-mode-map (kbd "C-c C-e") 'cdlatex-environment)
+  (define-key cdlatex-mode-map (kbd "C-c C-s") 'cdlatex-sub-sup-mode))
+
+(use-package pdf-tools
+  :straight t
+  :mode ("\\.pdf\\'" . pdf-view-mode)
+  :init
+  ;; Add the `pdf-tools` server to your exec path
+  (pdf-tools-install)
+  :config
+  (define-key pdf-view-mode-map (kbd "C-c C-o") 'pdf-tools-open-file)
+  (setq pdf-view-auto-refresh-on-file-change t)
+  ;; Automatically open a new PDF view when compiling a document.
+  (add-hook 'TeX-after-compilation-finished-functions
+            (lambda (program)
+              (when (string-equal program "latexmk")
+                (let* ((source-file buffer-file-name)
+                       (pdf-file (TeX-output-file-name TeX-master-file-name)))
+                  (if (file-exists-p pdf-file)
+                      (progn
+                        (message "Opening PDF file: %s" pdf-file)
+                        (find-file pdf-file))
+                    (message "Could not find PDF file: %s" pdf-file)))))))
+
+;; --- Tab Completion with Yasnippet ---
+(use-package yasnippet
+  :straight t
+  :init
+  (yas-global-mode 1))
+
+;; Install the official snippet collection.
+(use-package yasnippet-snippets
+  :straight t
+  :after yasnippet)
+
+;; Optional: Customize the key for snippet expansion
+(setq yas-trigger-key "TAB")
+
+;; Make sure yasnippet is fully loaded before trying to use it.
+;; A simple hook can sometimes be enough.
+(add-hook 'latex-mode-hook 'yas-minor-mode)
 #+end_src
