@@ -642,6 +642,17 @@ I prefer a dark colour theme.
   ;;  ;; :preview-key (kbd "M-.")
   ;;  :preview-key '(:debounce 0.4 any))
 
+
+  (with-eval-after-load 'consult
+  (consult-customize
+   ;; 1. The Commands
+   consult-theme
+   consult-ripgrep consult-git-grep consult-grep
+   consult-bookmark consult-recent-file consult-xref
+
+   ;; 2. The Settings (Keys and Values)
+   :preview-key '(:debounce 0.4 any)))
+
   ;; Optionally configure the narrowing key.
   ;; Both c and C-+ work reasonably well.
   (setq consult-narrow-key "<") ;; (kbd "C-+")
