@@ -2466,6 +2466,15 @@ Trying lsp-mode out. I used to use auto-complete for this.
   (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
   (require 'dap-cpptools)
   (yas-global-mode))
+
+
+(require 'eglot)
+(add-to-list 'eglot-server-programs
+             '((text-mode markdown-mode org-mode) . ("harper-ls" "--stdio")))
+
+(add-hook 'text-mode-hook #'eglot-ensure)
+(add-hook 'markdown-mode-hook #'eglot-ensure)
+(add-hook 'org-mode-hook #'eglot-ensure)
 #+end_src
 
 *** lsp-ui
