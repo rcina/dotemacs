@@ -2476,6 +2476,10 @@ Trying lsp-mode out. I used to use auto-complete for this.
 (add-hook 'markdown-mode-hook #'eglot-ensure)
 (add-hook 'org-mode-hook #'eglot-ensure)
 (setq flymake-show-diagnostics-at-end-of-line nil)
+(setq projectile-verbose nil)
+(setq eglot-events-buffer-size 0)
+(setq projectile-report-on-errors nil)
+(setq projectile-indexing-method 'native)
 #+end_src
 
 *** lsp-ui

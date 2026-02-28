@@ -1847,6 +1847,11 @@ With a prefix ARG, remove start location."
 (add-hook 'text-mode-hook #'eglot-ensure)
 (add-hook 'markdown-mode-hook #'eglot-ensure)
 (add-hook 'org-mode-hook #'eglot-ensure)
+(setq flymake-show-diagnostics-at-end-of-line nil)
+(setq projectile-verbose nil)
+(setq eglot-events-buffer-size 0)
+(setq projectile-report-on-errors nil)
+(setq projectile-indexing-method 'native)
 
 ;; (use-package lsp-ui
 ;;   :straight t
