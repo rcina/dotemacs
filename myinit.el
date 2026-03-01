@@ -83,10 +83,12 @@
 ;; Dictionary
 (setq dictionary-server "dict.org")
 
-;; Set /usr/local/bin explicitly and early — before any packages load —
-;; so executables like jupyter are always found.
-(add-to-list 'exec-path "/usr/local/bin")
-(setenv "PATH" (concat "/usr/local/bin:" (getenv "PATH")))
+;; Set these paths explicitly and early — before any packages load.
+;; /usr/local/bin  — jupyter, ruff
+;; ~/.local/bin    — black (installed via pip install --user)
+(dolist (path '("/usr/local/bin" "/home/rob/.local/bin"))
+  (add-to-list 'exec-path path))
+(setenv "PATH" (concat "/usr/local/bin:/home/rob/.local/bin:" (getenv "PATH")))
 
 ;; exec-path-from-shell syncs the rest of the shell PATH for completeness.
 (use-package exec-path-from-shell :straight t
@@ -760,9 +762,64 @@ Zero prefix: select current line. Negative prefix: select up N lines."
     (add-to-list 'lsp-enabled-clients 'jedi)))
 (add-hook 'python-mode-hook 'lsp)
 
+;; py-autopep8 is superseded by black/ruff below but kept in case elpy is used.
 (use-package py-autopep8 :straight t
   :config
   (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
+
+;; --- Black (formatter) ---
+(use-package blacken :straight t
+  :hook (python-mode . blacken-mode)
+  :custom
+  ;; Match black's default line length; adjust to taste.
+  (blacken-line-length 88))
+
+;; --- Ruff (linter) ---
+;; Ruff is configured as a flycheck checker by pointing flycheck directly
+;; at the ruff executable — no extra package needed.
+(with-eval-after-load 'flycheck
+  (flycheck-define-checker python-ruff
+    "A Python linter using ruff."
+    :command ("/usr/local/bin/ruff"
+              "check"
+              "--output-format=concise"
+              "--stdin-filename" source-original
+              "-")
+    :standard-input t
+    :error-filter (lambda (errors)
+                    (let ((errors (flycheck-sanitize-errors errors)))
+                      (seq-do #'flycheck-flake8-fix-error-level errors)
+                      errors))
+    :error-patterns
+    ((warning line-start (file-name) ":" line ":" column ": "
+              (id (one-or-more (not (any ":")))) ": "
+              (message) line-end))
+    :modes python-mode)
+
+  ;; Use ruff as the primary checker in python buffers.
+  (add-to-list 'flycheck-checkers 'python-ruff)
+  (defun my/python-set-ruff-checker ()
+    (when (derived-mode-p 'python-mode)
+      (setq-local flycheck-checker 'python-ruff)))
+  (add-hook 'python-mode-hook #'my/python-set-ruff-checker))
+
+;; --- Ruff auto-fix on save ---
+;; Runs after blacken formats the buffer, so the save order is:
+;;   1. black  — formats code style
+;;   2. ruff   — fixes lint issues (unused imports, etc.)
+;;   3. delete-trailing-whitespace — final cleanup
+(defun my/ruff-fix-buffer ()
+  "Run ruff --fix on the current file and revert the buffer to reflect changes."
+  (when (and (eq major-mode 'python-mode)
+             (buffer-file-name))
+    (shell-command
+     (format "/usr/local/bin/ruff check --fix %s"
+             (shell-quote-argument (buffer-file-name))))
+    (revert-buffer t t t)))
+
+(add-hook 'python-mode-hook
+          (lambda ()
+            (add-hook 'before-save-hook #'my/ruff-fix-buffer nil t)))
 
 (use-package go-mode :straight t)
 
