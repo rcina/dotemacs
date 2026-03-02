@@ -124,15 +124,6 @@
   :config
   (setq nerd-icons-font-family "Symbols Nerd Font Mono"))
 
-(use-package all-the-icons-ivy
-  :straight t
-  :init (add-hook 'after-init-hook 'all-the-icons-ivy-setup)
-  :config
-  (setq all-the-icons-ivy-file-commands
-        '(counsel-find-file counsel-file-jump counsel-recentf
-          counsel-projectile-find-file counsel-projectile-find-dir
-          counsel-switch-buffer)))
-
 (use-package doom-modeline
   :straight t
   :init (doom-modeline-mode 1))
@@ -250,7 +241,25 @@
   :init (marginalia-mode))
 
 (use-package corfu :straight t
-  :init (global-corfu-mode))
+  :init
+  (global-corfu-mode)
+  (corfu-popupinfo-mode 1)
+  :custom
+  (corfu-auto t)
+  (corfu-auto-delay 0.15)
+  (corfu-auto-prefix 2)
+  (corfu-cycle t))
+
+(use-package cape :straight t
+  :init
+  (add-to-list 'completion-at-point-functions #'cape-file)
+  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+  (add-to-list 'completion-at-point-functions #'cape-keyword))
+
+(use-package yasnippet-capf :straight t
+  :after (yasnippet)
+  :init
+  (add-to-list 'completion-at-point-functions #'yasnippet-capf))
 
 (use-package embark :straight t
   :bind (("C-."   . embark-act)
@@ -278,9 +287,9 @@
 
 (use-package helpful :straight t
   :bind
-  ([remap describe-function] . counsel-describe-function)
+  ([remap describe-function] . helpful-callable)
   ([remap describe-command]  . helpful-command)
-  ([remap describe-variable] . counsel-describe-variable)
+  ([remap describe-variable] . helpful-variable)
   ([remap describe-key]      . helpful-key))
 
 ;; Config helpers
@@ -495,8 +504,9 @@ Zero prefix: select current line. Negative prefix: select up N lines."
 ;; Abbrev mode
 (setq-default abbrev-mode t)
 
-;; Strip trailing whitespace on save
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
+(use-package ws-butler :straight t
+  :hook ((text-mode . ws-butler-mode)
+         (prog-mode . ws-butler-mode)))
 
 ;; Auto-fill in text modes
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
@@ -591,7 +601,7 @@ Zero prefix: select current line. Negative prefix: select up N lines."
 
 (use-package projectile :straight t
   :config (projectile-mode)
-  :custom ((projectile-completion-system 'ivy))
+  :custom ((projectile-completion-system 'default))
   :bind-keymap ("C-c p" . projectile-command-map)
   :init
   (when (file-directory-p "~/Projects/")
@@ -600,9 +610,6 @@ Zero prefix: select current line. Negative prefix: select up N lines."
         projectile-verbose nil
         projectile-report-on-errors nil
         projectile-indexing-method 'native))
-
-(use-package counsel-projectile :straight t
-  :config (counsel-projectile-mode))
 
 (use-package bookmark+ :straight t
   :config (require 'bookmark+))
@@ -671,7 +678,6 @@ Zero prefix: select current line. Negative prefix: select up N lines."
 (use-package lsp-treemacs :straight t :after lsp
   :config (lsp-treemacs-sync-mode 1))
 
-(use-package lsp-ivy :straight t)
 (use-package consult-lsp :straight t)
 
 (use-package dap-mode :straight t
@@ -682,49 +688,30 @@ Zero prefix: select current line. Negative prefix: select up N lines."
   ;; dap-cpptools is a sub-module of dap-mode; require it here after dap-mode loads
   (require 'dap-cpptools))
 
-(use-package company :straight t
-  :after lsp-mode
-  :hook (after-init . global-company-mode)
-  :bind (:map company-active-map
-              ("<tab>" . company-complete-selection)
-              :map lsp-mode-map
-              ("<tab>" . company-indent-or-complete-common))
-  :custom
-  (company-minimum-prefix-length 1)
-  (company-idle-delay 0.7)
-  (company-selection-wrap-around t)
-  (company-show-numbers t)
-  (company-require-match 'never)
-  (company-dabbrev-downcase nil)
-  (company-dabbrev-ignore-case t)
-  (company-backends '(company-nxml company-css company-capf
-                      (company-dabbrev-code company-keywords)
-                      company-files company-dabbrev company-clang)))
-
-(use-package company-box :straight t
-  :hook (company-mode . company-box-mode))
-
-(use-package company-lsp :straight t
-  :commands company-lsp
-  :config
-  (require 'company-lsp)
-  (push 'company-lsp company-backends))
-
 (use-package flycheck :straight t
   :init (add-hook 'after-init-hook 'global-flycheck-mode)
   :config
   (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
 
-(require 'eglot)
-(add-to-list 'eglot-server-programs
-             '((text-mode markdown-mode org-mode) . ("harper-ls" "--stdio")))
+(use-package consult-flycheck :straight t
+  :bind (("M-g F" . consult-flycheck)))
 
-(add-hook 'text-mode-hook     #'eglot-ensure)
-(add-hook 'markdown-mode-hook #'eglot-ensure)
-(add-hook 'org-mode-hook      #'eglot-ensure)
+(use-package sideline :straight t
+  :hook (flycheck-mode . sideline-mode))
 
-(setq flymake-show-diagnostics-at-end-of-line nil
-      eglot-events-buffer-size 0)
+(use-package sideline-flycheck :straight t
+  :hook (flycheck-mode . sideline-flycheck-setup)
+  :custom
+  (sideline-flycheck-display-mode 'line)
+  (sideline-backends-right '(sideline-flycheck)))
+
+(use-package treesit-auto :straight t
+  :custom
+  (treesit-auto-install 'prompt)
+  :config
+  (global-treesit-auto-mode))
+
+
 
 (add-hook 'prog-mode-hook #'(lambda () (display-line-numbers-mode 1)))
 
@@ -769,10 +756,7 @@ Zero prefix: select current line. Negative prefix: select up N lines."
 
 ;; --- Black (formatter) ---
 (use-package blacken :straight t
-  :hook (python-mode . blacken-mode)
-  :custom
-  ;; Match black's default line length; adjust to taste.
-  (blacken-line-length 88))
+  :defer t)
 
 ;; --- Ruff (linter) ---
 ;; Ruff is configured as a flycheck checker by pointing flycheck directly
@@ -833,7 +817,6 @@ Zero prefix: select current line. Negative prefix: select up N lines."
   (local-set-key (kbd "M-*") 'pop-tag-mark))
 
 (add-hook 'go-mode-hook 'my-go-mode-hook)
-(add-hook 'go-mode-hook 'auto-complete-mode)
 
 (use-package go-eldoc   :straight t :config (add-hook 'go-mode-hook 'go-eldoc-setup))
 (use-package godoctor  :straight t)
@@ -881,12 +864,7 @@ Zero prefix: select current line. Negative prefix: select up N lines."
          (lsp-mode  . emmet-mode)))
 
 (use-package prettier :straight t
-  :hook ((js2-mode       . prettier-mode)
-         (html-mode      . prettier-mode)
-         (js-mode        . prettier-mode)
-         (css-mode       . prettier-mode)
-         (web-mode       . prettier-mode)
-         (typescript-mode . prettier-mode)))
+  :defer t)
 
 (use-package auto-rename-tag :straight t
   :hook ((html-mode . auto-rename-tag-mode)
@@ -906,7 +884,25 @@ Zero prefix: select current line. Negative prefix: select up N lines."
 (use-package dumb-jump :straight t :config (dumb-jump-mode))
 (use-package htmlize :straight t)
 (use-package crux :straight t)
-(straight-use-package 'company-prescient)
+(use-package editorconfig :straight t
+  :config (editorconfig-mode 1))
+
+(use-package apheleia :straight t
+  :config
+  (setf (alist-get 'python-mode apheleia-mode-alist) '(black))
+  (setf (alist-get 'python-ts-mode apheleia-mode-alist) '(black))
+  (setf (alist-get 'js2-mode apheleia-mode-alist) '(prettier))
+  (setf (alist-get 'js-mode apheleia-mode-alist) '(prettier))
+  (setf (alist-get 'typescript-mode apheleia-mode-alist) '(prettier))
+  (setf (alist-get 'css-mode apheleia-mode-alist) '(prettier))
+  (setf (alist-get 'html-mode apheleia-mode-alist) '(prettier))
+  (setf (alist-get 'web-mode apheleia-mode-alist) '(prettier))
+  (setf (alist-get 'go-mode apheleia-mode-alist) '(gofmt))
+  (apheleia-global-mode +1))
+
+(use-package envrc :straight t
+  :config
+  (envrc-global-mode))
 
 (require 'org-id)
 (setq org-id-link-to-org-use-id 'create-if-interactive)
@@ -1419,6 +1415,14 @@ Git gutter:
   :commands vterm
   :config (setq vterm-max-scrollback 10000))
 
+(use-package vterm-toggle :straight t
+  :after vterm
+  :bind (("C-`" . vterm-toggle)
+         ("C-M-`" . vterm-toggle-cd))
+  :custom
+  (vterm-toggle-fullscreen-p nil)
+  (vterm-toggle-reset-window-configuration-after-exit t))
+
 (defun efs/configure-shell ()
   (add-hook 'eshell-pre-command-hook 'eshell-save-some-history)
   (add-to-list 'eshell-output-filter-functions 'eshell-truncate-buffer)
@@ -1591,9 +1595,11 @@ Git gutter:
                (nnimap-server-port 993)
                (nnimap-stream ssl)))
 
+(setq auth-sources '("~/.authinfo.gpg" "~/.netrc.gpg")
+      auth-source-cache-expiry nil)
+
 (setq message-send-mail-function 'smtpmail-send-it
       smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
-      smtpmail-auth-credentials    '(("smtp.gmail.com" 587 "user@gmail.com" nil))
       smtpmail-default-smtp-server "smtp.gmail.com"
       smtpmail-smtp-server         "smtp.gmail.com"
       smtpmail-smtp-service        587
