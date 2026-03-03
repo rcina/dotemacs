@@ -61,6 +61,7 @@
 (setq savehist-file "~/.emacs.d/savehist"
       history-length 150)
 
+(setq auto-revert-use-notify nil)
 (global-auto-revert-mode 1)
 
 (require 'uniquify)
@@ -128,7 +129,8 @@
   :straight t
   :init (doom-modeline-mode 1))
 
-(setq doom-modeline-height 40)
+(setq doom-modeline-height 40
+      doom-modeline-env-enable-python nil)
 (display-time-mode 1)
 (setq display-time-format "%I:%M:%S"
       display-time-interval 1)
@@ -406,7 +408,7 @@
       ispell-personal-dictionary "~/.aspell.en.pws")
 
 (add-hook 'text-mode-hook #'flyspell-mode)
-(add-hook 'prog-mode-hook #'flyspell-mode)
+(add-hook 'prog-mode-hook #'flyspell-prog-mode)
 
 ;; Free up C-. and C-; from flyspell (used by embark)
 (eval-after-load "flyspell"
@@ -626,7 +628,7 @@ Zero prefix: select current line. Negative prefix: select up N lines."
   :hook ((js-mode         . lsp)
          (js2-mode        . lsp)
          (typescript-mode . lsp)
-         (python-mode     . lsp)
+         (python-mode     . lsp-deferred)
          (rust-mode       . lsp)
          (html-mode       . lsp)
          (css-mode        . lsp)
@@ -645,7 +647,7 @@ Zero prefix: select current line. Negative prefix: select up N lines."
         lsp-headerline-breadcrumb-enable t
         lsp-idle-delay 0.1)
   :config
-  (setq lsp-enabled-clients '(jdtls emmet-wls html-ls css-ls ts-ls eslint clangd jedi pylsp rls rust-analyzer))
+  (setq lsp-enabled-clients '(jdtls emmet-wls html-ls css-ls ts-ls eslint clangd pyls rust-analyzer))
   (define-key lsp-mode-map (kbd "C-c i") lsp-command-map)
   (lsp-enable-which-key-integration t))
 
@@ -739,15 +741,45 @@ Zero prefix: select current line. Negative prefix: select up N lines."
 (setq python-shell-interpreter "/usr/local/bin/python"
       python-indent-guess-indent-offset-verbose nil)
 
+(add-hook 'python-ts-mode-hook #'python-mode)
+
 (require 'dap-python)
 (setq dap-python-debugger 'debugpy)
 
-(use-package lsp-jedi :straight t
+(use-package lsp-pyls :straight nil
+  :after lsp-mode
+  :init
+  (setq lsp-clients-python-command "pylsp"
+        lsp-pyls-disable-warning t)
+
+  (defun my/python-lsp-start ()
+    (interactive)
+    (setq-local lsp-enabled-clients '(pyls))
+    (setq-local lsp-disabled-clients '(jedi pyright))
+    (lsp-deferred))
+
+  (defun my/python-organize-imports ()
+    (interactive)
+    (when (buffer-file-name)
+      (shell-command
+       (format "/usr/local/bin/ruff check --select I --fix %s"
+               (shell-quote-argument (buffer-file-name))))
+      (revert-buffer t t t)))
+
+  (defun my/lsp-organize-imports-dwim ()
+    (interactive)
+    (if (derived-mode-p 'python-mode)
+        (my/python-organize-imports)
+      (lsp-organize-imports)))
+
+  (defun my/python-lsp-client-setup ()
+    (setq-local lsp-enabled-clients '(pyls))
+    (setq-local lsp-disabled-clients '(jedi pyright))
+    (local-set-key (kbd "C-c i l") #'my/python-lsp-start))
+
+  (add-hook 'python-mode-hook #'my/python-lsp-client-setup)
   :config
-  (with-eval-after-load "lsp-mode"
-    (add-to-list 'lsp-disabled-clients 'pyls)
-    (add-to-list 'lsp-enabled-clients 'jedi)))
-(add-hook 'python-mode-hook 'lsp)
+  (define-key lsp-command-map (kbd "r o") #'my/lsp-organize-imports-dwim))
 
 ;; py-autopep8 is superseded by black/ruff below but kept in case elpy is used.
 (use-package py-autopep8 :straight t
@@ -776,7 +808,9 @@ Zero prefix: select current line. Negative prefix: select up N lines."
                       errors))
     :error-patterns
     ((warning line-start (file-name) ":" line ":" column ": "
-              (id (one-or-more (not (any ":")))) ": "
+              (id (one-or-more upper))
+              (optional " [*]")
+              " "
               (message) line-end))
     :modes python-mode)
 
