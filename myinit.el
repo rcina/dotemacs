@@ -634,7 +634,8 @@ Zero prefix: select current line. Negative prefix: select up N lines."
          (css-mode        . lsp)
          (scss-mode       . lsp)
          (c-mode          . lsp)
-         (c++-mode        . lsp))
+         (c++-mode        . lsp)
+         (java-mode       . lsp-deferred))
   :init
   (setq lsp-rust-server 'rust-analyzer
         lsp-enable-snippet t
@@ -860,8 +861,8 @@ Zero prefix: select current line. Negative prefix: select up N lines."
   :config
   (require 'lsp-java)
   (require 'dap-java)
-  (add-hook 'java-mode-hook #'lsp)
   (add-to-list 'lsp-enabled-clients 'jdtls))
+  (add-hook 'java-mode-hook #'lsp-deferred)
 
 (setq js-indent-level 2)
 
