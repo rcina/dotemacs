@@ -754,7 +754,7 @@ Zero prefix: select current line. Negative prefix: select up N lines."
   (add-to-list 'major-mode-remap-alist '(java-mode   . java-ts-mode))
   (add-to-list 'major-mode-remap-alist '(c-mode      . c-ts-mode))
   (add-to-list 'major-mode-remap-alist '(c++-mode    . c++-ts-mode))
-  (add-to-list 'major-mode-remap-alist '(go-mode     . go-ts-mode))) ;; This does the remapping automatically)
+  (add-to-list 'major-mode-remap-alist '(go-mode     . go-ts-mode))) ;; This does the remapping automatically
 
 
 
