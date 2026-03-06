@@ -623,48 +623,77 @@ Zero prefix: select current line. Negative prefix: select up N lines."
 (advice-add 'pdf-view-bookmark-jump-handler
             :after 'my-bmk-pdf-handler-advice)
 
-(use-package lsp-mode :straight t
+;; 1. THE COMPLETION ENGINE (Company)
+;; This replaces Corfu to stop the autoconfigure errors.
+(use-package company
+  :straight t
+  :init
+  (global-company-mode)
+  :config
+  (setq company-minimum-prefix-length 1
+        company-idle-delay 0.0
+        company-tooltip-align-annotations t
+        company-selection-wrap-around t))
+
+;; Optional: Adds icons and a modern look to the Company popup
+(use-package company-box
+  :straight t
+  :hook (company-mode . company-box-mode))
+
+;; 2. THE LSP SUITE
+(use-package lsp-mode
+  :straight t
   :commands (lsp lsp-deferred)
   :hook ((js-mode          . lsp)
          (js2-mode         . lsp)
          (typescript-mode  . lsp)
          (python-mode      . lsp-deferred)
-         (python-ts-mode   . lsp-deferred) ;; Added
+         (python-ts-mode   . lsp-deferred)
          (rust-mode        . lsp)
-         (rust-ts-mode     . lsp)          ;; Added
-         (html-mode        . lsp)
-         (css-mode         . lsp)
-         (scss-mode        . lsp)
+         (rust-ts-mode     . lsp)
+         (go-mode          . lsp-deferred)
+         (go-ts-mode       . lsp-deferred)
          (c-mode           . lsp)
-         (c-ts-mode        . lsp)          ;; Added
+         (c-ts-mode        . lsp)
          (c++-mode         . lsp)
-         (c++-ts-mode      . lsp)          ;; Added
+         (c++-ts-mode      . lsp)
          (java-mode        . lsp-deferred)
-         (java-ts-mode     . lsp-deferred)) ;; Fixed
+         (java-ts-mode     . lsp-deferred))
   :init
-  (setq lsp-rust-server 'rust-analyzer
-        lsp-enable-snippet t
-        lsp-prefer-flymake nil
-        lsp-enable-symbol-highlighting nil
-        lsp-lens-enable nil
-        lsp-eldoc-enable-hover nil
-        lsp-ui-doc-show-with-mouse nil
-        lsp-ui-doc-show-with-cursor nil
+  ;; Move the silence flags to the very top of :init
+  (setq lsp-warn-no-matched-clients nil)
+  (setq lsp-log-io nil)
+  (setq lsp-completion-provider :company
+        lsp-rust-server 'rust-analyzer
         lsp-headerline-breadcrumb-enable t
-        lsp-idle-delay 0.1)
+        lsp-idle-delay 0.1
+        gc-cons-threshold (* 100 1024 1024)
+        read-process-output-max (* 1024 1024))
   :config
-  (setq lsp-enabled-clients '(jdtls emmet-wls html-ls css-ls ts-ls eslint clangd pyls rust-analyzer))
+  ;; Explicitly define enabled/disabled to stop the "searching" noise
+  (setq lsp-enabled-clients '(gopls jdtls clangd pylsp rust-analyzer ruff))
+  (setq lsp-disabled-clients '(rls semgrep-ls))
+
+  ;; Use clippy for Rust to avoid the 'no library targets' error
+  (setq lsp-rust-analyzer-cargo-watch-command "clippy")
+
   (define-key lsp-mode-map (kbd "C-c i") lsp-command-map)
   (lsp-enable-which-key-integration t))
 
-(setq gc-cons-threshold (* 100 1024 1024)
-      read-process-output-max (* 1024 1024))
-
+;; 3. UI, SNIPPETS, AND DIAGNOSTICS
 (with-eval-after-load 'lsp-mode
   (add-hook 'lsp-mode-hook #'lsp-ui-mode)
   (add-hook 'lsp-mode-hook #'flycheck-mode)
   (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
   (yas-global-mode))
+
+(use-package lsp-ui
+  :straight t
+  :commands lsp-ui-mode
+  :config
+  (setq lsp-ui-doc-enable t
+        lsp-ui-doc-position 'at-point
+        lsp-ui-sideline-enable t))
 
 (use-package lsp-ui :straight t
   :commands lsp-ui-mode
@@ -717,7 +746,15 @@ Zero prefix: select current line. Negative prefix: select up N lines."
   :custom
   (treesit-auto-install 'prompt)
   :config
-  (global-treesit-auto-mode))
+  (global-treesit-auto-mode)
+  (setq treesit-extra-load-path '("/usr/local/lib/tree-sitter" "/usr/local/lib"))
+  (setq treesit-auto-langs '(python java c c++ rust html css json)) ; Add the ones you use
+  ;; Add these manually since the auto-function failed
+  (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(java-mode   . java-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(c-mode      . c-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(c++-mode    . c++-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(go-mode     . go-ts-mode))) ;; This does the remapping automatically)
 
 
 
@@ -747,7 +784,7 @@ Zero prefix: select current line. Negative prefix: select up N lines."
 (setq python-shell-interpreter "/usr/local/bin/python"
       python-indent-guess-indent-offset-verbose nil)
 
-(add-hook 'python-ts-mode-hook #'python-mode)
+
 
 (require 'dap-python)
 (setq dap-python-debugger 'debugpy)
@@ -861,6 +898,16 @@ Zero prefix: select current line. Negative prefix: select up N lines."
 (use-package go-eldoc   :straight t :config (add-hook 'go-mode-hook 'go-eldoc-setup))
 (use-package godoctor  :straight t)
 (use-package go-guru   :straight t)
+
+(with-eval-after-load 'lsp-mode
+  (lsp-register-client
+   (make-lsp-client :new-connection (lsp-stdio-connection "gopls")
+                    :major-modes '(go-mode go-ts-mode)
+                    :priority 0
+                    :server-id 'gopls)))
+(use-package go-ts-mode
+  :ensure nil
+  :hook (go-ts-mode . lsp-deferred))
 
 (use-package lsp-java :straight t
   :config
