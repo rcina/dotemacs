@@ -1431,7 +1431,9 @@ Git gutter:
 
 (straight-use-package 'git-timemachine)
 
-(use-package auctex :straight t
+(use-package auctex
+  :straight (auctex :type git :host nil :repo "https://git.savannah.gnu.org/git/auctex.git")
+
   :config
   (setq TeX-engine 'xetex
         TeX-view-program-selection '((output-pdf "PDF Tools")))
