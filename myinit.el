@@ -92,6 +92,10 @@
   :config
   (exec-path-from-shell-initialize))
 
+(add-hook 'org-mode-hook
+  (lambda ()
+    (add-hook 'after-save-hook #'org-babel-tangle nil t)))
+
 (use-package modus-themes :straight t :defer t)
 (use-package doom-themes  :straight t :defer t)
 (use-package spacegray-theme :straight t :defer t)
@@ -996,7 +1000,12 @@ Zero prefix: select current line. Negative prefix: select up N lines."
       org-export-backends '(ascii beamer html latex md))
 
 (add-hook 'org-mode-hook 'org-indent-mode)
-(add-hook 'org-mode-hook 'org-cdlatex-mode)
+(add-hook 'org-mode-hook (lambda ()
+                           (when (featurep 'cdlatex)
+                             (org-cdlatex-mode 1))))
+
+
+
 
 ;; Habits
 (require 'org-habit)
@@ -1431,16 +1440,17 @@ Git gutter:
 
 (straight-use-package 'git-timemachine)
 
-(use-package auctex
-  :straight (auctex :type git :host nil :repo "https://git.savannah.gnu.org/git/auctex.git")
+(use-package tex
+  :straight auctex
 
   :config
   (setq TeX-engine 'xetex
         TeX-view-program-selection '((output-pdf "PDF Tools")))
-  (add-hook 'latex-mode-hook #'TeX-fold-mode))
+  (add-hook 'LaTeX-mode-hook #'TeX-fold-mode))
 
-(use-package cdlatex :straight t
-  :hook (latex-mode-hook . cdlatex-mode)
+(use-package cdlatex
+  :straight t
+  :hook (LaTeX-mode . cdlatex-mode)
   :config
   (define-key cdlatex-mode-map (kbd "TAB")     'cdlatex-tab)
   (define-key cdlatex-mode-map (kbd "C-c C-e") 'cdlatex-environment)

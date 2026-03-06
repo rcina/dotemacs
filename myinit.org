@@ -145,6 +145,14 @@ Set =exec-path= and =PATH= explicitly so Emacs can find executables like
   (exec-path-from-shell-initialize))
 #+end_src
 
+*** Auto Tangle on Save
+#+begin_src emacs-lisp
+(add-hook 'org-mode-hook
+  (lambda ()
+    (add-hook 'after-save-hook #'org-babel-tangle nil t)))
+
+#+end_src
+
 ** Appearance
 *** Theme
 #+begin_src emacs-lisp
@@ -1218,7 +1226,12 @@ Make sure both are installed:
       org-export-backends '(ascii beamer html latex md))
 
 (add-hook 'org-mode-hook 'org-indent-mode)
-(add-hook 'org-mode-hook 'org-cdlatex-mode)
+(add-hook 'org-mode-hook (lambda ()
+                           (when (featurep 'cdlatex)
+                             (org-cdlatex-mode 1))))
+
+
+
 
 ;; Habits
 (require 'org-habit)
@@ -1708,16 +1721,17 @@ Git gutter:
 
 ** LaTeX
 #+begin_src emacs-lisp
-(use-package auctex
-  :straight (auctex :type git :host nil :repo "https://git.savannah.gnu.org/git/auctex.git")
+(use-package tex
+  :straight auctex
 
   :config
   (setq TeX-engine 'xetex
         TeX-view-program-selection '((output-pdf "PDF Tools")))
-  (add-hook 'latex-mode-hook #'TeX-fold-mode))
+  (add-hook 'LaTeX-mode-hook #'TeX-fold-mode))
 
-(use-package cdlatex :straight t
-  :hook (latex-mode-hook . cdlatex-mode)
+(use-package cdlatex
+  :straight t
+  :hook (LaTeX-mode . cdlatex-mode)
   :config
   (define-key cdlatex-mode-map (kbd "TAB")     'cdlatex-tab)
   (define-key cdlatex-mode-map (kbd "C-c C-e") 'cdlatex-environment)
