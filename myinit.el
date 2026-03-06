@@ -625,17 +625,22 @@ Zero prefix: select current line. Negative prefix: select up N lines."
 
 (use-package lsp-mode :straight t
   :commands (lsp lsp-deferred)
-  :hook ((js-mode         . lsp)
-         (js2-mode        . lsp)
-         (typescript-mode . lsp)
-         (python-mode     . lsp-deferred)
-         (rust-mode       . lsp)
-         (html-mode       . lsp)
-         (css-mode        . lsp)
-         (scss-mode       . lsp)
-         (c-mode          . lsp)
-         (c++-mode        . lsp)
-         (java-mode       . lsp-deferred))
+  :hook ((js-mode          . lsp)
+         (js2-mode         . lsp)
+         (typescript-mode  . lsp)
+         (python-mode      . lsp-deferred)
+         (python-ts-mode   . lsp-deferred) ;; Added
+         (rust-mode        . lsp)
+         (rust-ts-mode     . lsp)          ;; Added
+         (html-mode        . lsp)
+         (css-mode         . lsp)
+         (scss-mode        . lsp)
+         (c-mode           . lsp)
+         (c-ts-mode        . lsp)          ;; Added
+         (c++-mode         . lsp)
+         (c++-ts-mode      . lsp)          ;; Added
+         (java-mode        . lsp-deferred)
+         (java-ts-mode     . lsp-deferred)) ;; Fixed
   :init
   (setq lsp-rust-server 'rust-analyzer
         lsp-enable-snippet t
