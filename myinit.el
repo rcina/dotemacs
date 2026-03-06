@@ -1,5 +1,5 @@
 (setq custom-file "~/.emacs-custom.el")
-(load custom-file)
+(when (file-exists-p custom-file) (load custom-file))
 
 (set-face-attribute 'default nil
                     :font "JetBrains Mono"
@@ -58,21 +58,17 @@
   :init (save-place-mode 1))
 (setq save-place-file "~/.emacs.d/saveplace")
 
-(setq savehist-file "~/.emacs.d/savehist"
-      history-length 150)
-
 (setq auto-revert-use-notify nil)
 (global-auto-revert-mode 1)
 
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)
 
-(use-package auto-compile :straight t)
 (setq load-prefer-newer t)
-(add-to-list 'load-path "~/.emacs.d/straight/repos/auto-compile")
-(require 'auto-compile)
-(auto-compile-on-load-mode)
-(auto-compile-on-save-mode)
+(use-package auto-compile :straight t
+  :config
+  (auto-compile-on-load-mode)
+  (auto-compile-on-save-mode))
 
 ;; Print via CUPS
 (setq lpr-command "gtklp"
@@ -152,7 +148,11 @@
                                     vertico-reverse)))
 (vertico-mode)
 
-(use-package savehist :straight t :init (savehist-mode))
+(use-package savehist :straight t
+  :init
+  (setq savehist-file "~/.emacs.d/savehist"
+        history-length 150)
+  (savehist-mode))
 
 (use-package emacs :straight t
   :init
@@ -281,9 +281,7 @@
 (use-package amx :straight t)
 
 (use-package which-key :straight t
-  :config
-  (require 'which-key)
-  (which-key-mode))
+  :config (which-key-mode))
 
 (use-package hydra :straight t)
 
@@ -318,13 +316,12 @@
 (global-set-key (kbd "C-|")   'avy-goto-char)
 (global-set-key (kbd "C-'")   'avy-goto-char-2)
 (global-set-key (kbd "M-g w") 'avy-goto-word-1)
-(global-set-key (kbd "M-g e") 'avy-goto-word-0)
+(global-set-key (kbd "M-g E") 'avy-goto-word-0)
 (global-set-key (kbd "M-g M-j") 'avy-goto-char-timer)
 (global-set-key (kbd "M-g M-c") 'avy-copy-line)
 (global-set-key (kbd "M-g M-m") 'avy-move-line)
 
 ;; Editing utilities
-(global-set-key "\M-y" 'popup-kill-ring)
 (global-set-key [remap dabbrev-expand] 'hippie-expand)
 
 ;; Lorem ipsum
@@ -395,13 +392,11 @@
 (when (fboundp 'winner-mode)
   (winner-mode 1))
 
-(use-package neotree :straight t)
-(require 'neotree)
-(global-set-key [f8] 'neotree-toggle)
+(use-package neotree :straight t
+  :config (global-set-key [f8] 'neotree-toggle))
 
 (use-package casual
-  :straight (casual :type git :host github :repo "kickingvegas/casual")
-  :ensure nil)
+  :straight (casual :type git :host github :repo "kickingvegas/casual"))
 
 (setq ispell-program-name "aspell"
       ispell-dictionary "english"
@@ -411,10 +406,9 @@
 (add-hook 'prog-mode-hook #'flyspell-prog-mode)
 
 ;; Free up C-. and C-; from flyspell (used by embark)
-(eval-after-load "flyspell"
-  '(define-key flyspell-mode-map (kbd "C-.") nil))
-(eval-after-load "flyspell"
-  '(define-key flyspell-mode-map (kbd "C-;") nil))
+(with-eval-after-load 'flyspell
+  (define-key flyspell-mode-map (kbd "C-.") nil)
+  (define-key flyspell-mode-map (kbd "C-;") nil))
 
 (use-package yasnippet :straight t
   :config
@@ -525,14 +519,6 @@ Zero prefix: select current line. Negative prefix: select up N lines."
         try-complete-file-name
         try-expand-all-abbrevs))
 
-(straight-use-package 'popup-kill-ring)
-(global-set-key "\M-y" 'popup-kill-ring)
-
-(use-package browse-kill-ring :straight t
-  :config
-  (require 'browse-kill-ring)
-  (browse-kill-ring-default-keybindings))
-
 (use-package whitespace :straight t
   :bind ("C-c T w" . whitespace-mode)
   :init
@@ -623,23 +609,6 @@ Zero prefix: select current line. Negative prefix: select up N lines."
 (advice-add 'pdf-view-bookmark-jump-handler
             :after 'my-bmk-pdf-handler-advice)
 
-;; 1. THE COMPLETION ENGINE (Company)
-;; This replaces Corfu to stop the autoconfigure errors.
-(use-package company
-  :straight t
-  :init
-  (global-company-mode)
-  :config
-  (setq company-minimum-prefix-length 1
-        company-idle-delay 0.0
-        company-tooltip-align-annotations t
-        company-selection-wrap-around t))
-
-;; Optional: Adds icons and a modern look to the Company popup
-(use-package company-box
-  :straight t
-  :hook (company-mode . company-box-mode))
-
 ;; 2. THE LSP SUITE
 (use-package lsp-mode
   :straight t
@@ -663,7 +632,7 @@ Zero prefix: select current line. Negative prefix: select up N lines."
   ;; Move the silence flags to the very top of :init
   (setq lsp-warn-no-matched-clients nil)
   (setq lsp-log-io nil)
-  (setq lsp-completion-provider :company
+  (setq lsp-completion-provider :none
         lsp-rust-server 'rust-analyzer
         lsp-headerline-breadcrumb-enable t
         lsp-idle-delay 0.1
@@ -682,21 +651,12 @@ Zero prefix: select current line. Negative prefix: select up N lines."
 
 ;; 3. UI, SNIPPETS, AND DIAGNOSTICS
 (with-eval-after-load 'lsp-mode
-  (add-hook 'lsp-mode-hook #'lsp-ui-mode)
   (add-hook 'lsp-mode-hook #'flycheck-mode)
-  (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
   (yas-global-mode))
-
-(use-package lsp-ui
-  :straight t
-  :commands lsp-ui-mode
-  :config
-  (setq lsp-ui-doc-enable t
-        lsp-ui-doc-position 'at-point
-        lsp-ui-sideline-enable t))
 
 (use-package lsp-ui :straight t
   :commands lsp-ui-mode
+  :hook (lsp-mode . lsp-ui-mode)
   :custom
   (lsp-ui-sideline-show-diagnostics t)
   (lsp-ui-sideline-show-hover nil)
@@ -709,19 +669,15 @@ Zero prefix: select current line. Negative prefix: select up N lines."
   (lsp-ui-doc-position 'at-point)
   (lsp-ui-doc-delay 0.2)
   (lsp-ui-imenu-window-width 0)
-  (lsp-ui-imenu--custom-mode-line-format nil)
-  :hook (lsp-mode . lsp-ui-mode))
+  (lsp-ui-imenu--custom-mode-line-format nil))
 
 (use-package lsp-treemacs :straight t :after lsp
   :config (lsp-treemacs-sync-mode 1))
 
-(use-package consult-lsp :straight t)
-
 (use-package dap-mode :straight t
   :hook ((lsp-mode . dap-mode)
-         (lsp-mode . dap-ui-mode))
+         (dap-mode . dap-ui-mode))
   :config
-  (dap-mode 1)
   ;; dap-cpptools is a sub-module of dap-mode; require it here after dap-mode loads
   (require 'dap-cpptools))
 
@@ -756,8 +712,6 @@ Zero prefix: select current line. Negative prefix: select up N lines."
   (add-to-list 'major-mode-remap-alist '(c++-mode    . c++-ts-mode))
   (add-to-list 'major-mode-remap-alist '(go-mode     . go-ts-mode))) ;; This does the remapping automatically
 
-
-
 (add-hook 'prog-mode-hook #'(lambda () (display-line-numbers-mode 1)))
 
 (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
@@ -786,8 +740,9 @@ Zero prefix: select current line. Negative prefix: select up N lines."
 
 
 
-(require 'dap-python)
-(setq dap-python-debugger 'debugpy)
+(with-eval-after-load 'dap-mode
+  (require 'dap-python)
+  (setq dap-python-debugger 'debugpy))
 
 (use-package lsp-pyls :straight nil
   :after lsp-mode
@@ -823,15 +778,6 @@ Zero prefix: select current line. Negative prefix: select up N lines."
   (add-hook 'python-mode-hook #'my/python-lsp-client-setup)
   :config
   (define-key lsp-command-map (kbd "r o") #'my/lsp-organize-imports-dwim))
-
-;; py-autopep8 is superseded by black/ruff below but kept in case elpy is used.
-(use-package py-autopep8 :straight t
-  :config
-  (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
-
-;; --- Black (formatter) ---
-(use-package blacken :straight t
-  :defer t)
 
 ;; --- Ruff (linter) ---
 ;; Ruff is configured as a flycheck checker by pointing flycheck directly
@@ -910,11 +856,11 @@ Zero prefix: select current line. Negative prefix: select up N lines."
   :hook (go-ts-mode . lsp-deferred))
 
 (use-package lsp-java :straight t
+  :hook (java-mode . lsp-deferred)
   :config
   (require 'lsp-java)
   (require 'dap-java)
   (add-to-list 'lsp-enabled-clients 'jdtls))
-  (add-hook 'java-mode-hook #'lsp-deferred)
 
 (setq js-indent-level 2)
 
@@ -935,7 +881,8 @@ Zero prefix: select current line. Negative prefix: select up N lines."
   (interactive)
   (shell-command (concat "npx ts-node " (buffer-file-name))))
 
-(require 'dap-firefox)
+(with-eval-after-load 'dap-mode
+  (require 'dap-firefox))
 
 (setq css-indent-offset 2)
 
@@ -947,8 +894,7 @@ Zero prefix: select current line. Negative prefix: select up N lines."
   :hook ((html-mode . emmet-mode)
          (sgml-mode . emmet-mode)
          (web-mode  . emmet-mode)
-         (css-mode  . emmet-mode)
-         (lsp-mode  . emmet-mode)))
+         (css-mode  . emmet-mode)))
 
 (use-package prettier :straight t
   :defer t)
@@ -1631,7 +1577,6 @@ Git gutter:
         hyrolo-file-list '("~/gtd/hyperbole/ideas.org")
         hyrolo-date-format "%Y-%m-%d %H:%M:%S"
         hyrolo-kill-buffers-after-use t)
-  (global-set-key [f7] 'hyrolo-fgrep)
   :bind* ("<M-return>" . hkey-either))
 
 (use-package greader :straight t)
@@ -1699,15 +1644,13 @@ Git gutter:
 
 (use-package fzf :straight t)
 
-(use-package linum-relative :straight t
-  :config
-  (defun linum-new-mode ()
-    "Toggle between absolute and relative line numbers."
-    (interactive)
-    (if linum-mode
-        (linum-relative-toggle)
-      (linum-mode 1)))
-  :bind ("s-k" . linum-new-mode))
+(defun my/toggle-line-numbers-relative ()
+  "Toggle between absolute and relative line numbers (native display-line-numbers)."
+  (interactive)
+  (if (eq display-line-numbers 'relative)
+      (setq display-line-numbers t)
+    (setq display-line-numbers 'relative)))
+(global-set-key (kbd "s-k") #'my/toggle-line-numbers-relative)
 
 (use-package inform :straight t :config (require 'inform))
 
