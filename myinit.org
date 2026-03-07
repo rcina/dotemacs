@@ -470,8 +470,14 @@ Set =exec-path= and =PATH= explicitly so Emacs can find executables like
 (global-set-key (kbd "C-x p i") 'org-cliplink)
 
 ;; Fix woman and manual Keybinding
-(setq woman-manpath '("/usr/share/man" "/usr/local/man" "/usr/local/share/man"))
-(global-set-key (kbd "C-c M") 'manual-entry)
+(when (string-equal system-type "berkeley-unix")
+  (defalias 'woman 'manual-entry))
+(defun my-manual-entry ()
+  (interactive)
+  (let ((completion-styles '(emacs21)))
+    (call-interactively 'manual-entry)))
+
+(global-set-key (kbd "C-c M") 'my-manual-entry)
 #+end_src
 
 *** Ibuffer Configuration
