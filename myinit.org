@@ -468,6 +468,10 @@ Set =exec-path= and =PATH= explicitly so Emacs can find executables like
 (global-set-key [f10] 'hydra-org/body)
 (global-set-key (kbd "<f6>") 'my/copy-idlink-to-clipboard)
 (global-set-key (kbd "C-x p i") 'org-cliplink)
+
+;; Fix woman and manual Keybinding
+(setq woman-manpath '("/usr/share/man" "/usr/local/man" "/usr/local/share/man"))
+(global-set-key (kbd "C-c M") 'manual-entry)
 #+end_src
 
 *** Ibuffer Configuration

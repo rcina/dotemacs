@@ -367,6 +367,10 @@
 (global-set-key (kbd "<f6>") 'my/copy-idlink-to-clipboard)
 (global-set-key (kbd "C-x p i") 'org-cliplink)
 
+;; Fix woman and manual Keybinding
+(setq woman-manpath '("/usr/share/man" "/usr/local/man" "/usr/local/share/man"))
+(global-set-key (kbd "C-c M") 'manual-entry)
+
 (setq ibuffer-saved-filter-groups
       '(("default"
          ("dired"       (mode . dired-mode))
@@ -719,19 +723,19 @@ Zero prefix: select current line. Negative prefix: select up N lines."
   (sideline-flycheck-display-mode 'line)
   (sideline-backends-right '(sideline-flycheck)))
 
-  (use-package treesit-auto :straight t
-    :custom
-    (treesit-auto-install 'prompt)
-    :config
-    (global-treesit-auto-mode)
-    (setq treesit-extra-load-path '("/usr/local/lib/tree-sitter" "/usr/local/lib"))
-    (setq treesit-auto-langs '(python java c c++ rust html css json)) ; Add the ones you use
-    ;; Add these manually since the auto-function failed
-    (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
-    (add-to-list 'major-mode-remap-alist '(java-mode   . java-ts-mode))
-    (add-to-list 'major-mode-remap-alist '(c-mode      . c-ts-mode))
-    (add-to-list 'major-mode-remap-alist '(c++-mode    . c++-ts-mode))
-    (add-to-list 'major-mode-remap-alist '(go-mode     . go-ts-mode))) ;; This does the remapping automatically
+(use-package treesit-auto :straight t
+  :custom
+  (treesit-auto-install 'prompt)
+  :config
+  (global-treesit-auto-mode)
+  (setq treesit-extra-load-path '("/usr/local/lib/tree-sitter" "/usr/local/lib"))
+  (setq treesit-auto-langs '(python java c c++ rust html css json)) ; Add the ones you use
+  ;; Add these manually since the auto-function failed
+  (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(java-mode   . java-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(c-mode      . c-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(c++-mode    . c++-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(go-mode     . go-ts-mode))) ;; This does the remapping automatically
 
 (add-hook 'prog-mode-hook #'(lambda () (display-line-numbers-mode 1)))
 
