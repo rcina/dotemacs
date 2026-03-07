@@ -80,15 +80,32 @@
 ;; Dictionary
 (setq dictionary-server "dict.org")
 
-;; Set these paths explicitly and early — before any packages load.
-;; /usr/local/bin  — jupyter, ruff
-;; ~/.local/bin    — black (installed via pip install --user)
-(dolist (path '("/usr/local/bin" "/home/rob/.local/bin"))
-  (add-to-list 'exec-path path))
-(setenv "PATH" (concat "/usr/local/bin:/home/rob/.local/bin:" (getenv "PATH")))
+;; 1. Handle OS-Specific Core Binaries
+(let ((is-freebsd (eq system-type 'berkeley-unix)))
+  (when is-freebsd
+    (add-to-list 'exec-path "/usr/bin")
+    (add-to-list 'exec-path "/usr/sbin")
+    (add-to-list 'exec-path "/usr/local/bin")))
 
-;; exec-path-from-shell syncs the rest of the shell PATH for completeness.
-(use-package exec-path-from-shell :straight t
+;; 2. Add Tool-Specific Paths (Jupyter, Ruff, Black, etc.)
+;; expand-file-name ensures "~" works regardless of your username
+(dolist (path '("/usr/local/bin" "~/.local/bin"))
+  (add-to-list 'exec-path (expand-file-name path)))
+
+;; 3. Sync the Environment PATH variable
+;; This generates the $PATH string directly from the Emacs exec-path list
+(setenv "PATH" (mapconcat #'identity exec-path ":"))
+
+;; 4. Zsh-Specific Environment Sync
+;; This pulls in any other variables (like PYTHONPATH or virtualenvs) from Zsh
+(use-package exec-path-from-shell
+  :straight t
+  ;; Only run this if we are in a GUI/Windowing system (prevents terminal hangs)
+  :if (memq window-system '(x pgtk carbon ns))
+  :init
+  ;; Point specifically to the Zsh binary (FreeBSD vs Linux location)
+  (setq exec-path-from-shell-shell-name
+        (if (file-exists-p "/usr/local/bin/zsh") "/usr/local/bin/zsh" "/bin/zsh"))
   :config
   (exec-path-from-shell-initialize))
 
