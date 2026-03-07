@@ -2069,3 +2069,7 @@ With prefix ARG, copy the URL to the online GNU manual instead."
          ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown"))
 #+end_src
+*** Woman
+#+begin_export latex
+(setq woman-manpath '("/usr/share/man" "/usr/local/share/man"))
+#+end_export
