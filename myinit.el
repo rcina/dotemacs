@@ -392,19 +392,20 @@
 
 ;; Fix woman and manual Keybinding
 (when (string-equal system-type "berkeley-unix")
-  (defalias 'woman 'manual-entry))
-(defun my-manual-entry ()
-  (interactive)
-  (let ((completion-styles '(emacs21)))
-    (call-interactively 'manual-entry)))
+  (defalias 'woman 'consult-man))
 
-(defun my/jump-to-man-page (buffer &rest _)
-  "Force selection of the Man buffer window whenever it appears."
-  (when (and (bufferp buffer)
-             (string-match-p "\\*Man " (buffer-name buffer)))
-    (select-window (get-buffer-window buffer))))
+;; (defun my-manual-entry ()
+;;   (interactive)
+;;   (let ((completion-styles '(emacs21)))
+;;     (call-interactively 'manual-entry)))
 
-(advice-add 'display-buffer :after #'my/jump-to-man-page)
+;; (defun my/jump-to-man-page (buffer &rest _)
+;;   "Force selection of the Man buffer window whenever it appears."
+;;   (when (and (bufferp buffer)
+;;              (string-match-p "\\*Man " (buffer-name buffer)))
+;;     (select-window (get-buffer-window buffer))))
+
+;;(advice-add 'display-buffer :after #'my/jump-to-man-page)
 
 ;; 2. The FreeBSD-compatible Keybinding
 ;; We use 'man' because it bypasses the broken 'apropos' index
@@ -769,19 +770,19 @@ Zero prefix: select current line. Negative prefix: select up N lines."
   (sideline-flycheck-display-mode 'line)
   (sideline-backends-right '(sideline-flycheck)))
 
-  (use-package treesit-auto :straight t
-    :custom
-    (treesit-auto-install 'prompt)
-    :config
-    (global-treesit-auto-mode)
-    (setq treesit-extra-load-path '("/usr/local/lib/tree-sitter" "/usr/local/lib"))
-    (setq treesit-auto-langs '(python java c c++ rust html css json)) ; Add the ones you use
-    ;; Add these manually since the auto-function failed
-    (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
-    (add-to-list 'major-mode-remap-alist '(java-mode   . java-ts-mode))
-    (add-to-list 'major-mode-remap-alist '(c-mode      . c-ts-mode))
-    (add-to-list 'major-mode-remap-alist '(c++-mode    . c++-ts-mode))
-    (add-to-list 'major-mode-remap-alist '(go-mode     . go-ts-mode))) ;; This does the remapping automatically
+(use-package treesit-auto :straight t
+  :custom
+  (treesit-auto-install 'prompt)
+  :config
+  (global-treesit-auto-mode)
+  (setq treesit-extra-load-path '("/usr/local/lib/tree-sitter" "/usr/local/lib"))
+  (setq treesit-auto-langs '(python java c c++ rust html css json)) ; Add the ones you use
+  ;; Add these manually since the auto-function failed
+  (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(java-mode   . java-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(c-mode      . c-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(c++-mode    . c++-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(go-mode     . go-ts-mode))) ;; This does the remapping automatically
 
 (add-hook 'prog-mode-hook #'(lambda () (display-line-numbers-mode 1)))
 

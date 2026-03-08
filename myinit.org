@@ -494,19 +494,20 @@ Set =exec-path= and =PATH= explicitly so Emacs can find executables like
 
 ;; Fix woman and manual Keybinding
 (when (string-equal system-type "berkeley-unix")
-  (defalias 'woman 'manual-entry))
-(defun my-manual-entry ()
-  (interactive)
-  (let ((completion-styles '(emacs21)))
-    (call-interactively 'manual-entry)))
+  (defalias 'woman 'consult-man))
 
-(defun my/jump-to-man-page (buffer &rest _)
-  "Force selection of the Man buffer window whenever it appears."
-  (when (and (bufferp buffer)
-             (string-match-p "\\*Man " (buffer-name buffer)))
-    (select-window (get-buffer-window buffer))))
+;; (defun my-manual-entry ()
+;;   (interactive)
+;;   (let ((completion-styles '(emacs21)))
+;;     (call-interactively 'manual-entry)))
 
-(advice-add 'display-buffer :after #'my/jump-to-man-page)
+;; (defun my/jump-to-man-page (buffer &rest _)
+;;   "Force selection of the Man buffer window whenever it appears."
+;;   (when (and (bufferp buffer)
+;;              (string-match-p "\\*Man " (buffer-name buffer)))
+;;     (select-window (get-buffer-window buffer))))
+
+;;(advice-add 'display-buffer :after #'my/jump-to-man-page)
 
 ;; 2. The FreeBSD-compatible Keybinding
 ;; We use 'man' because it bypasses the broken 'apropos' index
