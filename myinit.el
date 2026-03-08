@@ -248,22 +248,21 @@
   (setq xref-show-xrefs-function #'consult-xref
         xref-show-definitions-function #'consult-xref)
   :config
-(setq consult-narrow-key "<")
-;; FreeBSD: use -M flag to force man paths since /usr/bin/man ignores
-;; MANPATH env var. Also requires /usr/local/etc/man.d/base.conf to exist.
-(setq consult-man-args
-      (if (eq system-type 'berkeley-unix)
-          "man -k -M /usr/share/man:/usr/local/share/man"
-        "man -k"))
-(setq consult-async-min-input 2)
-(setq consult-async-input-throttle 0.5)
-(setq consult-async-refresh-delay 0.2)
-(with-eval-after-load 'consult
+  (setq consult-narrow-key "<")
+  ;; FreeBSD: use -M flag to force man paths since /usr/bin/man ignores
+  ;; MANPATH env var. Also requires /usr/local/etc/man.d/base.conf to exist.
+  (setq consult-man-args
+        (if (eq system-type 'berkeley-unix)
+            "man -k -M /usr/share/man:/usr/local/share/man"
+          "man -k"))
+  (setq consult-async-min-input 2)
+  (setq consult-async-input-throttle 0.5)
+  (setq consult-async-refresh-delay 0.2)
   (consult-customize
    consult-theme
    consult-ripgrep consult-git-grep consult-grep
    consult-bookmark consult-recent-file consult-xref
-   :preview-key '(:debounce 0.4 any))))
+   :preview-key '(:debounce 0.4 any)))
 
 (use-package consult-lsp :straight t)
 
@@ -289,19 +288,11 @@
          ("M-TAB" . completion-at-point)))
 
 (use-package cape :straight t
+  :bind (("M-/" . cape-dabbrev))
   :init
+  ;; Add file completion globally
   (add-to-list 'completion-at-point-functions #'cape-file)
-  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
-  (add-to-list 'completion-at-point-functions #'cape-keyword))
-
-
-(use-package cape :straight t
-  :bind (("M-/" . cape-dabbrev)) ; Bind dabbrev to a manual key instead of auto
-  :init
-  ;; Add only universal things like files to the global list
-  (add-to-list 'completion-at-point-functions #'cape-file)
-
-  ;; Add dabbrev and keywords ONLY to programming buffers
+  ;; Restrict dabbrev and keyword completion to programming buffers
   (add-hook 'prog-mode-hook
             (lambda ()
               (add-to-list 'completion-at-point-functions #'cape-dabbrev)
@@ -354,19 +345,15 @@
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "C-z")     'undo-only)
 (global-set-key (kbd "C-S-z")   'undo-redo)
-(global-set-key (kbd "M-o")     'ace-window)
 
-;; Search
-(global-set-key (kbd "C-|")   'avy-goto-char)
-(global-set-key (kbd "C-'")   'avy-goto-char-2)
-(global-set-key (kbd "M-g w") 'avy-goto-word-1)
-(global-set-key (kbd "M-g E") 'avy-goto-word-0)
+;; Search (avy; package configured in Navigation & Window Management section)
+(global-set-key (kbd "C-|")     'avy-goto-char)
+(global-set-key (kbd "C-'")     'avy-goto-char-2)
+(global-set-key (kbd "M-g w")   'avy-goto-word-1)
+(global-set-key (kbd "M-g E")   'avy-goto-word-0)
 (global-set-key (kbd "M-g M-j") 'avy-goto-char-timer)
 (global-set-key (kbd "M-g M-c") 'avy-copy-line)
 (global-set-key (kbd "M-g M-m") 'avy-move-line)
-
-;; Editing utilities
-;;(global-set-key [remap dabbrev-expand] 'hippie-expand)
 
 ;; Lorem ipsum
 (global-set-key (kbd "C-c C-i s") 'lorem-ipsum-insert-sentences)
@@ -385,38 +372,15 @@
 (define-key global-map (kbd "C-c j") 'vr/mc-mark)
 
 ;; Other
-(global-set-key [f8]  'neotree-toggle)
-(global-set-key [f10] 'hydra-org/body)
+(global-set-key [f10]        'hydra-org/body)
 (global-set-key (kbd "<f6>") 'my/copy-idlink-to-clipboard)
-(global-set-key (kbd "C-x p i") 'org-cliplink)
 
-;; Fix woman and manual Keybinding
+;; On FreeBSD, alias woman to consult-man (woman's man-path handling is unreliable)
 (when (string-equal system-type "berkeley-unix")
   (defalias 'woman 'consult-man))
 
-;; (defun my-manual-entry ()
-;;   (interactive)
-;;   (let ((completion-styles '(emacs21)))
-;;     (call-interactively 'manual-entry)))
-
-;; (defun my/jump-to-man-page (buffer &rest _)
-;;   "Force selection of the Man buffer window whenever it appears."
-;;   (when (and (bufferp buffer)
-;;              (string-match-p "\\*Man " (buffer-name buffer)))
-;;     (select-window (get-buffer-window buffer))))
-
-;;(advice-add 'display-buffer :after #'my/jump-to-man-page)
-
-;; 2. The FreeBSD-compatible Keybinding
-;; We use 'man' because it bypasses the broken 'apropos' index
-;; and looks at the actual files.
-;;(global-set-key (kbd "C-c M") 'man)
-
-(global-set-key (kbd "C-c M") 'consult-man)
-;; 3. Ensure Vertico completes man pages correctly
+;; Open man pages in the selected window rather than another
 (setq man-notify-method 'pushy)
-
-;;(global-set-key (kbd "C-c M") 'my-manual-entry)
 
 (setq ibuffer-saved-filter-groups
       '(("default"
@@ -681,7 +645,6 @@ Zero prefix: select current line. Negative prefix: select up N lines."
 (advice-add 'pdf-view-bookmark-jump-handler
             :after 'my-bmk-pdf-handler-advice)
 
-;; 2. THE LSP SUITE
 (use-package lsp-mode
   :straight t
   :commands (lsp lsp-deferred)
@@ -721,10 +684,9 @@ Zero prefix: select current line. Negative prefix: select up N lines."
   (define-key lsp-mode-map (kbd "C-c i") lsp-command-map)
   (lsp-enable-which-key-integration t))
 
-;; 3. UI, SNIPPETS, AND DIAGNOSTICS
+;; Enable flycheck diagnostics whenever lsp-mode is active
 (with-eval-after-load 'lsp-mode
-  (add-hook 'lsp-mode-hook #'flycheck-mode)
-  (yas-global-mode))
+  (add-hook 'lsp-mode-hook #'flycheck-mode))
 
 (use-package lsp-ui :straight t
   :commands lsp-ui-mode
