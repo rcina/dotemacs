@@ -248,14 +248,22 @@
   (setq xref-show-xrefs-function #'consult-xref
         xref-show-definitions-function #'consult-xref)
   :config
-  (setq consult-narrow-key "<")
-  (setq consult-man-args "apropos %s")
-  (with-eval-after-load 'consult
-    (consult-customize
-     consult-theme
-     consult-ripgrep consult-git-grep consult-grep
-     consult-bookmark consult-recent-file consult-xref
-     :preview-key '(:debounce 0.4 any))))
+(setq consult-narrow-key "<")
+;; FreeBSD: use -M flag to force man paths since /usr/bin/man ignores
+;; MANPATH env var. Also requires /usr/local/etc/man.d/base.conf to exist.
+(setq consult-man-args
+      (if (eq system-type 'berkeley-unix)
+          "man -k -M /usr/share/man:/usr/local/share/man"
+        "man -k"))
+(setq consult-async-min-input 2)
+(setq consult-async-input-throttle 0.5)
+(setq consult-async-refresh-delay 0.2)
+(with-eval-after-load 'consult
+  (consult-customize
+   consult-theme
+   consult-ripgrep consult-git-grep consult-grep
+   consult-bookmark consult-recent-file consult-xref
+   :preview-key '(:debounce 0.4 any))))
 
 (use-package consult-lsp :straight t)
 
@@ -401,8 +409,9 @@
 ;; 2. The FreeBSD-compatible Keybinding
 ;; We use 'man' because it bypasses the broken 'apropos' index
 ;; and looks at the actual files.
-(global-set-key (kbd "C-c M") 'man)
+;;(global-set-key (kbd "C-c M") 'man)
 
+(global-set-key (kbd "C-c M") 'consult-man)
 ;; 3. Ensure Vertico completes man pages correctly
 (setq man-notify-method 'pushy)
 
@@ -760,19 +769,19 @@ Zero prefix: select current line. Negative prefix: select up N lines."
   (sideline-flycheck-display-mode 'line)
   (sideline-backends-right '(sideline-flycheck)))
 
-(use-package treesit-auto :straight t
-  :custom
-  (treesit-auto-install 'prompt)
-  :config
-  (global-treesit-auto-mode)
-  (setq treesit-extra-load-path '("/usr/local/lib/tree-sitter" "/usr/local/lib"))
-  (setq treesit-auto-langs '(python java c c++ rust html css json)) ; Add the ones you use
-  ;; Add these manually since the auto-function failed
-  (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
-  (add-to-list 'major-mode-remap-alist '(java-mode   . java-ts-mode))
-  (add-to-list 'major-mode-remap-alist '(c-mode      . c-ts-mode))
-  (add-to-list 'major-mode-remap-alist '(c++-mode    . c++-ts-mode))
-  (add-to-list 'major-mode-remap-alist '(go-mode     . go-ts-mode))) ;; This does the remapping automatically
+  (use-package treesit-auto :straight t
+    :custom
+    (treesit-auto-install 'prompt)
+    :config
+    (global-treesit-auto-mode)
+    (setq treesit-extra-load-path '("/usr/local/lib/tree-sitter" "/usr/local/lib"))
+    (setq treesit-auto-langs '(python java c c++ rust html css json)) ; Add the ones you use
+    ;; Add these manually since the auto-function failed
+    (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
+    (add-to-list 'major-mode-remap-alist '(java-mode   . java-ts-mode))
+    (add-to-list 'major-mode-remap-alist '(c-mode      . c-ts-mode))
+    (add-to-list 'major-mode-remap-alist '(c++-mode    . c++-ts-mode))
+    (add-to-list 'major-mode-remap-alist '(go-mode     . go-ts-mode))) ;; This does the remapping automatically
 
 (add-hook 'prog-mode-hook #'(lambda () (display-line-numbers-mode 1)))
 
@@ -1767,3 +1776,9 @@ With prefix ARG, copy the URL to the online GNU manual instead."
          ("\\.md\\'"       . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown"))
+
+(setq woman-manpath
+      '("/usr/share/man"
+        "/usr/local/share/man"))
+
+(setenv "MANPATH" "/usr/share/man:/usr/local/share/man")
