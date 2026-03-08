@@ -326,14 +326,17 @@ t
   (setq xref-show-xrefs-function #'consult-xref
         xref-show-definitions-function #'consult-xref)
   :config
-  (setq consult-narrow-key "<")
-  (setq consult-man-args "apropos %s")
-  (with-eval-after-load 'consult
-    (consult-customize
-     consult-theme
-     consult-ripgrep consult-git-grep consult-grep
-     consult-bookmark consult-recent-file consult-xref
-     :preview-key '(:debounce 0.4 any))))
+(setq consult-narrow-key "<")
+(setq consult-man-args "man -k -M /usr/share/man:/usr/local/share/man")
+(setq consult-async-min-input 2)
+(setq consult-async-input-throttle 0.5)
+(setq consult-async-refresh-delay 0.2)
+(with-eval-after-load 'consult
+  (consult-customize
+   consult-theme
+   consult-ripgrep consult-git-grep consult-grep
+   consult-bookmark consult-recent-file consult-xref
+   :preview-key '(:debounce 0.4 any))))
 
 (use-package consult-lsp :straight t)
 #+end_src
@@ -504,8 +507,9 @@ t
 ;; 2. The FreeBSD-compatible Keybinding
 ;; We use 'man' because it bypasses the broken 'apropos' index
 ;; and looks at the actual files.
-(global-set-key (kbd "C-c M") 'man)
+;;(global-set-key (kbd "C-c M") 'man)
 
+(global-set-key (kbd "C-c M") 'consult-man)
 ;; 3. Ensure Vertico completes man pages correctly
 (setq man-notify-method 'pushy)
 
@@ -2128,7 +2132,11 @@ With prefix ARG, copy the URL to the online GNU manual instead."
          ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown"))
 #+end_src
-*** Woman
-#+begin_export latex
-(setq woman-manpath '("/usr/share/man" "/usr/local/share/man"))
-#+end_export
+*** Man / Woman paths
+#+begin_src emacs-lisp
+(setq woman-manpath
+      '("/usr/share/man"
+        "/usr/local/share/man"))
+
+(setenv "MANPATH" "/usr/share/man:/usr/local/share/man")
+#+end_src
