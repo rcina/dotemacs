@@ -276,7 +276,8 @@ Set =exec-path= and =PATH= explicitly so Emacs can find executables like
 *** Consult
 #+begin_src emacs-lisp
 (use-package consult :straight t
-  :bind (("C-c h"   . consult-history)
+  :bind (("C-c M" . consult-man)
+         ("C-c h"   . consult-history)
          ("C-c m"   . consult-mode-command)
          ("C-c k"   . consult-kmacro)
          ("C-x M-:" . consult-complex-command)
@@ -354,7 +355,12 @@ Set =exec-path= and =PATH= explicitly so Emacs can find executables like
   (corfu-auto t)
   (corfu-auto-delay 0.15)
   (corfu-auto-prefix 2)
-  (corfu-cycle t))
+  (corfu-cycle t)
+  :config
+  ;; This ensures auto-completion stays out of M-x
+  (add-hook 'minibuffer-setup-hook (lambda () (setq-local corfu-auto nil)))
+  :bind (:map global-map
+         ("M-TAB" . completion-at-point)))
 
 (use-package cape :straight t
   :init
@@ -362,11 +368,19 @@ Set =exec-path= and =PATH= explicitly so Emacs can find executables like
   (add-to-list 'completion-at-point-functions #'cape-dabbrev)
   (add-to-list 'completion-at-point-functions #'cape-keyword))
 
-(use-package yasnippet-capf :straight t
-  :after (yasnippet)
+
+(use-package cape :straight t
+  :bind (("M-/" . cape-dabbrev)) ; Bind dabbrev to a manual key instead of auto
   :init
-  (add-to-list 'completion-at-point-functions #'yasnippet-capf))
-#+end_src
+  ;; Add only universal things like files to the global list
+  (add-to-list 'completion-at-point-functions #'cape-file)
+
+  ;; Add dabbrev and keywords ONLY to programming buffers
+  (add-hook 'prog-mode-hook
+            (lambda ()
+              (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+              (add-to-list 'completion-at-point-functions #'cape-keyword))))
+  #+end_src
 
 *** Embark
 #+begin_src emacs-lisp
@@ -445,7 +459,7 @@ Set =exec-path= and =PATH= explicitly so Emacs can find executables like
 (global-set-key (kbd "M-g M-m") 'avy-move-line)
 
 ;; Editing utilities
-(global-set-key [remap dabbrev-expand] 'hippie-expand)
+;;(global-set-key [remap dabbrev-expand] 'hippie-expand)
 
 ;; Lorem ipsum
 (global-set-key (kbd "C-c C-i s") 'lorem-ipsum-insert-sentences)
@@ -477,7 +491,7 @@ Set =exec-path= and =PATH= explicitly so Emacs can find executables like
   (let ((completion-styles '(emacs21)))
     (call-interactively 'manual-entry)))
 
-(global-set-key (kbd "C-c M") 'my-manual-entry)
+;;(global-set-key (kbd "C-c M") 'my-manual-entry)
 #+end_src
 
 *** Ibuffer Configuration

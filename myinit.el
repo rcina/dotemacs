@@ -199,7 +199,8 @@
         completion-category-overrides '((file (styles partial-completion)))))
 
 (use-package consult :straight t
-  :bind (("C-c h"   . consult-history)
+  :bind (("C-c M" . consult-man)
+         ("C-c h"   . consult-history)
          ("C-c m"   . consult-mode-command)
          ("C-c k"   . consult-kmacro)
          ("C-x M-:" . consult-complex-command)
@@ -271,7 +272,12 @@
   (corfu-auto t)
   (corfu-auto-delay 0.15)
   (corfu-auto-prefix 2)
-  (corfu-cycle t))
+  (corfu-cycle t)
+  :config
+  ;; This ensures auto-completion stays out of M-x
+  (add-hook 'minibuffer-setup-hook (lambda () (setq-local corfu-auto nil)))
+  :bind (:map global-map
+         ("M-TAB" . completion-at-point)))
 
 (use-package cape :straight t
   :init
@@ -279,10 +285,18 @@
   (add-to-list 'completion-at-point-functions #'cape-dabbrev)
   (add-to-list 'completion-at-point-functions #'cape-keyword))
 
-(use-package yasnippet-capf :straight t
-  :after (yasnippet)
+
+(use-package cape :straight t
+  :bind (("M-/" . cape-dabbrev)) ; Bind dabbrev to a manual key instead of auto
   :init
-  (add-to-list 'completion-at-point-functions #'yasnippet-capf))
+  ;; Add only universal things like files to the global list
+  (add-to-list 'completion-at-point-functions #'cape-file)
+
+  ;; Add dabbrev and keywords ONLY to programming buffers
+  (add-hook 'prog-mode-hook
+            (lambda ()
+              (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+              (add-to-list 'completion-at-point-functions #'cape-keyword))))
 
 (use-package embark :straight t
   :bind (("C-."   . embark-act)
@@ -343,7 +357,7 @@
 (global-set-key (kbd "M-g M-m") 'avy-move-line)
 
 ;; Editing utilities
-(global-set-key [remap dabbrev-expand] 'hippie-expand)
+;;(global-set-key [remap dabbrev-expand] 'hippie-expand)
 
 ;; Lorem ipsum
 (global-set-key (kbd "C-c C-i s") 'lorem-ipsum-insert-sentences)
@@ -375,7 +389,7 @@
   (let ((completion-styles '(emacs21)))
     (call-interactively 'manual-entry)))
 
-(global-set-key (kbd "C-c M") 'my-manual-entry)
+;;(global-set-key (kbd "C-c M") 'my-manual-entry)
 
 (setq ibuffer-saved-filter-groups
       '(("default"
@@ -729,19 +743,19 @@ Zero prefix: select current line. Negative prefix: select up N lines."
   (sideline-flycheck-display-mode 'line)
   (sideline-backends-right '(sideline-flycheck)))
 
-  (use-package treesit-auto :straight t
-    :custom
-    (treesit-auto-install 'prompt)
-    :config
-    (global-treesit-auto-mode)
-    (setq treesit-extra-load-path '("/usr/local/lib/tree-sitter" "/usr/local/lib"))
-    (setq treesit-auto-langs '(python java c c++ rust html css json)) ; Add the ones you use
-    ;; Add these manually since the auto-function failed
-    (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
-    (add-to-list 'major-mode-remap-alist '(java-mode   . java-ts-mode))
-    (add-to-list 'major-mode-remap-alist '(c-mode      . c-ts-mode))
-    (add-to-list 'major-mode-remap-alist '(c++-mode    . c++-ts-mode))
-    (add-to-list 'major-mode-remap-alist '(go-mode     . go-ts-mode))) ;; This does the remapping automatically
+(use-package treesit-auto :straight t
+  :custom
+  (treesit-auto-install 'prompt)
+  :config
+  (global-treesit-auto-mode)
+  (setq treesit-extra-load-path '("/usr/local/lib/tree-sitter" "/usr/local/lib"))
+  (setq treesit-auto-langs '(python java c c++ rust html css json)) ; Add the ones you use
+  ;; Add these manually since the auto-function failed
+  (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(java-mode   . java-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(c-mode      . c-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(c++-mode    . c++-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(go-mode     . go-ts-mode))) ;; This does the remapping automatically
 
 (add-hook 'prog-mode-hook #'(lambda () (display-line-numbers-mode 1)))
 
