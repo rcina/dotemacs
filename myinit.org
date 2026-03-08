@@ -1089,9 +1089,7 @@ Make sure both are installed:
                     :major-modes '(go-mode go-ts-mode)
                     :priority 0
                     :server-id 'gopls)))
-(use-package go-ts-mode
-  :ensure nil
-  :hook (go-ts-mode . lsp-deferred))
+
 #+end_src
 
 *** Language: Java
