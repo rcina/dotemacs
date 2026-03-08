@@ -273,8 +273,7 @@ Set =exec-path= and =PATH= explicitly so Emacs can find executables like
         completion-category-overrides '((file (styles partial-completion)))))
 #+end_src
 
-*** Consul
-t
+*** Consult
 #+begin_src emacs-lisp
 (use-package consult :straight t
   :bind (("C-c M" . consult-man)
@@ -327,7 +326,12 @@ t
         xref-show-definitions-function #'consult-xref)
   :config
 (setq consult-narrow-key "<")
-(setq consult-man-args "man -k -M /usr/share/man:/usr/local/share/man")
+;; FreeBSD: use -M flag to force man paths since /usr/bin/man ignores
+;; MANPATH env var. Also requires /usr/local/etc/man.d/base.conf to exist.
+(setq consult-man-args
+      (if (eq system-type 'berkeley-unix)
+          "man -k -M /usr/share/man:/usr/local/share/man"
+        "man -k"))
 (setq consult-async-min-input 2)
 (setq consult-async-input-throttle 0.5)
 (setq consult-async-refresh-delay 0.2)
