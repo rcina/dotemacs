@@ -249,6 +249,7 @@
         xref-show-definitions-function #'consult-xref)
   :config
   (setq consult-narrow-key "<")
+  (setq consult-man-args "apropos %s")
   (with-eval-after-load 'consult
     (consult-customize
      consult-theme
@@ -388,6 +389,22 @@
   (interactive)
   (let ((completion-styles '(emacs21)))
     (call-interactively 'manual-entry)))
+
+(defun my/jump-to-man-page (buffer &rest _)
+  "Force selection of the Man buffer window whenever it appears."
+  (when (and (bufferp buffer)
+             (string-match-p "\\*Man " (buffer-name buffer)))
+    (select-window (get-buffer-window buffer))))
+
+(advice-add 'display-buffer :after #'my/jump-to-man-page)
+
+;; 2. The FreeBSD-compatible Keybinding
+;; We use 'man' because it bypasses the broken 'apropos' index
+;; and looks at the actual files.
+(global-set-key (kbd "C-c M") 'man)
+
+;; 3. Ensure Vertico completes man pages correctly
+(setq man-notify-method 'pushy)
 
 ;;(global-set-key (kbd "C-c M") 'my-manual-entry)
 
