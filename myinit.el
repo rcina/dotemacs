@@ -1,3 +1,6 @@
+(defun my-system-is-freebsd ()
+  (string-equal system-type "berkeley-unix"))
+
 (setq custom-file "~/.emacs-custom.el")
 (when (file-exists-p custom-file) (load custom-file))
 
@@ -25,6 +28,31 @@
 (setq ring-bell-function #'ignore)
 (setq use-dialog-box nil)
 (fset 'yes-or-no-p 'y-or-n-p)
+
+;; 1. Handle OS-Specific Core Binaries
+(let ((is-freebsd (eq system-type 'berkeley-unix)))
+  (when is-freebsd
+    (add-to-list 'exec-path "/usr/bin")
+    (add-to-list 'exec-path "/usr/sbin")
+    (add-to-list 'exec-path "/usr/local/bin")))
+
+;; 2. Add Tool-Specific Paths
+(dolist (path '("/usr/local/bin" "~/.local/bin"))
+  (add-to-list 'exec-path (expand-file-name path)))
+
+;; 3. Sync the Environment PATH variable
+(setenv "PATH" (mapconcat #'identity exec-path ":"))
+
+;; 4. Zsh-Specific Environment Sync
+(use-package exec-path-from-shell
+  :straight t
+  :if (memq window-system '(x pgtk carbon ns))
+  :init
+  (setq exec-path-from-shell-shell-name
+        (if (file-exists-p "/usr/local/bin/zsh") "/usr/local/bin/zsh" "/bin/zsh"))
+  :config
+  (setq exec-path-from-shell-variables '("PATH" "JAVA_HOME" "GOPATH" "EDITOR"))
+  (exec-path-from-shell-initialize))
 
 (setq-default fill-column 72
               tab-width 4
@@ -732,19 +760,19 @@ Zero prefix: select current line. Negative prefix: select up N lines."
   (sideline-flycheck-display-mode 'line)
   (sideline-backends-right '(sideline-flycheck)))
 
-  (use-package treesit-auto :straight t
-    :custom
-    (treesit-auto-install 'prompt)
-    :config
-    (global-treesit-auto-mode)
-    (setq treesit-extra-load-path '("/usr/local/lib/tree-sitter" "/usr/local/lib"))
-    (setq treesit-auto-langs '(python java c c++ rust html css json)) ; Add the ones you use
-    ;; Add these manually since the auto-function failed
-    (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
-    (add-to-list 'major-mode-remap-alist '(java-mode   . java-ts-mode))
-    (add-to-list 'major-mode-remap-alist '(c-mode      . c-ts-mode))
-    (add-to-list 'major-mode-remap-alist '(c++-mode    . c++-ts-mode))
-    (add-to-list 'major-mode-remap-alist '(go-mode     . go-ts-mode))) ;; This does the remapping automatically
+(use-package treesit-auto :straight t
+  :custom
+  (treesit-auto-install 'prompt)
+  :config
+  (global-treesit-auto-mode)
+  (setq treesit-extra-load-path '("/usr/local/lib/tree-sitter" "/usr/local/lib"))
+  (setq treesit-auto-langs '(python java c c++ rust html css json)) ; Add the ones you use
+  ;; Add these manually since the auto-function failed
+  (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(java-mode   . java-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(c-mode      . c-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(c++-mode    . c++-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(go-mode     . go-ts-mode))) ;; This does the remapping automatically
 
 (add-hook 'prog-mode-hook #'(lambda () (display-line-numbers-mode 1)))
 
@@ -760,7 +788,10 @@ Zero prefix: select current line. Negative prefix: select up N lines."
               (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
                 (ggtags-mode 1)))))
 
-(setq lsp-clients-clangd-executable "/usr/local/bin/clangd19")
+(setq lsp-clients-clangd-executable
+      (if (my-system-is-freebsd)
+          "/usr/local/bin/clangd19"  ; FreeBSD path
+        "/usr/bin/clangd"))          ; Linux path
 
 (use-package rust-mode :straight t
   :config
@@ -892,6 +923,11 @@ Zero prefix: select current line. Negative prefix: select up N lines."
   (require 'lsp-java)
   (require 'dap-java)
   (add-to-list 'lsp-enabled-clients 'jdtls))
+
+(setq lsp-java-java-path
+      (if (my-system-is-freebsd)
+          "/usr/local/openjdk21/bin/java"
+        "/usr/lib/jvm/java-21-openjdk-amd64/bin/java"))
 
 (setq js-indent-level 2)
 

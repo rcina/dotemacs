@@ -4,6 +4,11 @@
 * Emacs Configuration
 
 ** Core Settings
+*** FreeBSD Check
+#+begin_src emacs-lisp
+(defun my-system-is-freebsd ()
+  (string-equal system-type "berkeley-unix"))
+#+end_src
 *** Custom File
 Set up a separate file for Customize-recorded settings, keeping this config clean.
 
@@ -44,7 +49,34 @@ Hide chrome, silence the bell, and configure basic display settings.
 (setq use-dialog-box nil)
 (fset 'yes-or-no-p 'y-or-n-p)
 #+end_src
+*** Path Setup
+*** Path Setup
+#+begin_src emacs-lisp
+;; 1. Handle OS-Specific Core Binaries
+(let ((is-freebsd (eq system-type 'berkeley-unix)))
+  (when is-freebsd
+    (add-to-list 'exec-path "/usr/bin")
+    (add-to-list 'exec-path "/usr/sbin")
+    (add-to-list 'exec-path "/usr/local/bin")))
 
+;; 2. Add Tool-Specific Paths
+(dolist (path '("/usr/local/bin" "~/.local/bin"))
+  (add-to-list 'exec-path (expand-file-name path)))
+
+;; 3. Sync the Environment PATH variable
+(setenv "PATH" (mapconcat #'identity exec-path ":"))
+
+;; 4. Zsh-Specific Environment Sync
+(use-package exec-path-from-shell
+  :straight t
+  :if (memq window-system '(x pgtk carbon ns))
+  :init
+  (setq exec-path-from-shell-shell-name
+        (if (file-exists-p "/usr/local/bin/zsh") "/usr/local/bin/zsh" "/bin/zsh"))
+  :config
+  (setq exec-path-from-shell-variables '("PATH" "JAVA_HOME" "GOPATH" "EDITOR"))
+  (exec-path-from-shell-initialize))
+#+end_src
 *** Display & Editing Defaults
 #+begin_src emacs-lisp
 (setq-default fill-column 72
@@ -945,9 +977,11 @@ Zero prefix: select current line. Negative prefix: select up N lines."
               (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
                 (ggtags-mode 1)))))
 
-(setq lsp-clients-clangd-executable "/usr/local/bin/clangd19")
+(setq lsp-clients-clangd-executable
+      (if (my-system-is-freebsd)
+          "/usr/local/bin/clangd19"  ; FreeBSD path
+        "/usr/bin/clangd"))          ; Linux path
 #+end_src
-
 *** Language: Rust
 #+begin_src emacs-lisp
 (use-package rust-mode :straight t
@@ -1100,6 +1134,11 @@ Make sure both are installed:
   (require 'lsp-java)
   (require 'dap-java)
   (add-to-list 'lsp-enabled-clients 'jdtls))
+
+(setq lsp-java-java-path
+      (if (my-system-is-freebsd)
+          "/usr/local/openjdk21/bin/java"
+        "/usr/lib/jvm/java-21-openjdk-amd64/bin/java"))
 #+end_src
 
 *** Language: JavaScript & TypeScript
