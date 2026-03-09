@@ -49,7 +49,7 @@ Hide chrome, silence the bell, and configure basic display settings.
 (setq use-dialog-box nil)
 (fset 'yes-or-no-p 'y-or-n-p)
 #+end_src
-*** Path Setup
+
 *** Path Setup
 #+begin_src emacs-lisp
 ;; 1. Handle OS-Specific Core Binaries
