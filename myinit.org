@@ -994,9 +994,10 @@ Zero prefix: select current line. Negative prefix: select up N lines."
 
 *** Language: Python
 #+begin_src emacs-lisp
-(setq python-shell-interpreter "/usr/local/bin/python"
-      python-indent-guess-indent-offset-verbose nil)
-
+(setq python-indent-guess-indent-offset-verbose nil)
+;; Use the inherited path to find the python interpreter
+(setq python-shell-interpreter
+      (if (executable-find "python3") "python3" "python"))
 
 
 (with-eval-after-load 'dap-mode
