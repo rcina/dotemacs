@@ -1843,6 +1843,18 @@ Git gutter:
   (eshell-git-prompt-use-theme 'powerline))
 #+end_src
 
+*** Eat
+#+begin_src emacs-lisp
+(straight-use-package
+ '(eat :type git
+       :host codeberg
+       :repo "akib/emacs-eat"
+       :files ("*.el" ("term" "term/*.el") "*.texi"
+               "*.ti" ("terminfo/e" "terminfo/e/*")
+               ("terminfo/65" "terminfo/65/*")
+               ("integration" "integration/*")
+               (:exclude ".dir-locals.el" "*-tests.el"))))
+#+end_src
 *** term / eterm
 #+begin_src emacs-lisp
 (use-package term :straight t

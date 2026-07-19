@@ -141,6 +141,7 @@
   (lambda ()
     (add-hook 'after-save-hook #'org-babel-tangle nil t)))
 
+
 (use-package modus-themes :straight t :defer t)
 (use-package doom-themes  :straight t :defer t)
 (use-package spacegray-theme :straight t :defer t)
@@ -169,6 +170,7 @@
   :straight t
   :config
   (setq nerd-icons-font-family "Symbols Nerd Font Mono"))
+
 
 (use-package doom-modeline
   :straight t
@@ -760,19 +762,19 @@ Zero prefix: select current line. Negative prefix: select up N lines."
   (sideline-flycheck-display-mode 'line)
   (sideline-backends-right '(sideline-flycheck)))
 
-(use-package treesit-auto :straight t
-  :custom
-  (treesit-auto-install 'prompt)
-  :config
-  (global-treesit-auto-mode)
-  (setq treesit-extra-load-path '("/usr/local/lib/tree-sitter" "/usr/local/lib"))
-  (setq treesit-auto-langs '(python java c c++ rust html css json)) ; Add the ones you use
-  ;; Add these manually since the auto-function failed
-  (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
-  (add-to-list 'major-mode-remap-alist '(java-mode   . java-ts-mode))
-  (add-to-list 'major-mode-remap-alist '(c-mode      . c-ts-mode))
-  (add-to-list 'major-mode-remap-alist '(c++-mode    . c++-ts-mode))
-  (add-to-list 'major-mode-remap-alist '(go-mode     . go-ts-mode))) ;; This does the remapping automatically
+  (use-package treesit-auto :straight t
+    :custom
+    (treesit-auto-install 'prompt)
+    :config
+    (global-treesit-auto-mode)
+    (setq treesit-extra-load-path '("/usr/local/lib/tree-sitter" "/usr/local/lib"))
+    (setq treesit-auto-langs '(python java c c++ rust html css json)) ; Add the ones you use
+    ;; Add these manually since the auto-function failed
+    (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
+    (add-to-list 'major-mode-remap-alist '(java-mode   . java-ts-mode))
+    (add-to-list 'major-mode-remap-alist '(c-mode      . c-ts-mode))
+    (add-to-list 'major-mode-remap-alist '(c++-mode    . c++-ts-mode))
+    (add-to-list 'major-mode-remap-alist '(go-mode     . go-ts-mode))) ;; This does the remapping automatically
 
 (add-hook 'prog-mode-hook #'(lambda () (display-line-numbers-mode 1)))
 
@@ -844,6 +846,7 @@ Zero prefix: select current line. Negative prefix: select up N lines."
   (add-hook 'python-mode-hook #'my/python-lsp-client-setup)
   :config
   (define-key lsp-command-map (kbd "r o") #'my/lsp-organize-imports-dwim))
+
 
 ;; --- Ruff (linter) ---
 ;; Ruff is configured as a flycheck checker by pointing flycheck directly
@@ -917,6 +920,7 @@ Zero prefix: select current line. Negative prefix: select up N lines."
                     :major-modes '(go-mode go-ts-mode)
                     :priority 0
                     :server-id 'gopls)))
+
 
 (use-package lsp-java :straight t
   :hook (java-mode . lsp-deferred)
@@ -1549,6 +1553,16 @@ Git gutter:
     (setq eshell-destroy-buffer-when-process-dies t
           eshell-visual-commands '("htop" "zsh" "vim")))
   (eshell-git-prompt-use-theme 'powerline))
+
+(straight-use-package
+ '(eat :type git
+       :host codeberg
+       :repo "akib/emacs-eat"
+       :files ("*.el" ("term" "term/*.el") "*.texi"
+               "*.ti" ("terminfo/e" "terminfo/e/*")
+               ("terminfo/65" "terminfo/65/*")
+               ("integration" "integration/*")
+               (:exclude ".dir-locals.el" "*-tests.el"))))
 
 (use-package term :straight t
   :config (setq explicit-shell-file-name "zsh"))
