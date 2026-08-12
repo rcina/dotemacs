@@ -1,4 +1,4 @@
-;; Author: Robert Cina
+;; Author: Robert Cina  -*- lexical-binding: t; -*-
 ;; Web: http://www.robertcina.com
 ;; Github URL: https://github.com/rcina
 ;; Created: 2020-11-29
