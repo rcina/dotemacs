@@ -2157,3 +2157,15 @@ With prefix ARG, copy the URL to the online GNU manual instead."
 
 (setenv "MANPATH" "/usr/share/man:/usr/local/share/man")
 #+end_src
+*** GPTEL
+#+begin_src emacs-lisp
+(use-package gptel
+  :straight t
+  :config
+  (setq gptel-model 'Qwen2.5-Coder-7B-Instruct-Q4_K_M
+        gptel-backend (gptel-make-openai "llama-cpp"
+                        :host "localhost:8080"
+                        :endpoint "/v1/chat/completions"
+                        :stream t
+                        :models '(Qwen2.5-Coder-7B-Instruct-Q4_K_M))))
+#+end_src
