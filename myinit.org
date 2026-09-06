@@ -2165,7 +2165,9 @@ With prefix ARG, copy the URL to the online GNU manual instead."
   (setq gptel-model 'Qwen2.5-Coder-7B-Instruct-Q4_K_M
         gptel-backend (gptel-make-openai "llama-cpp"
                         :host "localhost:8080"
+                        :protocol "http"
                         :endpoint "/v1/chat/completions"
                         :stream t
+                        :key "no-key"
                         :models '(Qwen2.5-Coder-7B-Instruct-Q4_K_M))))
 #+end_src
