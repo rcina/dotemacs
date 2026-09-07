@@ -1807,3 +1807,18 @@ With prefix ARG, copy the URL to the online GNU manual instead."
                         :stream t
                         :key "no-key"
                         :models '(Qwen3-Coder-30B-A3B-Instruct-Q4_K_M))))
+
+(defun my/hermes-agent ()
+  "Open an EAT terminal running hermes with a trimmed toolset."
+  (interactive)
+  (eat "hermes -t web,file,terminal"))
+
+(defun my/aider ()
+  "Open an EAT terminal running aider in the current project."
+  (interactive)
+  (eat "aider --model openai/Qwen3-Coder-30B-A3B-Instruct-Q4_K_M"))
+
+(use-package aider
+  :straight t
+  :config
+  (setq aider-args '("--model" "openai/Qwen3-Coder-30B-A3B-Instruct-Q4_K_M")))
