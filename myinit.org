@@ -1665,9 +1665,18 @@ Works in org-mode and org-agenda buffers."
   :after pdf-tools
   :config (add-hook 'pdf-view-mode-hook 'pdf-view-restore-mode))
 
-(use-package djvu :straight t :config (require 'djvu))
-(straight-use-package '(djvu3 :type git :host github :repo "dalanicolai/djvu3"))
-(require 'djvu3)
+;;(use-package djvu :straight t :config (require 'djvu))
+;;(straight-use-package '(djvu3 :type git :host github :repo "dalanicolai/djvu3"))
+(use-package djvu
+  :straight t)
+
+(use-package djvu
+  :straight t)
+
+(use-package djvu3
+  :straight (djvu3 :type git :host github :repo "dalanicolai/djvu3"
+                   :pre-build (("sed" "-i.bak" "1s/$/ -*- lexical-binding: t -*-/" "djvu3.el")))
+  :after djvu)
 
 (use-package nov :straight t :config (require 'nov))
 
