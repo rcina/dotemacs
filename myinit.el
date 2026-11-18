@@ -1407,8 +1407,8 @@ Works in org-mode and org-agenda buffers."
   :after pdf-tools
   :config (add-hook 'pdf-view-mode-hook 'pdf-view-restore-mode))
 
-;;(use-package djvu :straight t :config (require 'djvu))
-;;(straight-use-package '(djvu3 :type git :host github :repo "dalanicolai/djvu3"))
+(use-package ivy :straight t)
+
 (use-package djvu
   :straight t)
 
